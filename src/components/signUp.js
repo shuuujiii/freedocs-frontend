@@ -1,4 +1,5 @@
 import React from 'react';
+// material-ui
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +14,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+// utils
 import axios from 'axios'
+
+// context 
+import { ErrorContext } from '../provider/totalProvider'
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -48,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+    const { _, setErrorState } = React.useContext(ErrorContext)
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
@@ -63,13 +69,12 @@ export default function SignUp() {
                 console.log(res)
             }
         ).catch(err => {
-            console.log(err)
-            alert(err)
+            setErrorState({ hasError: true, message: err.response.data.message })
         }
         )
-        // console.log('onSubmitSignUp')
     }
     return (
+
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
