@@ -19,18 +19,9 @@ import axios from 'axios'
 
 // context 
 import { ErrorContext } from '../provider/totalProvider'
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="">
-                shuji watanabe
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+
+// component
+import Copyright from './copyright'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
