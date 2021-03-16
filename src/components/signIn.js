@@ -48,7 +48,7 @@ export default function SignIn(props) {
     const classes = useStyles();
     const history = useHistory();
     const { setErrorState } = React.useContext(ErrorContext);
-    const { setAuthState } = React.useContext(AuthContext);
+    const { dispatchAuthState } = React.useContext(AuthContext);
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -58,7 +58,7 @@ export default function SignIn(props) {
             username: email,
             password: password
         }).then(res => {
-            setAuthState({
+            dispatchAuthState({
                 type: authActions.LOGIN,
                 payload: res.data.token
             });

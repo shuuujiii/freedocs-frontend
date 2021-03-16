@@ -8,6 +8,8 @@ import SignIn from './components/signIn'
 import Home from './components/home'
 import ErrorAlert from './components/errorAlert'
 import Userpage from './components/userPage'
+import Account from './components/account'
+import Profile from './components/profile'
 const App = () => {
   return (
     <Router>
@@ -19,6 +21,8 @@ const App = () => {
             <Route path="/signup" component={SignUp} />
             <Route path="/signin" component={SignIn} />
             <PrivateRoute path="/userpage" component={Userpage} />
+            <PrivateRoute path="/account" component={Account} />
+            <PrivateRoute path="/profile" component={Profile} />
           </Switch>
         </Provider>
       </div>

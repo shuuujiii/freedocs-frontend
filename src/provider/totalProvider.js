@@ -24,7 +24,7 @@ export const ErrorStateInitial = {
 }
 
 export const AuthStateInitial = {
-    token: ''
+    token: null,
 }
 
 export const Provider = ({ children }) => {
@@ -44,7 +44,7 @@ export const Provider = ({ children }) => {
     // 
     return (
         < ErrorProvider value={{ errorState, setErrorState }}>
-            <AuthProvider value={{ authState, setAuthState: dispatchAuthState }}>
+            <AuthProvider value={{ authState, dispatchAuthState }}>
                 {children}
             </AuthProvider>
         </ ErrorProvider >
