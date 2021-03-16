@@ -18,9 +18,11 @@ import Copyright from './copyright'
 
 // util
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 // context 
-import { ErrorContext } from '../provider/totalProvider'
+import { authActions } from '../reducers/authReducer'
+import { ErrorContext, AuthContext } from '../provider/totalProvider'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -42,21 +44,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
     const classes = useStyles();
-    const { setErrorState } = React.useContext(ErrorContext)
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const history = useHistory();
+    const { setErrorState } = React.useContext(ErrorContext);
+    const { setAuthState } = React.useContext(AuthContext);
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
 
     const onClickSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         axios.post('http://localhost:5000/api/v1/users/login', {
             username: email,
             password: password
-        }).then(
-            res => { console.log('res', res) }
-        ).catch(err => {
-            setErrorState({ hasError: true, message: err.response.data.message })
+        }).then(res => {
+            setAuthState({
+                type: authActions.LOGIN,
+                payload: res.data.token
+            });
+            history.push('/userpage')
+        }).catch(err => {
+            setErrorState({
+                hasError: true,
+                message: err.response.data.message
+            })
         })
     }
     return (
@@ -68,7 +79,7 @@ export default function SignIn() {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
-        </Typography>
+                </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
@@ -109,12 +120,12 @@ export default function SignIn() {
                         onClick={e => onClickSubmit(e)}
                     >
                         Sign In
-          </Button>
+                    </Button>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
-              </Link>
+                            </Link>
                         </Grid>
                         <Grid item>
                             <Link href="#" variant="body2">
