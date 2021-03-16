@@ -2,16 +2,9 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import Copyright from './common/copyright'
-// function Copyright() {
-//     return (
-//         <Typography variant="body2" color="textSecondary" style={{ whiteSpace: 'nowrap' }}>
-//             {'Copyright © ' + new Date().getFullYear() + ' shuji watanabe.'}
-//         </Typography>
-//     );
-// }
+import Copyright from '../common/copyright'
 
-export default function StickyFooter() {
+export default function Footer() {
     return (
         <Container style={{ display: 'flex', justifyContent: 'center' }} maxWidth="sm">
             <Copyright />

@@ -1,14 +1,12 @@
 import React from 'react'
-import MenuAppBar from './appBar'
-import StickyFooter from './footer'
-
-import axios from 'axios'
+import AppBar from './main/appBar'
+import Footer from './main/footer'
 const UserPage = () => {
     return (
         <div>
-            <MenuAppBar />
+            <AppBar />
             userpage
-            <StickyFooter />
+            <Footer />
         </div>
     )
 }

@@ -13,7 +13,7 @@ import Menu from '@material-ui/core/Menu';
 import { useHistory } from 'react-router-dom'
 
 // context 
-import { useAuth } from '../provider/authProvider'
+import { useAuth } from '../../provider/authProvider'
 
 const useStyles = makeStyles((theme) => ({
     root: {

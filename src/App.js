@@ -6,7 +6,7 @@ import PrivateRoute from './components/privateRoute'
 import SignUp from './components/signUp'
 import SignIn from './components/signIn'
 import Home from './components/home'
-import ErrorAlert from './components/errorAlert'
+import ErrorAlert from './components/main/errorAlert'
 import Userpage from './components/userPage'
 import Account from './components/common/account'
 import Profile from './components/common/profile'
@@ -15,6 +15,7 @@ import PrivacyPolicy from './components/common/privacypolicy'
 import About from './components/common/about'
 import Contact from './components/common/contact'
 import NotFound from './components/notFound'
+
 const App = () => {
   return (
     <Router>
