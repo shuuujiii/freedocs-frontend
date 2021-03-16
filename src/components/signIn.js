@@ -21,8 +21,8 @@ import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 // context 
-import { authActions } from '../reducers/authReducer'
-import { ErrorContext, AuthContext } from '../provider/totalProvider'
+import { ErrorContext } from '../provider/totalProvider'
+import { useAuth } from '../provider/authProvider'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -48,7 +48,7 @@ export default function SignIn(props) {
     const classes = useStyles();
     const history = useHistory();
     const { setErrorState } = React.useContext(ErrorContext);
-    const { dispatchAuthState } = React.useContext(AuthContext);
+    const auth = useAuth();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -58,15 +58,15 @@ export default function SignIn(props) {
             username: email,
             password: password
         }).then(res => {
-            dispatchAuthState({
-                type: authActions.LOGIN,
-                payload: res.data.token
-            });
+            auth.authicated()
             history.push('/userpage')
         }).catch(err => {
+            console.log(err)
             setErrorState({
                 hasError: true,
-                message: err.response.data.message
+                // message: err.response?.data?.message || err
+                message: 'aaa'
+
             })
         })
     }

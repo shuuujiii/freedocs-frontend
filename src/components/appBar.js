@@ -13,8 +13,7 @@ import Menu from '@material-ui/core/Menu';
 import { useHistory } from 'react-router-dom'
 
 // context 
-import { AuthContext } from '../provider/totalProvider'
-import { authActions } from '../reducers/authReducer'
+import { useAuth } from '../provider/authProvider'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuAppBar() {
     const classes = useStyles();
     const history = useHistory();
-    const { authState, dispatchAuthState } = React.useContext(AuthContext);
+    const auth = useAuth();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
@@ -52,7 +51,8 @@ export default function MenuAppBar() {
     }
 
     const handleLogout = () => {
-        dispatchAuthState({ type: authActions.LOGOUT })
+        auth.logout();
+        history.push('/')
     }
 
     return (
@@ -65,7 +65,7 @@ export default function MenuAppBar() {
                     <Typography variant="h6" className={classes.title}>
                         FreeDocs
                     </Typography>
-                    {authState.token && (
+                    {auth.authState.isAuthenticated && (
                         <div>
                             <IconButton
                                 aria-label="account of current user"
