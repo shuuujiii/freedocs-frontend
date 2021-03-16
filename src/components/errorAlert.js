@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
-import { ErrorContext, ErrorStateInitial } from '../provider/totalProvider'
+import { useError } from '../provider/errorProvider'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,18 +14,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleAlerts() {
     const classes = useStyles();
-    const { errorState, setErrorState } = React.useContext(ErrorContext)
+    const error = useError();
     const closeErrorAlert = () => {
-        setErrorState(ErrorStateInitial)
+        error.init()
     }
     return (
         <div>
-            { errorState.hasError &&
+            { error.errorState.hasError &&
                 <div className={classes.root}>
                     <Alert
                         onClose={closeErrorAlert}
                         severity="error"
-                    >{errorState.message}</Alert>
+                    >{error.errorState.message}</Alert>
                 </div>
             }
         </div>

@@ -21,7 +21,7 @@ import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 // context 
-import { ErrorContext } from '../provider/totalProvider'
+import { useError } from '../provider/errorProvider'
 import { useAuth } from '../provider/authProvider'
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn(props) {
     const classes = useStyles();
     const history = useHistory();
-    const { setErrorState } = React.useContext(ErrorContext);
+    const error = useError();
     const auth = useAuth();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -61,8 +61,7 @@ export default function SignIn(props) {
             auth.authenticated()
             history.push('/userpage')
         }).catch(err => {
-            console.log(err)
-            setErrorState({
+            error.setErrorState({
                 hasError: true,
                 message: err.response?.data?.message || err
 

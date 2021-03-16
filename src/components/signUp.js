@@ -18,7 +18,7 @@ import Container from '@material-ui/core/Container';
 import axios from 'axios'
 
 // context 
-import { ErrorContext } from '../provider/totalProvider'
+import { useError } from '../provider/errorProvider'
 
 // component
 import Copyright from './common/copyright'
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
-    const { _, setErrorState } = React.useContext(ErrorContext)
+    const error = useError()
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
@@ -60,7 +60,7 @@ export default function SignUp() {
                 console.log(res)
             }
         ).catch(err => {
-            setErrorState({ hasError: true, message: err.response.data.message })
+            error.setErrorState({ hasError: true, message: err.response.data.message })
         }
         )
     }
