@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 // component
-import Copyright from './copyright'
+import Copyright from './common/copyright'
 
 // util
 import axios from 'axios'

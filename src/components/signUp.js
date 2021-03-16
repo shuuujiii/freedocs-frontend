@@ -21,7 +21,7 @@ import axios from 'axios'
 import { ErrorContext } from '../provider/totalProvider'
 
 // component
-import Copyright from './copyright'
+import Copyright from './common/copyright'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

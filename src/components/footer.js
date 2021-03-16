@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import Copyright from './copyright'
+import Copyright from './common/copyright'
 // function Copyright() {
 //     return (
 //         <Typography variant="body2" color="textSecondary" style={{ whiteSpace: 'nowrap' }}>
