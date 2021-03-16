@@ -58,14 +58,13 @@ export default function SignIn(props) {
             username: email,
             password: password
         }).then(res => {
-            auth.authicated()
+            auth.authenticated()
             history.push('/userpage')
         }).catch(err => {
             console.log(err)
             setErrorState({
                 hasError: true,
-                // message: err.response?.data?.message || err
-                message: 'aaa'
+                message: err.response?.data?.message || err
 
             })
         })
