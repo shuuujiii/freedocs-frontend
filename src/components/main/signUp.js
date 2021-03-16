@@ -18,10 +18,10 @@ import Container from '@material-ui/core/Container';
 import axios from 'axios'
 
 // context 
-import { useError } from '../provider/errorProvider'
+import { useError } from '../../provider/errorProvider'
 
 // component
-import Copyright from './common/copyright'
+import Copyright from '../common/copyright'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { AuthProvider } from './authProvider'
 import { ErrorProvider } from './errorProvider'
 
@@ -10,4 +11,8 @@ export const Provider = ({ children }) => {
             </AuthProvider>
         </ ErrorProvider >
     )
+}
+
+Provider.propTypes = {
+    children: PropTypes.element,
 }

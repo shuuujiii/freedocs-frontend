@@ -1,11 +1,11 @@
 import React from 'react'
-import AppBar from './main/appBar'
-import Footer from './main/footer'
+import AppBar from './appBar'
+import Footer from './footer'
 const UserPage = () => {
     return (
         <div>
             <AppBar />
-            userpage
+                userpage
             <Footer />
         </div>
     )

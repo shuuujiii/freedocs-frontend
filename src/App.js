@@ -1,20 +1,20 @@
 
 import React from 'react'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from './provider/totalProvider'
-import PrivateRoute from './components/privateRoute'
-import SignUp from './components/signUp'
-import SignIn from './components/signIn'
-import Home from './components/home'
+import PrivateRoute from './utils/privateRoute'
+import SignUp from './components/main/signUp'
+import SignIn from './components/main/signIn'
+import Home from './components/main/home'
 import ErrorAlert from './components/main/errorAlert'
-import Userpage from './components/userPage'
+import Userpage from './components/main/userPage'
+import NotFound from './components/main/notFound'
 import Account from './components/common/account'
 import Profile from './components/common/profile'
 import Terms from './components/common/terms'
 import PrivacyPolicy from './components/common/privacypolicy'
 import About from './components/common/about'
 import Contact from './components/common/contact'
-import NotFound from './components/notFound'
 
 const App = () => {
   return (

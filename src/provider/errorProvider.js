@@ -1,5 +1,5 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 const ErrorContext = React.createContext()
 const initialErrorState = {
     hasError: false,
@@ -20,4 +20,8 @@ export const ErrorProvider = ({ children }) => {
             {children}
         </ErrorContext.Provider>
     )
+}
+
+ErrorProvider.propTypes = {
+    children: PropTypes.element
 }

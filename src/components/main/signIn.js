@@ -14,15 +14,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 // component
-import Copyright from './common/copyright'
+import Copyright from '../common/copyright'
 
 // util
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 // context 
-import { useError } from '../provider/errorProvider'
-import { useAuth } from '../provider/authProvider'
+import { useError } from '../../provider/errorProvider'
+import { useAuth } from '../../provider/authProvider'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn(props) {
+export default function SignIn() {
     const classes = useStyles();
     const history = useHistory();
     const error = useError();
@@ -57,10 +57,11 @@ export default function SignIn(props) {
         axios.post('http://localhost:5000/api/v1/users/login', {
             username: email,
             password: password
-        }).then(res => {
+        }).then(() => {
             auth.authenticated()
             history.push('/userpage')
-        }).catch(err => {
+        }
+        ).catch(err => {
             error.setErrorState({
                 hasError: true,
                 message: err.response?.data?.message || err
