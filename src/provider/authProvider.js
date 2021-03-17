@@ -56,5 +56,5 @@ export function AuthProvider({ children }) {
 }
 
 AuthProvider.propTypes = {
-    children: PropTypes.element
+    children: PropTypes.array
 }

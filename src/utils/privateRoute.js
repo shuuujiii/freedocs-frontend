@@ -8,7 +8,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     const auth = useAuth()
     const [authCheck, setAuthCheck] = React.useState(false)
     React.useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/users/authenticate')
+        axios.get(process.env.REACT_APP_API + '/users/authenticate')
             .then(() => {
 
                 auth.authenticated()
@@ -29,7 +29,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 };
 
 PrivateRoute.propTypes = {
-    component: PropTypes.element
+    component: PropTypes.func
 }
 
 export default PrivateRoute;
