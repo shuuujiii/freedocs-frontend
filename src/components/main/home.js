@@ -6,7 +6,7 @@ const Home = () => {
     const history = useHistory()
     const test = (e) => {
         e.preventDefault();
-        history.push('/signup')
+        history.push('/signin')
     }
     return (
         <div>

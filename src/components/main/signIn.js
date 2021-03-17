@@ -49,22 +49,23 @@ export default function SignIn() {
     const history = useHistory();
     const error = useError();
     const auth = useAuth();
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = React.useState('nabe');
+    const [password, setPassword] = React.useState('nabenabe');
 
     const onClickSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:5000/api/v1/users/login', {
             username: email,
             password: password
-        }).then(() => {
+        }).then((res) => {
+            console.log(res)
             auth.authenticated()
             history.push('/userpage')
         }
         ).catch(err => {
             error.setErrorState({
                 hasError: true,
-                message: err.response?.data?.message || err
+                message: err.response?.data?.message || err.message
 
             })
         })

@@ -10,7 +10,8 @@ export const authActions = {
     INIT: 'INIT',
     LOGIN: 'LOGIN',
     LOGOUT: 'LOGOUT',
-    AUTHENTICATED: 'AUTHENTICATED'
+    AUTHENTICATED: 'AUTHENTICATED',
+    NOT_AUTHENTICATED: 'NOT_AUTHENTICATED',
 }
 
 export const AuthReducer = (state, action) => {
@@ -35,6 +36,9 @@ export function AuthProvider({ children }) {
     const [authState, dispatchAuthState] = React.useReducer(AuthReducer, authInitialState)
     const authenticated = () => {
         dispatchAuthState({ type: authActions.AUTHENTICATED })
+    }
+    const notAuthenticatd = () => {
+        dispatchAuthState({ type: authActions.NOT_AUTHENTICATED })
     }
     const logout = () => {
         dispatchAuthState({ type: authActions.LOGOUT })
