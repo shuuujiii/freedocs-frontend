@@ -2,13 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { AuthProvider } from './authProvider'
 import { ErrorProvider } from './errorProvider'
-
+import { MessageProvider } from './messageProvider'
 export const Provider = ({ children }) => {
     return (
         < ErrorProvider >
-            <AuthProvider>
-                {children}
-            </AuthProvider>
+            <MessageProvider>
+                <AuthProvider>
+                    {children}
+                </AuthProvider>
+            </MessageProvider>
         </ ErrorProvider >
     )
 }

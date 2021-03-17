@@ -3,9 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom';
 import { useAuth } from '../provider/authProvider';
+import { useHistory } from 'react-router-dom'
 import axios from 'axios';
 const PrivateRoute = ({ component: Component, ...rest }) => {
-    const auth = useAuth()
+    const auth = useAuth();
+    const history = useHistory();
     const [authCheck, setAuthCheck] = React.useState(false)
     React.useEffect(() => {
         axios.defaults.withCredentials = true;
@@ -15,8 +17,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                     auth.authenticated()
                 } else {
                     auth.notAuthenticated()
+                    history.push('/signin')
                 }
-            }).catch(e => { console.log(e) })
+            }).catch(e => {
+                console.log(e)
+                history.push('/signin')
+            })
         setAuthCheck(true)
         // eslint-disable-next-line
     }, [])

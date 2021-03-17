@@ -66,7 +66,6 @@ export default function SignIn() {
             error.setErrorState({
                 hasError: true,
                 message: err.response?.data?.message || err.message
-
             })
         })
     }
