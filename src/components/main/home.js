@@ -10,10 +10,8 @@ const Home = () => {
     }
     return (
         <div>
-            <MenuAppBar />
             home
             <button onClick={(e) => { test(e) }}>button</button>
-            <Footer />
         </div>
     )
 }

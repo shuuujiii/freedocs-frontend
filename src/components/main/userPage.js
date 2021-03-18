@@ -1,8 +1,5 @@
 import React from 'react'
-import Container from '@material-ui/core/Container';
 
-import AppBar from './appBar'
-import Footer from './footer'
 import axios from 'axios'
 // import { useAuth } from '../../provider/authProvider'
 import CreateArticle from '../article/createArticle'
@@ -19,13 +16,8 @@ const UserPage = () => {
 
     return (
         <div>
-            <AppBar />
-            <Container maxWidth="sm">
-                <Articles articles={articles} setArticles={setArticles} />
-                <CreateArticle setArticles={setArticles} />
-            </Container>
-            <Footer />
-
+            <Articles articles={articles} setArticles={setArticles} />
+            <CreateArticle setArticles={setArticles} />
         </div>
     )
 }
