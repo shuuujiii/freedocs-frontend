@@ -8,7 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-
+import Button from '@material-ui/core/Button'
 // util
 import { useHistory } from 'react-router-dom'
 
@@ -24,7 +24,20 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+        color: 'white',
+        '&:hover': {
+            cursor: 'pointer'
+        }
     },
+    signin: {
+        color: 'white',
+        textTransform: 'none',
+    },
+    signup: {
+        color: 'white',
+        textTransform: 'none',
+    }
+
 }));
 
 export default function MenuAppBar() {
@@ -52,6 +65,11 @@ export default function MenuAppBar() {
         history.push('/')
     }
 
+    const onClickTitle = (e) => {
+        e.preventDefault()
+        auth.authState.isAuthenticated ? history.push('/userpage') : history.push('/')
+    }
+
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -59,10 +77,18 @@ export default function MenuAppBar() {
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        FreeDocs
-                    </Typography>
-                    {auth.authState.isAuthenticated && (
+                    <div
+                        className={classes.title}
+                        onClick={e => { onClickTitle(e) }}
+                    >
+                        <Typography
+                            variant="h6"
+                        >
+                            FreeDocs
+                        </Typography>
+                    </div>
+
+                    {auth.authState.isAuthenticated ? (
                         <div>
                             <IconButton
                                 aria-label="account of current user"
@@ -91,6 +117,18 @@ export default function MenuAppBar() {
                                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
+                        </div>
+                    ) : (
+                        <div>
+                            <Button
+                                className={classes.signin}
+                                href="/signin"
+                            >Sign in</Button>
+                            <Button
+                                className={classes.signup}
+                                variant="outlined"
+                                href="/signup"
+                            >Sign up</Button>
                         </div>
                     )}
                 </Toolbar>
