@@ -17,7 +17,7 @@ import Container from '@material-ui/core/Container';
 // utils
 import axios from 'axios'
 
-// context 
+// context
 import { useError } from '../../provider/errorProvider'
 
 // component
@@ -59,10 +59,7 @@ export default function SignUp() {
             res => {
                 console.log(res)
             }
-        ).catch(err => {
-            error.setErrorState({ hasError: true, message: err.response.data.message })
-        }
-        )
+        ).catch(error.setError)
     }
     return (
 

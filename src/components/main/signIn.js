@@ -20,7 +20,7 @@ import Copyright from '../common/copyright'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
-// context 
+// context
 import { useError } from '../../provider/errorProvider'
 import { useAuth } from '../../provider/authProvider'
 
@@ -65,13 +65,7 @@ export default function SignIn() {
             error.init()
             auth.authenticated()
             history.push('/userpage')
-        }
-        ).catch(err => {
-            error.setErrorState({
-                hasError: true,
-                message: err.response?.data?.message || err.message
-            })
-        })
+        }).catch(error.setError)
     }
     return (
         <Container component="main" maxWidth="xs">

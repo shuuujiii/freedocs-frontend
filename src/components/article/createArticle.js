@@ -20,13 +20,12 @@ export default function CreateArticle({ setArticles }) {
         e.preventDefault();
         axios.post(process.env.REACT_APP_API + '/article', {
             url: url,
-            tags: tags.map(tag => tag._id)
+            tags: tags
         }).then(
             () => {
                 axios.get(process.env.REACT_APP_API + '/article')
                     .then(res => {
                         setArticles(res.data)
-                        setTags([])
                         message.successMessage('created')
                         setUrl('')
                     })
@@ -34,12 +33,7 @@ export default function CreateArticle({ setArticles }) {
                         console.log(err)
                     })
             }
-        ).catch(err => {
-            error.setErrorState({
-                hasError: true,
-                message: err.response?.data?.message || err.message
-            })
-        });
+        ).catch(error.setError);
     }
     return (
         <div>

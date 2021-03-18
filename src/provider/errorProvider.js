@@ -11,11 +11,21 @@ export const ErrorProvider = ({ children }) => {
     const init = () => {
         setErrorState(initialErrorState)
     }
+    const setError = (err) => {
+        setErrorState({
+            hasError: true,
+            message: err.response?.data?.message || 'Sorry! it may be a bug :P'
+        })
+        if (!err.response?.data?.message) {
+            console.log(err)
+        }
+
+    }
     return (
         <ErrorContext.Provider value={{
             errorState,
-            setErrorState,
-            init
+            init,
+            setError,
         }}>
             {children}
         </ErrorContext.Provider>

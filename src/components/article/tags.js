@@ -37,15 +37,9 @@ const Tags = ({ tags, setTags }) => {
                 name: inputTag
             })
                 .then(res => {
-                    console.log(res.data)
                     setTags(prev => [...prev, res.data])
                     setInputTag('')
-                }).catch(err => {
-                    error.setError({
-                        hasError: true,
-                        message: err.message,
-                    })
-                })
+                }).catch(error.setError)
         }
     }
     const handleDelete = (id) => {

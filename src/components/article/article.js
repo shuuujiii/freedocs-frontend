@@ -46,14 +46,9 @@ const Article = ({ article, setArticles }) => {
                 .then(res => {
                     setArticles(res.data)
                     message.successMessage('deleted')
-                }).catch(err => { console.log(err) })
+                }).catch(error.setError)
         }
-        ).catch(err => {
-            error.setErrorState({
-                hasError: true,
-                message: err.response?.data?.message || err.message
-            })
-        })
+        ).catch(error.setError)
     }
 
     const onClickEdit = (e) => {
