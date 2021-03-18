@@ -13,6 +13,9 @@ import axios from 'axios'
 import { useError } from '../../provider/errorProvider'
 import { useMessage } from '../../provider/messageProvider'
 
+//components
+import EditArticle from './editArticle'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -31,6 +34,7 @@ const Article = ({ article, setArticles }) => {
     const classes = useStyles();
     const error = useError();
     const message = useMessage();
+    const [isEdit, setIsEdit] = React.useState(false)
 
     const onClickDelete = (e, id) => {
         e.preventDefault()
@@ -55,36 +59,43 @@ const Article = ({ article, setArticles }) => {
 
     const onClickEdit = (e, id) => {
         e.preventDefault()
-        console.log('edit clicked', id)
+        setIsEdit(true)
     }
     return (
-        <Grid item xs={12} >
-            <Box
-                display="flex"
-                flexDirection="row"
-                p={1}
-                m={1}
-                bgcolor="grey.200"
-            >
-                <Box display="flex" flexGrow={1} alignItems="center" alignContent="center">
-                    {article.url}
-                </Box>
-                <Box className={classes.editButton}>
-                    <Button>
-                        <EditIcon
-                            variant="contained"
-                            onClick={e => { onClickEdit(e, article._id) }}
-                        />
-                    </Button>
-                    <Button>
-                        <DeleteIcon
-                            variant="contained"
-                            onClick={e => { onClickDelete(e, article._id) }}
-                        />
-                    </Button>
-                </Box>
-            </Box>
-        </Grid>
+        <div style={{ width: '100%' }}>
+            {isEdit ?
+                <EditArticle
+                    setIsEdit={setIsEdit}
+                    article={article}
+                    setArticles={setArticles}
+                />
+                :
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                    p={1}
+                    m={1}
+                    bgcolor="grey.200"
+                >
+                    <Box display="flex" flexGrow={1} alignItems="center" alignContent="center">
+                        {article.url}
+                    </Box>
+                    <Box className={classes.editButton}>
+                        <Button>
+                            <EditIcon
+                                variant="contained"
+                                onClick={e => { onClickEdit(e, article._id) }}
+                            />
+                        </Button>
+                        <Button>
+                            <DeleteIcon
+                                variant="contained"
+                                onClick={e => { onClickDelete(e, article._id) }}
+                            />
+                        </Button>
+                    </Box>
+                </Box>}
+        </div>
     )
 }
 
