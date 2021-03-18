@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // material-ui
-import Box from '@material-ui/core/Box';
+// import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
+import usePagination from "../../utils/usePagination";
+
 // utils
 import axios from 'axios'
 import { useError } from '../../provider/errorProvider'
@@ -27,21 +29,28 @@ export default function Articles({ articles, setArticles }) {
     const error = useError();
     const message = useMessage();
 
+    const [page, setPage] = React.useState(1);
+    const PER_PAGE = 10;
+
+    const count = Math.ceil(articles.length / PER_PAGE);
+    const _DATA = usePagination(articles, PER_PAGE);
+
+    const handleChange = (e, p) => {
+        setPage(p);
+        _DATA.jump(p);
+    };
     const onClickDelete = (e, id) => {
         e.preventDefault()
-        console.log('id', id)
         axios.delete(process.env.REACT_APP_API + '/article', {
             data: {
                 _id: id
             }
-        }).then((r) => {
-            console.log('delete response', r.data.deletedCount)
+        }).then(() => {
             axios.get(process.env.REACT_APP_API + '/article')
                 .then(res => {
-                    console.log(res.data)
                     setArticles(res.data)
                     message.successMessage('deleted')
-                })
+                }).catch(err => { console.log(err) })
         }
         ).catch(err => {
             error.setErrorState({
@@ -52,8 +61,16 @@ export default function Articles({ articles, setArticles }) {
     }
     return (
         <div>
+            <Pagination
+                count={count}
+                size="large"
+                page={page}
+                variant="outlined"
+                shape="rounded"
+                onChange={handleChange}
+            />
             <Grid container justify="center" spacing={2}>
-                {articles.map((article) => (
+                {_DATA.currentData().map((article) => (
                     <Grid item xs={12} key={article._id}>
                         <Paper className={classes.paper} variant='outlined'>
                             <div> {article.title}</div>
@@ -70,7 +87,6 @@ export default function Articles({ articles, setArticles }) {
                     </Grid>
                 ))}
             </Grid>
-            <Pagination count={10} variant="outlined" shape="rounded" />
         </div>
     )
 }

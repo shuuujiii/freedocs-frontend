@@ -49,8 +49,8 @@ export default function SignIn() {
     const history = useHistory();
     const error = useError();
     const auth = useAuth();
-    const [email, setEmail] = React.useState('nabe');
-    const [password, setPassword] = React.useState('nabenabe');
+    const [email, setEmail] = React.useState('seedUser');
+    const [password, setPassword] = React.useState('seedseed');
 
     const onClickSubmit = (e) => {
         e.preventDefault();

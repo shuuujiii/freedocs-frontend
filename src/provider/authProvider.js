@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
     const authenticated = () => {
         dispatchAuthState({ type: authActions.AUTHENTICATED })
     }
-    const notAuthenticatd = () => {
+    const notAuthenticated = () => {
         dispatchAuthState({ type: authActions.NOT_AUTHENTICATED })
     }
     const logout = () => {
@@ -51,6 +51,7 @@ export function AuthProvider({ children }) {
             authState,
             dispatchAuthState,
             authenticated,
+            notAuthenticated,
             init,
             logout,
         }}>

@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 // material-ui
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -10,17 +11,17 @@ import { useError } from '../../provider/errorProvider'
 import { useMessage } from '../../provider/messageProvider'
 // conponent
 import Messages from '../main/messages'
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(3),
-            // width: '25ch',
-        },
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         '& > *': {
+//             margin: theme.spacing(3),
+//             // width: '25ch',
+//         },
+//     },
+// }));
 
-export default function CreateArticle() {
-    const classes = useStyles();
+export default function CreateArticle({ setArticles }) {
+    // const classes = useStyles();
     const error = useError();
     const message = useMessage();
     const [title, setTitle] = React.useState('');
@@ -33,9 +34,16 @@ export default function CreateArticle() {
             tags: []
         }).then(
             () => {
-                message.successMessage('created')
-                setTitle('')
-                setUrl('')
+                axios.get(process.env.REACT_APP_API + '/article')
+                    .then(res => {
+                        setArticles(res.data)
+                        message.successMessage('created')
+                        setTitle('')
+                        setUrl('')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         ).catch(err => {
             error.setErrorState({
@@ -82,4 +90,8 @@ export default function CreateArticle() {
             <Messages />
         </Box>
     );
+}
+
+CreateArticle.propTypes = {
+    setArticles: PropTypes.func
 }
