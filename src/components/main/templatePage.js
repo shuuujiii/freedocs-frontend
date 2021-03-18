@@ -9,6 +9,8 @@ import Container from '@material-ui/core/Container';
 import NotFound from './notFound'
 import AppBar from './appBar'
 import Footer from './footer'
+import Messages from './messages'
+
 const TemplatePage = () => {
     return (
         <div>
@@ -21,6 +23,7 @@ const TemplatePage = () => {
                     <Route component={NotFound} />
                 </Switch>
             </Container>
+            <Messages />
             <Footer />
         </div >
     );
