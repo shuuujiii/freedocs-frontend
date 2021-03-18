@@ -43,12 +43,9 @@ export default function MenuAppBar() {
     }
 
     const handleProfile = () => {
+        handleClose()
         history.push('/profile');
     };
-
-    const handleAccount = () => {
-        history.push('/account')
-    }
 
     const handleLogout = () => {
         auth.logout();
@@ -92,7 +89,6 @@ export default function MenuAppBar() {
                                 onClose={handleClose}
                             >
                                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                                <MenuItem onClick={handleAccount}>My account</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
                         </div>
