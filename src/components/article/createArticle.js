@@ -19,12 +19,14 @@ export default function CreateArticle({ setArticles }) {
     const error = useError();
     const message = useMessage();
     const [url, setUrl] = React.useState('');
+    const [description, setDescription] = React.useState('')
     const [tags, setTags] = React.useState([])
     const onClickSave = (e) => {
         e.preventDefault();
         axios.post(process.env.REACT_APP_API + '/article', {
             url: url,
-            tags: tags.map(tag => tag._id)
+            description: description,
+            tags: tags.map(tag => tag._id),
         }).then(
             () => {
                 axios.get(process.env.REACT_APP_API + '/article')
@@ -40,8 +42,7 @@ export default function CreateArticle({ setArticles }) {
         ).catch(error.setError);
     }
     return (
-        <Paper
-        >
+        <Paper>
             <Box
                 display="flex"
                 flexDirection="column"
@@ -55,25 +56,37 @@ export default function CreateArticle({ setArticles }) {
                 <Box
                     display="flex"
                     flexDirection="row"
+                    m={1}
                 >
-                    <Box flexGrow={1} >
-                        <TextField
-                            id="outlined-url"
-                            label="URL"
-                            placeholder="input url"
-                            variant="outlined"
-                            fullWidth
-                            size="small"
-                            value={url}
-                            onChange={e => { setUrl(e.target.value) }}
-                        />
-                    </Box>
-                    <Box>
-                        <Button
-                            variant="contained"
-                            onClick={e => { onClickSave(e) }}
-                        >Save</Button>
-                    </Box>
+                    <TextField
+                        id="outlined-url"
+                        label="URL"
+                        placeholder="input url"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        value={url}
+                        onChange={e => { setUrl(e.target.value) }}
+                    />
+                </Box>
+                <Box m={1}>
+                    <TextField
+                        multiline={true}
+                        fullWidth
+                        label="description"
+                        variant="outlined"
+                        value={description}
+                        onChange={e => { setDescription(e.target.value) }}
+                    />
+                </Box>
+                <Box
+                    m={1}
+                >
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={e => { onClickSave(e) }}
+                    >Save</Button>
                 </Box>
             </Box>
         </Paper>
