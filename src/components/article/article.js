@@ -5,6 +5,23 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper'
+
+import clsx from 'clsx';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 // icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -28,14 +45,26 @@ const useStyles = makeStyles((theme) => ({
         minHeight: '50px',
         alignItems: 'center',
     },
-
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
 }));
 const Article = ({ article, setArticles }) => {
     const classes = useStyles();
+    const [expanded, setExpanded] = React.useState(false);
     const error = useError();
     const message = useMessage();
     const [isEdit, setIsEdit] = React.useState(false)
-
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
     const onClickDelete = (e, id) => {
         e.preventDefault()
         axios.delete(process.env.REACT_APP_API + '/article', {
@@ -65,47 +94,54 @@ const Article = ({ article, setArticles }) => {
                     setArticles={setArticles}
                 />
                 :
-                <Paper>
-
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        p={1}
-                        m={1}
-                    >
-                        <Box>
-                            <Paper
-                                elevation={0}
-                                component="ul"
-                                className={classes.tagPaper}>
-                                <TagChips tags={article.tags} setTags={() => { }} deletable={false} />
-                            </Paper>
-                        </Box>
-                        <Box display="flex" flexDirection='row'>
-                            <Box display="flex"
-                                flexGrow={1}
-                                alignItems="center"
-                                alignContent="center">
-                                {article.url}
-                            </Box>
-                            <Box className={classes.editButton}>
-                                <Button>
-                                    <EditIcon
-                                        variant="contained"
-                                        onClick={e => { onClickEdit(e, article._id) }}
-                                    />
-                                </Button>
-                                <Button>
-                                    <DeleteIcon
-                                        variant="contained"
-                                        onClick={e => { onClickDelete(e, article._id) }}
-                                    />
-                                </Button>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Paper>
-
+                <Card style={{ marginBottom: '10px' }}>
+                    <CardContent>
+                        <Paper
+                            elevation={0}
+                            component="ul"
+                            className={classes.tagPaper}>
+                            <TagChips tags={article.tags} setTags={() => { }} deletable={false} />
+                        </Paper>
+                    </CardContent>
+                    <CardContent>
+                        {article.url}
+                    </CardContent>
+                    <CardActions disableSpacing>
+                        <IconButton
+                            onClick={e => { onClickEdit(e, article._id) }}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton
+                            onClick={e => { onClickDelete(e, article._id) }}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                        <IconButton
+                            className={clsx(classes.expand, {
+                                [classes.expandOpen]: expanded,
+                            })}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <ExpandMoreIcon />
+                        </IconButton>
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                            <Typography
+                                style={{ whiteSpace: "pre-line" }}
+                                variant="body2"
+                                color="textSecondary"
+                                component="span"
+                            >
+                                {article.description}
+                            </Typography>
+                        </CardContent>
+                    </Collapse>
+                </Card>
+                // </Box>
             }
         </div >
     )
