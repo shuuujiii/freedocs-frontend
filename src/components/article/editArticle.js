@@ -39,8 +39,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
             }
         ).catch(error.setError)
     }
-    const onClickCancel = (e) => {
-        // e.preventDefault()
+    const onClickCancel = () => {
         setIsEdit(false)
     }
     return (

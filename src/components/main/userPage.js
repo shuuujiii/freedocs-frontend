@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 // material-ui
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box'
 // components
 import CreateArticle from '../article/createArticle'
 import Articles from '../article/articles'
