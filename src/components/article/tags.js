@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(0.5),
         margin: 'auto',
         minHeight: '50px',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     chip: {
         margin: theme.spacing(0.5),
@@ -47,7 +47,7 @@ const Tags = ({ tags, setTags }) => {
     }
 
     return (
-        <Paper component="ul" className={classes.root}>
+        <Paper elevation={0} component="ul" className={classes.root}>
             {tags.map(tag => {
                 return (
                     <li key={tag._id}>

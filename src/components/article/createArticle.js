@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 // material-ui
+import { makeStyles } from '@material-ui/core/styles';
+
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+
 // utils
 import axios from 'axios';
 import { useError } from '../../provider/errorProvider';
@@ -11,7 +15,15 @@ import { useMessage } from '../../provider/messageProvider';
 
 // components
 import Tags from './tags';
+import SelectInput from '@material-ui/core/Select/SelectInput';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        margin: theme.spacing(1)
+    }
+}));
 export default function CreateArticle({ setArticles }) {
+    const classes = useStyles();
     const error = useError();
     const message = useMessage();
     const [url, setUrl] = React.useState('');
@@ -20,23 +32,23 @@ export default function CreateArticle({ setArticles }) {
         e.preventDefault();
         axios.post(process.env.REACT_APP_API + '/article', {
             url: url,
-            tags: tags
+            tags: tags.map(tag => tag._id)
         }).then(
             () => {
                 axios.get(process.env.REACT_APP_API + '/article')
                     .then(res => {
+                        error.init()
                         setArticles(res.data)
                         message.successMessage('created')
                         setUrl('')
+                        setTags([])
                     })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                    .catch(error.setError)
             }
         ).catch(error.setError);
     }
     return (
-        <div>
+        <Paper elevation={3} className={classes.root}>
             <Tags tags={tags} setTags={setTags} />
             <Box
                 display="flex"
@@ -64,7 +76,7 @@ export default function CreateArticle({ setArticles }) {
                     >Save</Button>
                 </Box>
             </Box>
-        </div>
+        </Paper>
     );
 }
 
