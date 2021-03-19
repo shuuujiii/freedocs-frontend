@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper'
 // icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -22,11 +23,18 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         // minHeight: 40,
     },
+    mainBox: {
+        // backgroundColor: "#eceff1"
+        display: "flex",
+        flexDirection: 'row',
+        padding: theme.spacing(1),
+        margin: theme.spacing(1),
+    },
     control: {
-        padding: theme.spacing(2),
+        // padding: theme.spacing(2),
     },
     editButton: {
-        backgroundColor: 'green.300'
+        // backgroundColor: 'green.300'
     }
 }));
 const Article = ({ article, setArticles }) => {
@@ -57,38 +65,37 @@ const Article = ({ article, setArticles }) => {
     }
     return (
         <div style={{ width: '100%' }}>
-            {isEdit ?
-                <EditArticle
-                    setIsEdit={setIsEdit}
-                    article={article}
-                    setArticles={setArticles}
-                />
-                :
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    p={1}
-                    m={1}
-                    bgcolor="grey.200"
-                >
-                    <Box display="flex" flexGrow={1} alignItems="center" alignContent="center">
-                        {article.url}
-                    </Box>
-                    <Box className={classes.editButton}>
-                        <Button>
-                            <EditIcon
-                                variant="contained"
-                                onClick={e => { onClickEdit(e, article._id) }}
-                            />
-                        </Button>
-                        <Button>
-                            <DeleteIcon
-                                variant="contained"
-                                onClick={e => { onClickDelete(e, article._id) }}
-                            />
-                        </Button>
-                    </Box>
-                </Box>}
+            <Paper>
+                {isEdit ?
+                    <EditArticle
+                        setIsEdit={setIsEdit}
+                        article={article}
+                        setArticles={setArticles}
+                    />
+                    :
+                    <Box className={classes.mainBox}>
+                        <Box display="flex"
+                            flexGrow={1}
+                            alignItems="center"
+                            alignContent="center">
+                            {article.url}
+                        </Box>
+                        <Box className={classes.editButton}>
+                            <Button>
+                                <EditIcon
+                                    variant="contained"
+                                    onClick={e => { onClickEdit(e, article._id) }}
+                                />
+                            </Button>
+                            <Button>
+                                <DeleteIcon
+                                    variant="contained"
+                                    onClick={e => { onClickDelete(e, article._id) }}
+                                />
+                            </Button>
+                        </Box>
+                    </Box>}
+            </Paper>
         </div>
     )
 }

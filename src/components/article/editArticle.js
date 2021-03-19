@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // material-ui
+import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -8,7 +9,22 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import { useError } from '../../provider/errorProvider'
 import { useMessage } from '../../provider/messageProvider'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: "flex",
+        padding: theme.spacing(1),
+        margin: theme.spacing(1),
+        alignItems: 'center',
+    },
+    textFieldBox: {
+        display: "flex",
+        flexGrow: '1'
+    }
+
+}))
 const EditArticle = ({ setIsEdit, article, setArticles }) => {
+    const classes = useStyles();
     const error = useError();
     const message = useMessage();
     const [url, setUrl] = React.useState(article.url)
@@ -27,29 +43,20 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 message.successMessage('edited')
                 axios.get(process.env.REACT_APP_API + '/article')
                     .then(res => {
+                        error.init()
                         setArticles(res.data)
                         setIsEdit(false)
                     })
             }
-        ).catch(err => {
-            error.setError({
-                hasError: true,
-                message: err?.response?.data?.message || err.message
-            })
-        })
+        ).catch(error.setError)
     }
     const onClickCancel = (e) => {
         e.preventDefault()
         setIsEdit(false)
     }
     return (
-        <Box
-            display="flex"
-            p={1}
-            bgcolor="background.paper"
-            alignItems="center"
-        >
-            <Box flexGrow={1} >
+        <Box className={classes.root}>
+            <Box className={classes.textFieldBox}>
                 <TextField
                     id="outlined-url"
                     label="URL"
@@ -61,13 +68,13 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                     onChange={e => { setUrl(e.target.value) }}
                 />
             </Box>
-            <Box bgcolor="background.paper">
+            <Box>
                 <Button
                     variant="contained"
                     onClick={e => { onClickSave(e) }}
                 >Save</Button>
             </Box>
-            <Box bgcolor="background.paper">
+            <Box>
                 <Button
                     variant="contained"
                     onClick={e => { onClickCancel(e) }}

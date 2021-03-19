@@ -15,7 +15,6 @@ import { useMessage } from '../../provider/messageProvider';
 
 // components
 import Tags from './tags';
-import SelectInput from '@material-ui/core/Select/SelectInput';
 
 const useStyles = makeStyles((theme) => ({
     root: {
