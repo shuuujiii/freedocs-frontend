@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-// material-ui
-import { makeStyles } from '@material-ui/core/styles';
 
+// material-ui
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -16,13 +15,7 @@ import { useMessage } from '../../provider/messageProvider';
 // components
 import Tags from './tags';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        margin: theme.spacing(1)
-    }
-}));
 export default function CreateArticle({ setArticles }) {
-    const classes = useStyles();
     const error = useError();
     const message = useMessage();
     const [url, setUrl] = React.useState('');
@@ -47,32 +40,40 @@ export default function CreateArticle({ setArticles }) {
         ).catch(error.setError);
     }
     return (
-        <Paper elevation={3} className={classes.root}>
-            <Tags tags={tags} setTags={setTags} />
+        <Paper
+        >
             <Box
                 display="flex"
+                flexDirection="column"
+                alignItems="left"
                 p={1}
-                bgcolor="background.paper"
-                alignItems="center"
-                marginTop="10px"
+                m={1}
             >
-                <Box flexGrow={1} >
-                    <TextField
-                        id="outlined-url"
-                        label="URL"
-                        placeholder="input url"
-                        variant="outlined"
-                        fullWidth
-                        size="small"
-                        value={url}
-                        onChange={e => { setUrl(e.target.value) }}
-                    />
+                <Box>
+                    <Tags tags={tags} setTags={setTags} />
                 </Box>
-                <Box bgcolor="background.paper">
-                    <Button
-                        variant="contained"
-                        onClick={e => { onClickSave(e) }}
-                    >Save</Button>
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                >
+                    <Box flexGrow={1} >
+                        <TextField
+                            id="outlined-url"
+                            label="URL"
+                            placeholder="input url"
+                            variant="outlined"
+                            fullWidth
+                            size="small"
+                            value={url}
+                            onChange={e => { setUrl(e.target.value) }}
+                        />
+                    </Box>
+                    <Box>
+                        <Button
+                            variant="contained"
+                            onClick={e => { onClickSave(e) }}
+                        >Save</Button>
+                    </Box>
                 </Box>
             </Box>
         </Paper>

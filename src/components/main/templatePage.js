@@ -15,7 +15,7 @@ const TemplatePage = () => {
     return (
         <div>
             <AppBar />
-            <Container maxWidth="sm">
+            <Container maxWidth="lg">
                 <Switch>
                     <Route exact path='/' component={Home} />
                     <PrivateRoute path="/userpage" component={Userpage} />

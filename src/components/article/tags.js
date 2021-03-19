@@ -1,28 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles';
-import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import { TextField } from '@material-ui/core';
 
 // utils
 import axios from 'axios';
 import { useError } from '../../provider/errorProvider';
-
+// component
+import TagChips from './tagChips'
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         justifyContent: 'left',
         flexWrap: 'wrap',
         listStyle: 'none',
-        padding: theme.spacing(0.5),
+        padding: theme.spacing(1),
         margin: 'auto',
-        minHeight: '50px',
         alignItems: 'center',
-    },
-    chip: {
-        margin: theme.spacing(0.5),
-    },
+    }
 }));
 
 const Tags = ({ tags, setTags }) => {
@@ -42,23 +38,13 @@ const Tags = ({ tags, setTags }) => {
                 }).catch(error.setError)
         }
     }
-    const handleDelete = (id) => {
-        setTags(prev => prev.filter(tag => tag._id !== id))
-    }
-
     return (
-        <Paper elevation={0} component="ul" className={classes.root}>
-            {tags.map(tag => {
-                return (
-                    <li key={tag._id}>
-                        <Chip
-                            label={tag.name}
-                            onDelete={() => { handleDelete(tag._id) }}
-                            className={classes.chip}
-                        />
-                    </li>
-                )
-            })}
+        <Paper
+            elevation={0}
+            component="ul"
+            className={classes.root}
+        >
+            <TagChips tags={tags} setTags={setTags} deletable={true} />
             <TextField
                 style={{ outlineWidth: '0' }}
                 value={inputTag}

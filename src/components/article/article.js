@@ -15,27 +15,20 @@ import { useMessage } from '../../provider/messageProvider'
 
 //components
 import EditArticle from './editArticle'
+import TagChips from './tagChips'
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
+    tagPaper: {
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        listStyle: 'none',
+        padding: theme.spacing(0.5),
+        margin: 'auto',
+        minHeight: '50px',
+        alignItems: 'center',
     },
-    paper: {
-        // minHeight: 40,
-    },
-    mainBox: {
-        // backgroundColor: "#eceff1"
-        display: "flex",
-        flexDirection: 'row',
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-    },
-    control: {
-        // padding: theme.spacing(2),
-    },
-    editButton: {
-        // backgroundColor: 'green.300'
-    }
+
 }));
 const Article = ({ article, setArticles }) => {
     const classes = useStyles();
@@ -65,38 +58,56 @@ const Article = ({ article, setArticles }) => {
     }
     return (
         <div style={{ width: '100%' }}>
-            <Paper>
-                {isEdit ?
-                    <EditArticle
-                        setIsEdit={setIsEdit}
-                        article={article}
-                        setArticles={setArticles}
-                    />
-                    :
-                    <Box className={classes.mainBox}>
-                        <Box display="flex"
-                            flexGrow={1}
-                            alignItems="center"
-                            alignContent="center">
-                            {article.url}
+            {isEdit ?
+                <EditArticle
+                    setIsEdit={setIsEdit}
+                    article={article}
+                    setArticles={setArticles}
+                />
+                :
+                <Paper>
+
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        p={1}
+                        m={1}
+                    >
+                        <Box>
+                            <Paper
+                                elevation={0}
+                                component="ul"
+                                className={classes.tagPaper}>
+                                <TagChips tags={article.tags} setTags={() => { }} deletable={false} />
+                            </Paper>
                         </Box>
-                        <Box className={classes.editButton}>
-                            <Button>
-                                <EditIcon
-                                    variant="contained"
-                                    onClick={e => { onClickEdit(e, article._id) }}
-                                />
-                            </Button>
-                            <Button>
-                                <DeleteIcon
-                                    variant="contained"
-                                    onClick={e => { onClickDelete(e, article._id) }}
-                                />
-                            </Button>
+                        <Box display="flex" flexDirection='row'>
+                            <Box display="flex"
+                                flexGrow={1}
+                                alignItems="center"
+                                alignContent="center">
+                                {article.url}
+                            </Box>
+                            <Box className={classes.editButton}>
+                                <Button>
+                                    <EditIcon
+                                        variant="contained"
+                                        onClick={e => { onClickEdit(e, article._id) }}
+                                    />
+                                </Button>
+                                <Button>
+                                    <DeleteIcon
+                                        variant="contained"
+                                        onClick={e => { onClickDelete(e, article._id) }}
+                                    />
+                                </Button>
+                            </Box>
                         </Box>
-                    </Box>}
-            </Paper>
-        </div>
+                    </Box>
+                </Paper>
+
+            }
+        </div >
     )
 }
 

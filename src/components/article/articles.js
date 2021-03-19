@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // material-ui
-import Grid from '@material-ui/core/Grid';
 import Pagination from '@material-ui/lab/Pagination';
 import usePagination from "../../utils/usePagination";
 
@@ -21,15 +20,13 @@ export default function Articles({ articles, setArticles }) {
 
     return (
         <div>
-            <Grid container justify="center" spacing={2}>
-                {_DATA.currentData().map((article) => (
-                    <Article
-                        key={article._id}
-                        article={article}
-                        setArticles={setArticles}
-                    />
-                ))}
-            </Grid>
+            {_DATA.currentData().map((article) => (
+                <Article
+                    key={article._id}
+                    article={article}
+                    setArticles={setArticles}
+                />
+            ))}
             <Pagination
                 count={count}
                 size="large"
