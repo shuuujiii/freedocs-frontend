@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TagChips = ({ tags, setTags, deletable }) => {
+const TagChips = ({ tags, setTags, deletable = false }) => {
     const classes = useStyles();
     const handleDelete = (id) => {
         setTags(prev => prev.filter(tag => tag._id !== id))
@@ -22,7 +22,7 @@ const TagChips = ({ tags, setTags, deletable }) => {
                 <li key={tag._id}>
                     <Chip
                         className={classes.chip}
-                        label={tag.name}
+                        label={tag.count ? tag.name + ' (' + tag.count + ')' : tag.name}
                         onDelete={deletable ? () => { handleDelete(tag._id) } : undefined}
                     />
                 </li>

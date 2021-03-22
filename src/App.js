@@ -5,12 +5,12 @@ import { Provider } from './provider/totalProvider'
 import SignUp from './components/main/signUp'
 import SignIn from './components/main/signIn'
 import ErrorAlert from './components/main/errorAlert'
-import NotFound from './components/main/notFound'
 import Terms from './components/common/terms'
 import PrivacyPolicy from './components/common/privacypolicy'
 import About from './components/common/about'
 import Contact from './components/common/contact'
 import TemplatePage from './components/main/templatePage'
+
 const App = () => {
   return (
     <Router>
@@ -25,11 +25,10 @@ const App = () => {
             <Route path="/about" component={About} />
             <Route path="/contact" component={Contact} />
             <Route path='/' component={TemplatePage} />
-            <Route component={NotFound} />
           </Switch>
         </Provider>
       </div>
-    </Router>
+    </Router >
   );
 }
 

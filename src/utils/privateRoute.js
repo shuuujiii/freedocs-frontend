@@ -13,7 +13,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         axios.defaults.withCredentials = true;
         axios.post(process.env.REACT_APP_API + '/users/authenticate')
             .then((res) => {
-                console.log(res)
                 if (res.data === 'authenticated') {
                     auth.authenticated()
                 } else {

@@ -1,6 +1,8 @@
 
 import React from 'react'
 import { Route, Switch } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+
 import PrivateRoute from '../../utils/privateRoute'
 import Home from './home'
 import Userpage from './userPage'
@@ -16,12 +18,16 @@ const TemplatePage = () => {
         <div>
             <AppBar />
             <Container maxWidth="lg">
-                <Switch>
-                    <Route exact path='/' component={Home} />
-                    <PrivateRoute path="/userpage" component={Userpage} />
-                    <PrivateRoute path="/profile" component={Profile} />
-                    <Route component={NotFound} />
-                </Switch>
+                <Grid container justify="center" spacing={2}>
+                    <Grid item xs={8}>
+                        <Switch>
+                            <Route exact path='/' component={Home} />
+                            <PrivateRoute path="/userpage" component={Userpage} />
+                            <PrivateRoute path="/profile" component={Profile} />
+                            <Route component={NotFound} />
+                        </Switch>
+                    </Grid>
+                </Grid>
             </Container>
             <Messages />
             <Footer />

@@ -52,10 +52,6 @@ export default function SignIn() {
     const [email, setEmail] = React.useState('seedUser');
     const [password, setPassword] = React.useState('seedseed');
 
-    React.useEffect(() => {
-        console.log('useEffect')
-        error.init()
-    }, [])
     const onClickSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:5000/api/v1/users/login', {

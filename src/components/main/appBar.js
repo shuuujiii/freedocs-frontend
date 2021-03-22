@@ -98,6 +98,11 @@ export default function MenuAppBar() {
         history.push('/profile');
     };
 
+    const handleMyPage = () => {
+        handleClose()
+        history.push('/userpage');
+    };
+
     const handleLogout = () => {
         auth.logout();
         history.push('/')
@@ -105,7 +110,7 @@ export default function MenuAppBar() {
 
     const onClickTitle = (e) => {
         e.preventDefault()
-        auth.authState.isAuthenticated ? history.push('/userpage') : history.push('/')
+        history.push('/')
     }
 
     return (
@@ -162,6 +167,7 @@ export default function MenuAppBar() {
                                 open={open}
                                 onClose={handleClose}
                             >
+                                <MenuItem onClick={handleMyPage}>MyPage</MenuItem>
                                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
