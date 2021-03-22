@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 // material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper'
@@ -94,7 +95,7 @@ const Article = ({ article, setArticles }) => {
                         </Paper>
                     </CardContent>
                     <CardContent>
-                        {article.url}
+                        <Link herf={article.url} target='_blank'>{article.url}</Link>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton

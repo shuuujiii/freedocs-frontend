@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
@@ -6,9 +7,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-
+import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axios from 'axios'
+import usePagination from "../../utils/usePagination";
 import { useError } from '../../provider/errorProvider'
 
 // components
@@ -30,7 +32,16 @@ const Home = () => {
     const error = useError();
     const classes = useStyles();
     const [articles, setArticles] = React.useState([]);
+    const [page, setPage] = React.useState(1);
+    const PER_PAGE = 10;
 
+    const count = Math.ceil(articles.length / PER_PAGE);
+    const _DATA = usePagination(articles, PER_PAGE);
+
+    const handleChange = (e, p) => {
+        setPage(p);
+        _DATA.jump(p);
+    };
     React.useEffect(() => {
         axios.get(process.env.REACT_APP_API + '/main')
             .then(res => {
@@ -40,8 +51,8 @@ const Home = () => {
     }, [])
 
     return (
-        <div style={{ marginTop: '10px' }}>
-            {articles.map(article => {
+        <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            {_DATA.currentData().map(article => {
                 return (
                     <div
                         key={article._id.url}
@@ -61,7 +72,7 @@ const Home = () => {
                                 </Paper>
                             </CardContent>
                             <CardContent>
-                                <div>{article._id.url}</div>
+                                <Link href={article._id.url} target='_blank'>{article._id.url}</Link>
                             </CardContent>
                             <CardActions disableSpacing>
                                 <IconButton aria-label="add to favorites">
@@ -72,6 +83,14 @@ const Home = () => {
                     </div>
                 )
             })}
+            <Pagination
+                count={count}
+                size="large"
+                page={page}
+                variant="outlined"
+                shape="rounded"
+                onChange={handleChange}
+            />
         </div>
     )
 }
