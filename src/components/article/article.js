@@ -95,7 +95,7 @@ const Article = ({ article, setArticles }) => {
                         </Paper>
                     </CardContent>
                     <CardContent>
-                        <Link herf={article.url} target='_blank'>{article.url}</Link>
+                        <Link to={{ pathname: article.url }} target='_blank'>{article.url}</Link>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton
