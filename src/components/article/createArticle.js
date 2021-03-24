@@ -35,6 +35,7 @@ export default function CreateArticle({ setArticles }) {
                         setArticles(res.data)
                         message.successMessage('created')
                         setUrl('')
+                        setDescription('')
                         setTags([])
                     })
                     .catch(error.setError)
