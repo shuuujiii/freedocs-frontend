@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,7 +14,7 @@ import InputBase from '@material-ui/core/InputBase';
 // util
 import { useHistory } from 'react-router-dom'
 
-// context 
+// context
 import { useAuth } from '../../provider/authProvider'
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function MenuAppBar() {
+export default function Header({ search, setSearch }) {
     const classes = useStyles();
     const history = useHistory();
     const auth = useAuth();
@@ -137,6 +138,8 @@ export default function MenuAppBar() {
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
+                            value={search}
+                            onChange={e => { setSearch(e.target.value) }}
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
@@ -189,4 +192,9 @@ export default function MenuAppBar() {
             </AppBar>
         </div>
     );
+}
+
+Header.propTypes = {
+    search: PropTypes.string,
+    setSearch: PropTypes.func,
 }

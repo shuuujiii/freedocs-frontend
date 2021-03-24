@@ -72,7 +72,7 @@ const Home = () => {
                                 </Paper>
                             </CardContent>
                             <CardContent>
-                                <Link href={article._id.url} target='_blank'>{article._id.url}</Link>
+                                <Link to={{ pathname: article?._id?.url || '#' }} target='_blank' >{article._id.url}</Link>
                             </CardContent>
                             <CardActions disableSpacing>
                                 <IconButton aria-label="add to favorites">

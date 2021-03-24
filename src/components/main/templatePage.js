@@ -9,19 +9,22 @@ import Userpage from './userPage'
 import Profile from './profile'
 import Container from '@material-ui/core/Container';
 import NotFound from './notFound'
-import AppBar from './appBar'
+import Header from './appBar'
 import Footer from './footer'
 import Messages from './messages'
 
 const TemplatePage = () => {
+    const [search, setSearch] = React.useState('')
     return (
         <div>
-            <AppBar />
+            <Header search={search}
+                setSearch={setSearch}
+            />
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
                         <Switch>
-                            <Route exact path='/' component={Home} />
+                            <Route exact path='/' render={() => <Home search={search} />} />
                             <PrivateRoute path="/userpage" component={Userpage} />
                             <PrivateRoute path="/profile" component={Profile} />
                             <Route component={NotFound} />
