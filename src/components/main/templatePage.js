@@ -25,7 +25,7 @@ const TemplatePage = () => {
                     <Grid item xs={8}>
                         <Switch>
                             <Route exact path='/' render={() => <Home search={search} />} />
-                            <PrivateRoute path="/userpage" component={Userpage} />
+                            <PrivateRoute path="/userpage" component={Userpage} search={search} />
                             <PrivateRoute path="/profile" component={Profile} />
                             <Route component={NotFound} />
                         </Switch>

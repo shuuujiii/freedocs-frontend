@@ -5,9 +5,24 @@ function usePagination(data, itemsPerPage) {
     const maxPage = Math.ceil(data.length / itemsPerPage);
 
     React.useEffect(() => {
-        if (currentData().length === 0) {
-            setCurrentPage(prev => prev - 1)
+        // 最大ページが現在のページ以下 (検索結果によってページ数が減る)
+        if (Math.ceil(data.length / itemsPerPage) < currentPage) {
+            setCurrentPage(Math.ceil(data.length / itemsPerPage))
+            return
         }
+
+        // 検索結果なしから、検索結果ありになった場合
+        if (currentPage === 0 && data.length > 0) {
+            setCurrentPage(1)
+            return
+        }
+        // 現在のページデータがない場合 (最後のページでコンテンツを削除)
+        if (currentData().length === 0 && data.length > 0) {
+            setCurrentPage(prev => prev - 1)
+            return
+        }
+
+
     }, [data])
 
     function currentData() {

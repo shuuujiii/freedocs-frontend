@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Home = () => {
+const Home = ({ search }) => {
     const error = useError();
     const classes = useStyles();
     const [articles, setArticles] = React.useState([]);
@@ -43,12 +44,15 @@ const Home = () => {
         _DATA.jump(p);
     };
     React.useEffect(() => {
-        axios.get(process.env.REACT_APP_API + '/main')
+        let p = new URLSearchParams();
+        p.append('search', search);
+        axios.get(process.env.REACT_APP_API + '/main?' + p)
             .then(res => {
+                console.log(res.data)
                 setArticles(res.data);
             })
             .catch(error.setError)
-    }, [])
+    }, [search])
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
@@ -93,6 +97,10 @@ const Home = () => {
             />
         </div>
     )
+}
+
+Home.propTypes = {
+    search: PropTypes.string,
 }
 
 export default Home;

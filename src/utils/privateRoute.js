@@ -30,16 +30,22 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         <Route {...rest} render={props => {
             if (!authCheck) { return <></> }
             if (auth.authState.isAuthenticated) {
-                return <Component {...props} />
+                return <Component {...props} {...rest} />
             } else {
-                <Redirect to="/signin" />
+                <Redirect
+                    to={{
+                        pathname: "/login",
+                        state: { from: props.location }
+                    }}
+                // to="/signin"
+                />
             }
         }} />
     );
 };
 
 PrivateRoute.propTypes = {
-    component: PropTypes.func
+    component: PropTypes.func,
+    location: PropTypes.object,
 }
-
 export default PrivateRoute;
