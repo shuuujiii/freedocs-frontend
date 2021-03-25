@@ -12,11 +12,12 @@ import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axios from 'axios'
 import usePagination from "../../utils/usePagination";
-import { useError } from '../../provider/errorProvider'
+import { useError } from '../../provider/errorProvider';
+import { useSortReducer } from '../article/sortReducer';
 
 // components
 import TagChips from '../../components/article/tagChips'
-
+import SortSelect from '../../components/article/sortSelect'
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -33,6 +34,7 @@ const Home = ({ search }) => {
     const error = useError();
     const classes = useStyles();
     const [articles, setArticles] = React.useState([]);
+    const [sort, dispatchSort] = useSortReducer();
     const [page, setPage] = React.useState(1);
     const PER_PAGE = 10;
 
@@ -54,8 +56,19 @@ const Home = ({ search }) => {
             .catch(error.setError)
     }, [search])
 
+
+    React.useMemo(() => {
+        articles.sort((a, b) => {
+            a = a._id[sort.key];
+            b = b._id[sort.key];
+            return (a === b ? 0 : a > b ? 1 : -1) * sort.order;
+        })
+        // return tmpt
+    }, [sort, articles])
+
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <SortSelect sort={sort} dispatchSort={dispatchSort} />
             {_DATA.currentData().map(article => {
                 return (
                     <div
