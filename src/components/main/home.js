@@ -58,9 +58,18 @@ const Home = ({ search }) => {
 
 
     React.useMemo(() => {
+        const fixHierarychKey = (y, key) => {
+            const x = key.split('.')
+            const keyName = x[0]
+            if (x.length === 1) {
+                return y[x[0]]
+            }
+            const nextKeyName = x[1];
+            return fixHierarychKey(y[keyName], nextKeyName)
+        }
         articles.sort((a, b) => {
-            a = a._id[sort.key];
-            b = b._id[sort.key];
+            a = fixHierarychKey(a, sort.key);
+            b = fixHierarychKey(b, sort.key);
             return (a === b ? 0 : a > b ? 1 : -1) * sort.order;
         })
         // return tmpt
