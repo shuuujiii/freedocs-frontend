@@ -19,8 +19,6 @@ import Copyright from '../common/copyright'
 // util
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
-
-// context
 import { useError } from '../../provider/errorProvider'
 import { useAuth } from '../../provider/authProvider'
 
@@ -54,7 +52,7 @@ export default function SignIn() {
 
     const onClickSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:5000/api/v1/users/login', {
+        axios.post(process.env.REACT_APP_API + '/users/login', {
             username: email,
             password: password
         }).then(() => {
@@ -100,10 +98,10 @@ export default function SignIn() {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
-                    />
+                    /> */}
                     <Button
                         type="submit"
                         fullWidth
@@ -115,11 +113,11 @@ export default function SignIn() {
                         Sign In
                     </Button>
                     <Grid container>
-                        <Grid item xs>
+                        {/* <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
                             </Link>
-                        </Grid>
+                        </Grid> */}
                         <Grid item>
                             <Link href="/signup" variant="body2">
                                 {"Don't have an account? Sign Up"}
