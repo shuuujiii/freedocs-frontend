@@ -4,7 +4,7 @@ export const SORT = {
     URL_ASC: "URL_ASC",
 }
 const initialSortState = {
-    key: '_id.url',
+    key: 'url',
     value: SORT.URL_ASC,
     order: 1,
 }
@@ -12,7 +12,7 @@ const sortReducer = (state, action) => {
     switch (action.type) {
         case SORT.URL_DESC:
             return {
-                key: '_id.url',
+                key: 'url',
                 value: SORT.URL_DESC,
                 order: -1,
             };

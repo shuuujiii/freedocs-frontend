@@ -4,8 +4,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -22,7 +20,7 @@ import { useHistory } from 'react-router-dom'
 
 // context
 import { useError } from '../../provider/errorProvider'
-
+import { useAuth } from '../../provider/authProvider'
 // component
 import Copyright from '../common/copyright'
 
@@ -56,6 +54,7 @@ const UserValidator = Joi.object().keys({
 export default function SignUp() {
     const error = useError();
     const history = useHistory();
+    const auth = useAuth();
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
@@ -70,16 +69,15 @@ export default function SignUp() {
             return
         }
 
-        await axios.post('http://localhost:5000/api/v1/users', {
+        axios.post('http://localhost:5000/api/v1/users', {
             username: username,
             password: password,
         }).then(
             res => {
-                console.log(res)
                 if (res.status === StatusCodes.CREATED) {
-                    history.push('/userpage')
+                    auth.authenticated();
+                    setTimeout(history.push('/userpage'), 3000);
                 }
-                // console.log(res)
             }
         ).catch(error.setError)
     }

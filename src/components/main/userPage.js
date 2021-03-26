@@ -14,7 +14,6 @@ const UserPage = ({ search }) => {
         p.append('search', search);
         axios.get(process.env.REACT_APP_API + '/article?' + p)
             .then(res => {
-                console.log('response', res.data)
                 setArticles(res.data)
             })
     }, [search])

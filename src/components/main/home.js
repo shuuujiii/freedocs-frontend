@@ -48,9 +48,8 @@ const Home = ({ search }) => {
     React.useEffect(() => {
         let p = new URLSearchParams();
         p.append('search', search);
-        axios.get(process.env.REACT_APP_API + '/main?' + p)
+        axios.get(process.env.REACT_APP_API + '/article/all?' + p)
             .then(res => {
-                console.log(res.data)
                 setArticles(res.data);
             })
             .catch(error.setError)
@@ -81,7 +80,7 @@ const Home = ({ search }) => {
             {_DATA.currentData().map(article => {
                 return (
                     <div
-                        key={article._id.url}
+                        key={article._id}
                         style={{ marginBottom: '10px' }}
                     >
                         <Card>
@@ -98,7 +97,7 @@ const Home = ({ search }) => {
                                 </Paper>
                             </CardContent>
                             <CardContent>
-                                <Link to={{ pathname: article?._id?.url || '#' }} target='_blank' >{article._id.url}</Link>
+                                <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
                             </CardContent>
                             <CardActions disableSpacing>
                                 <IconButton aria-label="add to favorites">

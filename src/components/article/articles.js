@@ -7,7 +7,6 @@ import usePagination from "../../utils/usePagination";
 // component
 import Article from './article'
 export default function Articles({ articles, setArticles }) {
-    console.log('art', articles)
     const [page, setPage] = React.useState(1);
     const PER_PAGE = 10;
 
