@@ -13,9 +13,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+// validation
+import Joi from 'joi'
 // utils
 import axios from 'axios'
+import { StatusCodes } from 'http-status-codes'
+import { useHistory } from 'react-router-dom'
 
 // context
 import { useError } from '../../provider/errorProvider'
@@ -43,21 +46,40 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const UserValidator = Joi.object().keys({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
+    confirmPassword: Joi.any().equal(Joi.ref('password')).required().options({ messages: { 'any.only': 'confirm password does not match' } }),
+    admin: Joi.boolean(),
+}).with('username', 'password')
+
 export default function SignUp() {
-    const error = useError()
-    const [email, setEmail] = React.useState('')
+    const error = useError();
+    const history = useHistory();
+    const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
 
     const classes = useStyles();
-    const onSubmitSignUp = (e) => {
+    const onSubmitSignUp = async (e) => {
         e.preventDefault()
-        axios.post('http://localhost:5000/api/v1/users', {
-            username: email,
+        try {
+            await UserValidator.validateAsync({ username: username, password: password, confirmPassword: confirmPassword })
+        } catch (err) {
+            error.setErrorMessage(err.message)
+            return
+        }
+
+        await axios.post('http://localhost:5000/api/v1/users', {
+            username: username,
             password: password,
         }).then(
             res => {
                 console.log(res)
+                if (res.status === StatusCodes.CREATED) {
+                    history.push('/userpage')
+                }
+                // console.log(res)
             }
         ).catch(error.setError)
     }
@@ -79,12 +101,12 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                                value={email}
-                                onChange={e => { setEmail(e.target.value) }}
+                                id="username"
+                                label="Username"
+                                name="username"
+                                autoComplete="username"
+                                value={username}
+                                onChange={e => { setUsername(e.target.value) }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -115,12 +137,12 @@ export default function SignUp() {
                                 onChange={e => { setConfirmPassword(e.target.value) }}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                                 label="I want to receive inspiration, marketing promotions and updates via email."
                             />
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                     <Button
                         type="submit"

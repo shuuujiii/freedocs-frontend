@@ -19,13 +19,20 @@ export const ErrorProvider = ({ children }) => {
         if (!err.response?.data?.message) {
             console.log(err)
         }
+    }
 
+    const setErrorMessage = (message) => {
+        setErrorState({
+            hasError: true,
+            message: message,
+        })
     }
     return (
         <ErrorContext.Provider value={{
             errorState,
             init,
             setError,
+            setErrorMessage,
         }}>
             {children}
         </ErrorContext.Provider>
