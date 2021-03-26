@@ -20,7 +20,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                     history.push('/signin')
                 }
             }).catch(e => {
-                console.log(e)
                 history.push('/signin')
             })
         setAuthCheck(true)
