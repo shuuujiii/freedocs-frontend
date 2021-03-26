@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
+import axios from 'axios'
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,10 +14,11 @@ import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase';
 // util
 import { useHistory } from 'react-router-dom'
+import { StatusCodes } from 'http-status-codes'
 
 // context
 import { useAuth } from '../../provider/authProvider'
-
+import { useError } from '../../provider/errorProvider'
 const useStyles = makeStyles((theme) => ({
     title: {
         color: 'white',
@@ -82,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Header({ search, setSearch }) {
     const classes = useStyles();
     const history = useHistory();
+    const error = useError();
     const auth = useAuth();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -105,8 +108,13 @@ export default function Header({ search, setSearch }) {
     };
 
     const handleLogout = () => {
-        auth.logout();
-        history.push('/')
+        axios.post(process.env.REACT_APP_API + '/users/logout')
+            .then(res => {
+                if (res.status === StatusCodes.OK) {
+                    auth.logout();
+                    history.push('/')
+                }
+            }).catch(error.setError)
     }
 
     const onClickTitle = (e) => {
