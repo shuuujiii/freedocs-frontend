@@ -69,7 +69,7 @@ export default function SignUp() {
             return
         }
 
-        axios.post('http://localhost:5000/api/v1/users', {
+        axios.post(process.env.REACT_APP_API + '/users', {
             username: username,
             password: password,
         }).then(

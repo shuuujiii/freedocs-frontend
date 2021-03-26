@@ -47,13 +47,13 @@ export default function SignIn() {
     const history = useHistory();
     const error = useError();
     const auth = useAuth();
-    const [email, setEmail] = React.useState('');
+    const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const onClickSubmit = (e) => {
         e.preventDefault();
         axios.post(process.env.REACT_APP_API + '/users/login', {
-            username: email,
+            username: username,
             password: password
         }).then(() => {
             error.init()
@@ -77,13 +77,13 @@ export default function SignIn() {
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="User Name"
+                        name="username"
+                        autoComplete="username"
                         autoFocus
-                        value={email}
-                        onChange={e => { setEmail(e.target.value) }}
+                        value={username}
+                        onChange={e => { setUsername(e.target.value) }}
                     />
                     <TextField
                         variant="outlined"
