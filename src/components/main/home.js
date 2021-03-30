@@ -76,6 +76,7 @@ const Home = ({ search }) => {
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <div>staging test for heroku test automatically deploy</div>
             <SortSelect sort={sort} dispatchSort={dispatchSort} />
             {_DATA.currentData().map(article => {
                 return (
