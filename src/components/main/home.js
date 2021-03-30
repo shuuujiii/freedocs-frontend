@@ -48,7 +48,7 @@ const Home = ({ search }) => {
     React.useEffect(() => {
         let p = new URLSearchParams();
         p.append('search', search);
-        axios.get(process.env.REACT_APP_API + '/article/all?' + p)
+        axios.get(process.env.REACT_APP_API + '/article/all?' + p, { withCredentials: true })
             .then(res => {
                 setArticles(res.data);
             })
@@ -76,6 +76,7 @@ const Home = ({ search }) => {
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <div>{process.env.REACT_APP_API}</div>
             <SortSelect sort={sort} dispatchSort={dispatchSort} />
             {_DATA.currentData().map(article => {
                 return (
