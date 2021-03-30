@@ -76,7 +76,6 @@ const Home = ({ search }) => {
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-            <div>{process.env.REACT_APP_API}</div>
             <SortSelect sort={sort} dispatchSort={dispatchSort} />
             {_DATA.currentData().map(article => {
                 return (
