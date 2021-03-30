@@ -11,17 +11,20 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     const [authCheck, setAuthCheck] = React.useState(false)
     React.useEffect(() => {
         axios.defaults.withCredentials = true;
-        axios.post(process.env.REACT_APP_API + '/users/authenticate')
-            .then((res) => {
-                if (res.data === 'authenticated') {
-                    auth.authenticated()
-                } else {
-                    auth.notAuthenticated()
+        const getData = async () => {
+            await axios.post(process.env.REACT_APP_API + '/users/authenticate')
+                .then((res) => {
+                    if (res.data === 'authenticated') {
+                        auth.authenticated()
+                    } else {
+                        auth.notAuthenticated()
+                        history.push('/signin')
+                    }
+                }).catch(e => {
                     history.push('/signin')
-                }
-            }).catch(e => {
-                history.push('/signin')
-            })
+                })
+        }
+        getData();
         setAuthCheck(true)
         // eslint-disable-next-line
     }, [])
