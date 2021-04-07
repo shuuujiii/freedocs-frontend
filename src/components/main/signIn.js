@@ -1,10 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -15,9 +14,10 @@ import Container from '@material-ui/core/Container';
 
 // component
 import Copyright from '../common/copyright'
+import Loading from '../main/loading'
 
 // util
-import axios from 'axios'
+import axiosbase from '../../utils/axiosbase'
 import { useHistory } from 'react-router-dom'
 import { useError } from '../../provider/errorProvider'
 import { useAuth } from '../../provider/authProvider'
@@ -47,88 +47,102 @@ export default function SignIn() {
     const history = useHistory();
     const error = useError();
     const auth = useAuth();
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
+    const [username, setUsername] = React.useState('nabeshi');
+    const [password, setPassword] = React.useState('nabenabe');
 
     const onClickSubmit = (e) => {
         e.preventDefault();
-        axios.post(process.env.REACT_APP_API + '/users/login', {
+        setLoading(true)
+        axiosbase.post('/users/login', {
             username: username,
             password: password
         }).then(() => {
             error.init()
             auth.authenticated()
-            history.push('/userpage')
-        }).catch(error.setError)
+            setLoading(false)
+            history.push(history.location.state?.from || '/userpage')
+        }).catch(err => {
+            error.setError(err)
+            setLoading(false)
+        })
     }
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="username"
-                        label="User Name"
-                        name="username"
-                        autoComplete="username"
-                        autoFocus
-                        value={username}
-                        onChange={e => { setUsername(e.target.value) }}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                    {/* <FormControlLabel
+        loading ?
+            <Loading /> :
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <form className={classes.form} noValidate>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="username"
+                            label="User Name"
+                            name="username"
+                            autoComplete="username"
+                            autoFocus
+                            value={username}
+                            onChange={e => { setUsername(e.target.value) }}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                        {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     /> */}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={e => onClickSubmit(e)}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        {/* <Grid item xs>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={e => onClickSubmit(e)}
+                        >
+                            Sign In
+                        </Button>
+                        <Grid container>
+                            {/* <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid> */}
-                        <Grid item>
-                            <Link href="/signup" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
+                            <Grid item>
+                                <Link href="/signup" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
-            </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
-        </Container>
+                    </form>
+                </div>
+                <Box mt={8}>
+                    <Copyright />
+                </Box>
+            </Container>
     );
+}
+
+SignIn.propTypes = {
+    props: PropTypes.object,
+    history: PropTypes.object,
+    location: PropTypes.string,
 }
