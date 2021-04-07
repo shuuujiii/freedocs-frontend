@@ -7,7 +7,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
 // utils
-import axios from 'axios'
+// import axios from 'axios'
+import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider'
 import { useMessage } from '../../provider/messageProvider'
 
@@ -22,7 +23,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
     const [tags, setTags] = React.useState(article.tags)
     const onClickSave = (e) => {
         e.preventDefault()
-        axios.put(process.env.REACT_APP_API + '/article', {
+        axiosbase.put('/article', {
             _id: article._id,
             url: url,
             description: description,
@@ -30,7 +31,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
         }).then(
             () => {
                 message.successMessage('edited')
-                axios.get(process.env.REACT_APP_API + '/article')
+                axiosbase.get('/article')
                     .then(res => {
                         error.init()
                         setArticles(res.data)

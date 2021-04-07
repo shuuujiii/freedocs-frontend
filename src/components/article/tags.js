@@ -5,7 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import { TextField } from '@material-ui/core';
 
 // utils
-import axios from 'axios';
+// import axios from 'axios';
+import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider';
 // component
 import TagChips from './tagChips'
@@ -29,7 +30,7 @@ const Tags = ({ tags, setTags }) => {
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault()
-            axios.post(process.env.REACT_APP_API + '/tag', {
+            axiosbase.post('/tag', {
                 name: inputTag
             })
                 .then(res => {

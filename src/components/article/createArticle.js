@@ -8,7 +8,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
 // utils
-import axios from 'axios';
+// import axios from 'axios';
+import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider';
 import { useMessage } from '../../provider/messageProvider';
 
@@ -23,13 +24,13 @@ export default function CreateArticle({ setArticles }) {
     const [tags, setTags] = React.useState([])
     const onClickSave = (e) => {
         e.preventDefault();
-        axios.post(process.env.REACT_APP_API + '/article', {
+        axiosbase.post('/article', {
             url: url,
             description: description,
             tags: tags.map(tag => tag._id),
         }).then(
             () => {
-                axios.get(process.env.REACT_APP_API + '/article')
+                axiosbase.get('/article')
                     .then(res => {
                         error.init()
                         setArticles(res.data)
