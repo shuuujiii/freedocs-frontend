@@ -48,8 +48,8 @@ export default function SignIn() {
     const error = useError();
     const auth = useAuth();
     const [loading, setLoading] = React.useState(false);
-    const [username, setUsername] = React.useState('nabeshi');
-    const [password, setPassword] = React.useState('nabenabe');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
 
     const onClickSubmit = (e) => {
         e.preventDefault();
