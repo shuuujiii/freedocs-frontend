@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import axios from 'axios'
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,6 +12,7 @@ import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase';
 // util
+import axiosbase from '../../utils/axiosbase'
 import { useHistory } from 'react-router-dom'
 import { StatusCodes } from 'http-status-codes'
 
@@ -108,7 +108,8 @@ export default function Header({ search, setSearch }) {
     };
 
     const handleLogout = () => {
-        axios.post(process.env.REACT_APP_API + '/users/logout')
+
+        axiosbase.post('/users/logout')
             .then(res => {
                 if (res.status === StatusCodes.OK) {
                     auth.logout();

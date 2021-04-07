@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import axios from 'axios'
+import axiosbase from '../../utils/axiosbase'
 // material-ui
 // import Grid from '@material-ui/core/Grid';
 // components
@@ -12,7 +12,7 @@ const UserPage = ({ search }) => {
     React.useEffect(() => {
         let p = new URLSearchParams();
         p.append('search', search);
-        axios.get(process.env.REACT_APP_API + '/article?' + p)
+        axiosbase.get('/article?' + p)
             .then(res => {
                 setArticles(res.data)
             })

@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import axiosbase from '../../utils/axiosbase'
 // import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -62,7 +62,7 @@ function Profile() {
     const onClickDeleteAccount = (e) => {
         e.preventDefault()
         setLoading(true)
-        axios.delete(process.env.REACT_APP_API + '/users').then(
+        axiosbase.delete('/users').then(
             res => {
                 setLoading(false)
                 console.log('response', res)
@@ -75,7 +75,7 @@ function Profile() {
         })
     }
     React.useEffect(() => {
-        axios.get(process.env.REACT_APP_API + '/users')
+        axiosbase.get('/users')
             .then(res => {
                 setUsername(res.data.username)
             })
