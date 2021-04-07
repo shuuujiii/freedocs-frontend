@@ -10,7 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Pagination from '@material-ui/lab/Pagination';
 // utils
-import axios from 'axios'
+// import axios from 'axios'
+import axiosbase from '../../utils/axiosbase'
 import usePagination from "../../utils/usePagination";
 import { useError } from '../../provider/errorProvider';
 import { useSortReducer } from '../article/sortReducer';
@@ -45,17 +46,33 @@ const Home = ({ search }) => {
         setPage(p);
         _DATA.jump(p);
     };
+
+    const onClickLikes = (id) => {
+        axiosbase.post('/article/likes', {
+            _id: id
+        }).then(res => {
+            // setArticles()
+            console.log(res)
+        })
+        // console.log('like!', id)
+    }
     React.useEffect(() => {
         let p = new URLSearchParams();
         p.append('search', search);
-        axios.get(process.env.REACT_APP_API + '/article/all?' + p, { withCredentials: true })
+        axiosbase.get('/article/all?' + p)
             .then(res => {
+                console.log('all article', res.data)
                 setArticles(res.data);
             })
             .catch(error.setError)
     }, [search])
 
 
+    const setLikeColor = (isFavorite) => {
+        console.log(isFavorite)
+        return isFavorite ? "secondary" : "inherit"
+        // return "inherit"
+    }
     React.useMemo(() => {
         const fixHierarychKey = (y, key) => {
             const x = key.split('.')
@@ -100,7 +117,10 @@ const Home = ({ search }) => {
                                 <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
                             </CardContent>
                             <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
+                                <IconButton
+                                    color={setLikeColor(article.isFavorite)}
+                                    aria-label="add to favorites"
+                                    onClick={() => { onClickLikes(article._id) }}>
                                     <FavoriteIcon />
                                 </IconButton>
                             </CardActions>
