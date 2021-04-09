@@ -14,7 +14,9 @@ import Pagination from '@material-ui/lab/Pagination';
 import axiosbase from '../../utils/axiosbase'
 import usePagination from "../../utils/usePagination";
 import { useError } from '../../provider/errorProvider';
+import { useAuth } from '../../provider/authProvider';
 import { useSortReducer } from '../article/sortReducer';
+import { useHistory } from 'react-router-dom'
 
 // components
 import TagChips from '../../components/article/tagChips'
@@ -34,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 const Home = ({ search }) => {
     const error = useError();
     const classes = useStyles();
+    const history = useHistory();
+    const auth = useAuth();
     const [articles, setArticles] = React.useState([]);
     const [sort, dispatchSort] = useSortReducer();
     const [page, setPage] = React.useState(1);
@@ -47,14 +51,20 @@ const Home = ({ search }) => {
         _DATA.jump(p);
     };
 
-    const onClickLikes = (id) => {
-        axiosbase.post('/article/likes', {
-            _id: id
-        }).then(res => {
-            // setArticles()
-            console.log(res)
-        })
-        // console.log('like!', id)
+    const onClickLikes = (id, isFavorite) => {
+        auth.authState.isAuthenticated ?
+            axiosbase.post('/article/likes', {
+                _id: id,
+                likes: !isFavorite,
+            }).then(res => {
+                setArticles(prev => {
+                    return prev.map(article =>
+                        article._id === res.data[0]._id ? res.data[0] : article
+                    )
+                })
+            })
+            :
+            history.push('/signin')
     }
     React.useEffect(() => {
         let p = new URLSearchParams();
@@ -69,9 +79,7 @@ const Home = ({ search }) => {
 
 
     const setLikeColor = (isFavorite) => {
-        console.log(isFavorite)
         return isFavorite ? "secondary" : "inherit"
-        // return "inherit"
     }
     React.useMemo(() => {
         const fixHierarychKey = (y, key) => {
@@ -120,7 +128,7 @@ const Home = ({ search }) => {
                                 <IconButton
                                     color={setLikeColor(article.isFavorite)}
                                     aria-label="add to favorites"
-                                    onClick={() => { onClickLikes(article._id) }}>
+                                    onClick={() => { onClickLikes(article._id, article.isFavorite) }}>
                                     <FavoriteIcon />
                                 </IconButton>
                             </CardActions>
