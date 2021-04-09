@@ -16,5 +16,5 @@ export const Provider = ({ children }) => {
 }
 
 Provider.propTypes = {
-    children: PropTypes.array,
+    children: PropTypes.element,
 }
