@@ -108,12 +108,12 @@ export default function Header({ search, setSearch }) {
     };
 
     const handleLogout = () => {
-
         axiosbase.post('/users/logout')
             .then(res => {
                 if (res.status === StatusCodes.OK) {
                     auth.logout();
                     history.push('/')
+                    history.go(0)
                 }
             }).catch(error.setError)
     }
