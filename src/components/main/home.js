@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
@@ -10,17 +10,17 @@ import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Pagination from '@material-ui/lab/Pagination';
 // utils
-// import axios from 'axios'
 import axiosbase from '../../utils/axiosbase'
-import usePagination from "../../utils/usePagination";
+
+// provider
 import { useError } from '../../provider/errorProvider';
 import { useAuth } from '../../provider/authProvider';
 import { useSortReducer } from '../article/sortReducer';
-import { useHistory } from 'react-router-dom'
 
 // components
 import TagChips from '../../components/article/tagChips'
 import SortSelect from '../../components/article/sortSelect'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -41,14 +41,11 @@ const Home = ({ search }) => {
     const [articles, setArticles] = React.useState([]);
     const [sort, dispatchSort] = useSortReducer();
     const [page, setPage] = React.useState(1);
-    const PER_PAGE = 10;
-
-    const count = Math.ceil(articles.length / PER_PAGE);
-    const _DATA = usePagination(articles, PER_PAGE);
+    const [totalPages, setTotalPages] = React.useState(0)
 
     const handleChange = (e, p) => {
+        e.preventDefault()
         setPage(p);
-        _DATA.jump(p);
     };
 
     const onClickLikes = (id, isFavorite) => {
@@ -69,40 +66,35 @@ const Home = ({ search }) => {
     React.useEffect(() => {
         let p = new URLSearchParams();
         p.append('search', search);
+        p.append('page', page)
+        p.append('sortkey', sort.key)
+        p.append('order', sort.order)
         axiosbase.get('/article/all?' + p)
             .then(res => {
                 console.log('all article', res.data)
-                setArticles(res.data);
+                setArticles(res.data.docs);
+                setTotalPages(res.data.totalPages)
             })
             .catch(error.setError)
-    }, [search])
+    }, [search, page, sort])
 
 
     const setLikeColor = (isFavorite) => {
         return isFavorite ? "secondary" : "inherit"
     }
-    React.useMemo(() => {
-        const fixHierarychKey = (y, key) => {
-            const x = key.split('.')
-            const keyName = x[0]
-            if (x.length === 1) {
-                return y[x[0]]
-            }
-            const nextKeyName = x[1];
-            return fixHierarychKey(y[keyName], nextKeyName)
-        }
-        articles.sort((a, b) => {
-            a = fixHierarychKey(a, sort.key);
-            b = fixHierarychKey(b, sort.key);
-            return (a === b ? 0 : a > b ? 1 : -1) * sort.order;
-        })
-        // return tmpt
-    }, [sort, articles])
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
             <SortSelect sort={sort} dispatchSort={dispatchSort} />
-            {_DATA.currentData().map(article => {
+            <Pagination
+                count={totalPages}
+                size="large"
+                page={page}
+                variant="outlined"
+                shape="rounded"
+                onChange={handleChange}
+            />
+            {articles.map(article => {
                 return (
                     <div
                         key={article._id}
@@ -136,14 +128,7 @@ const Home = ({ search }) => {
                     </div>
                 )
             })}
-            <Pagination
-                count={count}
-                size="large"
-                page={page}
-                variant="outlined"
-                shape="rounded"
-                onChange={handleChange}
-            />
+
         </div>
     )
 }

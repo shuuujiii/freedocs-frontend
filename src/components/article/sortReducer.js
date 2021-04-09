@@ -5,16 +5,16 @@ export const SORT = {
 }
 const initialSortState = {
     key: 'url',
-    value: SORT.URL_ASC,
-    order: 1,
+    // value: SORT.URL_ASC,
+    order: 'asc',
 }
 const sortReducer = (state, action) => {
     switch (action.type) {
         case SORT.URL_DESC:
             return {
                 key: 'url',
-                value: SORT.URL_DESC,
-                order: -1,
+                // value: SORT.URL_DESC,
+                order: 'desc',
             };
         case SORT.URL_ASC:
             return initialSortState
