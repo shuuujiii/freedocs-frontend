@@ -13,11 +13,14 @@ import TemplatePage from './components/main/templatePage'
 import { useAuth } from './provider/authProvider'
 import { useError } from './provider/errorProvider'
 import axiosbase from './utils/axiosbase'
+
+import Loading from './components/main/loading'
 const App = () => {
   const auth = useAuth();
   const error = useError();
   const [loading, setLoading] = React.useState(false)
   React.useEffect(() => {
+    setLoading(true)
     const authenticate = async () => {
       await axiosbase.post('/users/authenticate')
         .then((res) => {
@@ -27,33 +30,32 @@ const App = () => {
           } else {
             auth.notAuthenticated()
           }
-          setLoading(true)
+          setLoading(false)
         }).catch(e => {
           // error.setError(e)
           // auth.notAuthenticated()
-          setLoading(true)
+          setLoading(false)
         })
     }
     authenticate();
     // eslint-disable-next-line
   }, [])
   return (
-    <Router>
-      <div className="App">
-        {/* <Provider> */}
-        <ErrorAlert />
-        <Switch>
-          <Route path="/signup" component={SignUp} />
-          <Route path="/signin" component={SignIn} />
-          <Route path="/terms" component={Terms} />
-          <Route path="/privacypolicy" component={PrivacyPolicy} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
-          <Route path='/' component={TemplatePage} />
-        </Switch>
-        {/* </Provider> */}
-      </div>
-    </Router >
+    loading ? <Loading /> :
+      <Router>
+        <div className="App">
+          <ErrorAlert />
+          <Switch>
+            <Route path="/signup" component={SignUp} />
+            <Route path="/signin" component={SignIn} />
+            <Route path="/terms" component={Terms} />
+            <Route path="/privacypolicy" component={PrivacyPolicy} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route path='/' component={TemplatePage} />
+          </Switch>
+        </div>
+      </Router >
   );
 }
 
