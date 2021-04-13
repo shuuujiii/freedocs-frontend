@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container';
 // validation
 import Joi from 'joi'
 // utils
-import axios from 'axios'
+import axiosbase from '../../utils/axiosbase'
 import { StatusCodes } from 'http-status-codes'
 import { useHistory } from 'react-router-dom'
 
@@ -69,14 +69,14 @@ export default function SignUp() {
             return
         }
 
-        axios.post(process.env.REACT_APP_API + '/users', {
+        axiosbase.post('/users', {
             username: username,
             password: password,
         }).then(
             res => {
                 if (res.status === StatusCodes.CREATED) {
                     auth.authenticated();
-                    setTimeout(history.push('/userpage'), 3000);
+                    history.push('/');
                 }
             }
         ).catch(error.setError)
