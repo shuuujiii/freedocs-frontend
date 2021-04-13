@@ -21,8 +21,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
             await axiosbase.post('/users/authenticate')
                 .then((res) => {
                     error.init()
-                    if (res.data === 'authenticated') {
-                        auth.authenticated()
+                    if (res.data.payload.user) {
+                        auth.authenticated(res.data.payload.user)
                     } else {
                         auth.notAuthenticated()
                     }
