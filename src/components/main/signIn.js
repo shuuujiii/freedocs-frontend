@@ -61,7 +61,7 @@ export default function SignIn() {
             error.init()
             auth.authenticated()
             setLoading(false)
-            history.push(history.location.state?.from || '/userpage')
+            history.push(history.location.state?.from || '/')
         }).catch(err => {
             error.setError(err)
             setLoading(false)

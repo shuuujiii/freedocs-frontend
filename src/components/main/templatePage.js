@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 
 import PrivateRoute from '../../utils/privateRoute'
 import Home from './home'
-import Userpage from './userPage'
+// import Userpage from './userPage'
 import Profile from './profile'
 import Container from '@material-ui/core/Container';
 import NotFound from './notFound'
@@ -15,6 +15,7 @@ import Messages from './messages'
 
 const TemplatePage = () => {
     const [search, setSearch] = React.useState('')
+
     return (
         <div>
             <Header search={search}
@@ -25,7 +26,9 @@ const TemplatePage = () => {
                     <Grid item xs={8}>
                         <Switch>
                             <Route exact path='/' render={() => <Home search={search} />} />
-                            <PrivateRoute path="/userpage" component={Userpage} search={search} />
+                            {/* <Route exact path='/' component={Home} /> */}
+
+                            {/* <PrivateRoute path="/userpage" component={Userpage} search={search} /> */}
                             <PrivateRoute path="/profile" component={Profile} />
                             <Route component={NotFound} />
                         </Switch>

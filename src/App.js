@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Provider } from './provider/totalProvider'
+// import { Provider } from './provider/totalProvider'
 import SignUp from './components/main/signUp'
 import SignIn from './components/main/signIn'
 import ErrorAlert from './components/main/errorAlert'
@@ -31,7 +31,7 @@ const App = () => {
             auth.notAuthenticated()
           }
           setLoading(false)
-        }).catch(e => {
+        }).catch(() => {
           // error.setError(e)
           // auth.notAuthenticated()
           setLoading(false)
