@@ -44,40 +44,46 @@ const Home = ({ search = '' }) => {
         }
         getData()
         return () => mounted = false
-    }, [search, page, sort])
+    }, [search, page, sort, auth.authState.user])
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
             {auth.authState.isAuthenticated &&
                 <CreateArticle setArticles={setArticles} />}
-            <SortSelect sort={sort} dispatchSort={dispatchSort} />
-            <Pagination
-                count={totalPages}
-                size="large"
-                page={page}
-                variant="outlined"
-                shape="rounded"
-                onChange={handleChange}
-            />
-            {articles.map(article => {
-                return (
-                    <div
-                        key={article._id}
-                        style={{ marginBottom: '10px' }}
-                    >
-                        <ArticleCard article={article} setArticles={setArticles} />
-                    </div>
-                )
-            })}
-            <Pagination
-                count={totalPages}
-                size="large"
-                page={page}
-                variant="outlined"
-                shape="rounded"
-                onChange={handleChange}
-            />
+            {articles.length === 0 ?
+                <div>No articles</div> :
+                <div>
+                    <SortSelect sort={sort} dispatchSort={dispatchSort} />
+                    <Pagination
+                        count={totalPages}
+                        size="large"
+                        page={page}
+                        variant="outlined"
+                        shape="rounded"
+                        onChange={handleChange}
+                    />
+                    {articles.map(article => {
+                        return (
+                            <div
+                                key={article._id}
+                                style={{ marginBottom: '10px' }}
+                            >
+                                <ArticleCard article={article} setArticles={setArticles} />
+                            </div>
+                        )
+                    })}
+                    <Pagination
+                        count={totalPages}
+                        size="large"
+                        page={page}
+                        variant="outlined"
+                        shape="rounded"
+                        onChange={handleChange}
+                    />
+                </div>
+            }
         </div>
+
     )
 }
 
