@@ -57,9 +57,9 @@ export default function SignIn() {
         axiosbase.post('/users/login', {
             username: username,
             password: password
-        }).then(() => {
+        }).then((res) => {
             error.init()
-            auth.authenticated()
+            auth.authenticated(res.data.payload.user)
             setLoading(false)
             history.push(history.location.state?.from || '/')
         }).catch(err => {
@@ -144,5 +144,5 @@ export default function SignIn() {
 SignIn.propTypes = {
     props: PropTypes.object,
     history: PropTypes.object,
-    location: PropTypes.string,
+    location: PropTypes.object,
 }
