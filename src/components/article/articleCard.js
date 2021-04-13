@@ -12,6 +12,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import CommentIcon from '@material-ui/icons/Comment';
+import { green } from '@material-ui/core/colors';
 // utils
 import axiosbase from '../../utils/axiosbase'
 
@@ -50,37 +51,73 @@ const ArticleCard = ({ article, setArticles }) => {
     const history = useHistory();
     const auth = useAuth();
     const [expanded, setExpanded] = React.useState(false);
-
+    const [likes, setLikes] = React.useState(false)
+    const [good, setGood] = React.useState(false)
+    const [bad, setBad] = React.useState(false)
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const onClickLikes = (id, isFavorite) => {
+    React.useEffect(() => {
+        if (auth.authState.user) {
+            setLikes(article.likes.includes(auth.authState.user._id))
+            setGood(article.good.includes(auth.authState.user._id))
+            setBad(article.bad.includes(auth.authState.user._id))
+        }
+    }, [])
+
+    const onClickLikes = () => {
         auth.authState.isAuthenticated ?
             axiosbase.post('/article/likes', {
-                _id: id,
-                likes: !isFavorite,
+                _id: article._id,
+                likes: !likes,
             }).then(res => {
                 setArticles(prev => {
                     return prev.map(article =>
-                        article._id === res.data[0]._id ? res.data[0] : article
+                        article._id === res.data._id ? res.data : article
                     )
                 })
+                setLikes(res.data.likes.includes(auth.authState.user._id))
+
             })
             :
             history.push('/signin')
     }
 
     const onClickGood = () => {
-
+        auth.authState.isAuthenticated ?
+            axiosbase.post('/article/good', {
+                _id: article._id,
+                good: !good,
+            }).then(res => {
+                setArticles(prev => {
+                    return prev.map(article =>
+                        article._id === res.data._id ? res.data : article
+                    )
+                })
+                setGood(res.data.good.includes(auth.authState.user._id))
+                setBad(res.data.bad.includes(auth.authState.user._id))
+            })
+            :
+            history.push('/signin')
     }
 
     const onClickBad = () => {
-
-    }
-
-    const setLikeColor = (isFavorite) => {
-        return isFavorite ? "secondary" : "inherit"
+        auth.authState.isAuthenticated ?
+            axiosbase.post('/article/bad', {
+                _id: article._id,
+                bad: !bad,
+            }).then(res => {
+                setArticles(prev => {
+                    return prev.map(article =>
+                        article._id === res.data._id ? res.data : article
+                    )
+                })
+                setGood(res.data.good.includes(auth.authState.user._id))
+                setBad(res.data.bad.includes(auth.authState.user._id))
+            })
+            :
+            history.push('/signin')
     }
 
     return (
@@ -102,24 +139,25 @@ const ArticleCard = ({ article, setArticles }) => {
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton
-                    color={setLikeColor(article.isFavorite)}
+                    color={likes ? "secondary" : "default"}
                     aria-label="add to favorites"
-                    onClick={() => { onClickLikes(article._id, article.isFavorite) }}>
+                    onClick={() => { onClickLikes() }}>
                     <FavoriteIcon />
                 </IconButton>
                 <IconButton
-                    color={setLikeColor(article.isFavorite)}
+                    color={good ? "primary" : "default"}
                     aria-label="good"
-                    onClick={() => { onClickGood(article._id, article.isFavorite) }}>
+                    onClick={() => { onClickGood() }}>
                     <ThumbUpIcon />
                 </IconButton>
                 <IconButton
-                    color={setLikeColor(article.isFavorite)}
+                    color={bad ? "primary" : "default"}
                     aria-label="bad"
-                    onClick={() => { onClickBad(article._id, article.isFavorite) }}>
+                    onClick={() => { onClickBad() }}>
                     <ThumbDownIcon />
                 </IconButton>
                 <IconButton
+                    coler="default"
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
                     aria-label="show more"
@@ -128,6 +166,11 @@ const ArticleCard = ({ article, setArticles }) => {
                 </IconButton>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                    <div style={{ whiteSpace: 'pre-wrap' }}>
+                        {article.description}
+                    </div>
+                </CardContent>
                 <CardContent>
                     <Comments article_id={article._id} />
                 </CardContent>
