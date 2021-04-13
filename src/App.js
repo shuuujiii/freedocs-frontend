@@ -22,11 +22,11 @@ const App = () => {
   React.useEffect(() => {
     setLoading(true)
     const authenticate = async () => {
-      await axiosbase.post('/users/authenticate')
+      await axiosbase.post('/users/silent')
         .then((res) => {
           error.init()
-          if (res.data === 'authenticated') {
-            auth.authenticated()
+          if (res.data.payload.user) {
+            auth.authenticated(res.data.payload.user)
           } else {
             auth.notAuthenticated()
           }
