@@ -4,6 +4,7 @@ const AuthContext = React.createContext()
 
 const authInitialState = {
     isAuthenticated: false,
+    user: null,
 }
 
 export const authActions = {
@@ -19,11 +20,14 @@ export const AuthReducer = (state, action) => {
         case authActions.INIT:
             return authInitialState
         case authActions.AUTHENTICATED:
-            return { isAuthenticated: true }
-        case authActions.LOGIN:
-            return { token: action.payload }
+            return {
+                isAuthenticated: true,
+                user: action.payload,
+            }
+        // case authActions.LOGIN:
+        //     return { token: action.payload }
         case authActions.LOGOUT:
-            return { isAuthenticated: false }
+            return authInitialState
         default:
             return ''
     }
@@ -34,11 +38,14 @@ export const useAuth = () => {
 }
 export function AuthProvider({ children }) {
     const [authState, dispatchAuthState] = React.useReducer(AuthReducer, authInitialState)
-    const authenticated = () => {
-        dispatchAuthState({ type: authActions.AUTHENTICATED })
+    const authenticated = (user) => {
+        dispatchAuthState({
+            type: authActions.AUTHENTICATED,
+            payload: user
+        })
     }
     const notAuthenticated = () => {
-        dispatchAuthState({ type: authActions.NOT_AUTHENTICATED })
+        dispatchAuthState({ type: authActions.INIT })
     }
     const logout = () => {
         dispatchAuthState({ type: authActions.LOGOUT })
