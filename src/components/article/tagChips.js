@@ -17,17 +17,19 @@ const TagChips = ({ tags, setTags, deletable = false }) => {
     }
 
     return (
-        tags.map(tag => {
-            return (
-                <li key={tag._id}>
-                    <Chip
-                        className={classes.chip}
-                        label={tag.count ? tag.name + ' (' + tag.count + ')' : tag.name}
-                        onDelete={deletable ? () => { handleDelete(tag._id) } : undefined}
-                    />
-                </li>
-            )
-        })
+        tags.length === 0 && !deletable ?
+            <div>No Tag</div> :
+            tags.map(tag => {
+                return (
+                    <li key={tag._id}>
+                        <Chip
+                            className={classes.chip}
+                            label={tag.count ? tag.name + ' (' + tag.count + ')' : tag.name}
+                            onDelete={deletable ? () => { handleDelete(tag._id) } : undefined}
+                        />
+                    </li>
+                )
+            })
     );
 }
 TagChips.propTypes = {
