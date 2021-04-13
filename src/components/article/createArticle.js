@@ -16,18 +16,43 @@ import { useMessage } from '../../provider/messageProvider';
 // components
 import Tags from './tags';
 
+// validation
+import Joi from 'joi'
+
+
+const ArticleValidator = Joi.object({
+    url: Joi.string().uri().required(),
+    description: Joi.string().allow(null).allow(''),
+    // user: Joi.string().required(),
+    // tags: Joi.array().items(Joi.objectId().allow(null)).required(),
+    // likes: Joi.array().items(Joi.objectId().allow(null)).required(),
+    // good: Joi.array().items(Joi.objectId().allow(null)).required(),
+})
+
 export default function CreateArticle({ setArticles }) {
     const error = useError();
     const message = useMessage();
     const [url, setUrl] = React.useState('');
     const [description, setDescription] = React.useState('')
     const [tags, setTags] = React.useState([])
-    const onClickSave = (e) => {
+    const onClickSave = async (e) => {
         e.preventDefault();
+        const tag_ids = tags.map(tag => tag._id)
+
+        try {
+            await ArticleValidator.validateAsync({
+                url: url,
+                description: description,
+                tags: tag_ids,
+            })
+        } catch (err) {
+            error.setErrorMessage(err.message)
+            return
+        }
         axiosbase.post('/article', {
             url: url,
             description: description,
-            tags: tags.map(tag => tag._id),
+            tags: tag_ids,
         }).then(
             () => {
                 axiosbase.get('/article')
@@ -75,6 +100,7 @@ export default function CreateArticle({ setArticles }) {
                     <TextField
                         multiline={true}
                         fullWidth
+                        rows={5}
                         label="description"
                         variant="outlined"
                         value={description}
