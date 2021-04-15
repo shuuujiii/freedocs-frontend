@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 // material-ui
 import TextField from '@material-ui/core/TextField';
@@ -24,12 +24,12 @@ const ArticleValidator = Joi.object({
     url: Joi.string().uri().required(),
     description: Joi.string().allow(null).allow(''),
     // user: Joi.string().required(),
-    // tags: Joi.array().items(Joi.objectId().allow(null)).required(),
+    tags: Joi.array().items(Joi.allow(null)).required(),
     // likes: Joi.array().items(Joi.objectId().allow(null)).required(),
     // good: Joi.array().items(Joi.objectId().allow(null)).required(),
 })
 
-export default function CreateArticle({ setArticles }) {
+export default function CreateArticle() {
     const error = useError();
     const message = useMessage();
     const [url, setUrl] = React.useState('');
@@ -53,20 +53,14 @@ export default function CreateArticle({ setArticles }) {
             url: url,
             description: description,
             tags: tag_ids,
-        }).then(
-            () => {
-                axiosbase.get('/article')
-                    .then(res => {
-                        error.init()
-                        setArticles(res.data)
-                        message.successMessage('created')
-                        setUrl('')
-                        setDescription('')
-                        setTags([])
-                    })
-                    .catch(error.setError)
-            }
-        ).catch(error.setError);
+        }).then(() => {
+            error.init()
+            message.successMessage('created')
+            setUrl('')
+            setDescription('')
+            setTags([])
+            window.location.reload()
+        }).catch(error.setError);
     }
     return (
         <Paper>
@@ -122,5 +116,5 @@ export default function CreateArticle({ setArticles }) {
 }
 
 CreateArticle.propTypes = {
-    setArticles: PropTypes.func
+    // setArticles: PropTypes.func
 }
