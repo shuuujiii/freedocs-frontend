@@ -8,7 +8,6 @@ import Terms from './components/common/terms'
 import PrivacyPolicy from './components/common/privacypolicy'
 import About from './components/common/about'
 import Contact from './components/common/contact'
-import TemplatePage from './components/main/templatePage'
 import { useAuth } from './provider/authProvider'
 import { useError } from './provider/errorProvider'
 import CookieConsent from 'react-cookie-consent'
@@ -16,11 +15,23 @@ import CookieConsent from 'react-cookie-consent'
 import axiosbase from './utils/axiosbase'
 import { useTracking } from './utils/useTracking'
 
+import Grid from '@material-ui/core/Grid';
+
+import PrivateRoute from './utils/privateRoute'
+import Home from './components/main/home'
+import Profile from './components/main/profile'
+import Container from '@material-ui/core/Container';
+import NotFound from './components/main/notFound'
+import Header from './components/main/appBar'
+import Footer from './components/main/footer'
+import Messages from './components/main/messages'
 import Loading from './components/main/loading'
 const App = () => {
   const auth = useAuth();
   const error = useError();
   const [loading, setLoading] = React.useState(false)
+  const [search, setSearch] = React.useState('')
+
   useTracking(process.env.REACT_APP_GA_MEASUREMENT_ID)
 
   React.useEffect(() => {
@@ -55,16 +66,28 @@ const App = () => {
   return (
     loading ? <Loading /> :
       <div className="App">
+        <Header search={search}
+          setSearch={setSearch}
+        />
         <ErrorAlert />
-        <Switch>
-          <Route path="/signup" component={SignUp} />
-          <Route path="/signin" component={SignIn} />
-          <Route path="/terms" component={Terms} />
-          <Route path="/privacypolicy" component={PrivacyPolicy} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
-          <Route path='/' component={TemplatePage} />
-        </Switch>
+        <Container maxWidth="lg">
+          <Grid container justify="center" spacing={2}>
+            <Grid item xs={8}>
+              <Switch>
+                <Route exact path='/' render={() => <Home search={search} />} />
+                <Route path="/signup" component={SignUp} />
+                <Route path="/signin" component={SignIn} />
+                <Route path="/terms" component={Terms} />
+                <Route path="/privacypolicy" component={PrivacyPolicy} />
+                <Route path="/about" component={About} />
+                <Route path="/contact" component={Contact} />
+                <PrivateRoute path="/profile" component={Profile} />
+                <Route component={NotFound} />
+              </Switch>
+            </Grid>
+          </Grid>
+        </Container>
+        <Messages />
         <CookieConsent
           location="bottom"
           buttonText="OK"
@@ -84,6 +107,8 @@ const App = () => {
           This website uses cookies to enhance the user experience.
           {/* <span style={{ fontSize: "10px" }}>This bit of text is smaller :O</span> */}
         </CookieConsent>
+        <Footer />
+
       </div>
   );
 }

@@ -6,7 +6,7 @@ import Copyright from '../common/copyright'
 
 export default function Footer() {
     return (
-        <Container style={{ display: 'flex', justifyContent: 'center' }} maxWidth="sm">
+        <Container style={{ display: 'flex', justifyContent: 'center', minHeight: '100px', marginTop: '20px' }} maxWidth="sm">
             <Copyright />
             <Typography variant="body2" color="textSecondary" style={{ whiteSpace: 'nowrap' }}>
                 <Link style={{ marginLeft: '1rem', marginRight: '1rem', whiteSpace: 'nowrap' }} color="inherit" href="/terms">
