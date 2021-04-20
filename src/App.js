@@ -15,7 +15,6 @@ import CookieConsent from 'react-cookie-consent'
 import axiosbase from './utils/axiosbase'
 import { useTracking } from './utils/useTracking'
 
-import Grid from '@material-ui/core/Grid';
 
 import PrivateRoute from './utils/privateRoute'
 import Home from './components/main/home'
@@ -71,21 +70,19 @@ const App = () => {
         />
         <ErrorAlert />
         <Container maxWidth="lg">
-          <Grid container justify="center" spacing={2}>
-            <Grid item xs={8}>
-              <Switch>
-                <Route exact path='/' render={() => <Home search={search} />} />
-                <Route path="/signup" component={SignUp} />
-                <Route path="/signin" component={SignIn} />
-                <Route path="/terms" component={Terms} />
-                <Route path="/privacypolicy" component={PrivacyPolicy} />
-                <Route path="/about" component={About} />
-                <Route path="/contact" component={Contact} />
-                <PrivateRoute path="/profile" component={Profile} />
-                <Route component={NotFound} />
-              </Switch>
-            </Grid>
-          </Grid>
+
+          <Switch>
+            <Route exact path='/' render={() => <Home search={search} />} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/signin" component={SignIn} />
+            <Route path="/terms" component={Terms} />
+            <Route path="/privacypolicy" component={PrivacyPolicy} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <PrivateRoute path="/profile" component={Profile} />
+            <Route component={NotFound} />
+          </Switch>
+
         </Container>
         <Messages />
         <CookieConsent

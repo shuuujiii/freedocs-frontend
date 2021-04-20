@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Grid from '@material-ui/core/Grid';
+
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
@@ -48,40 +50,44 @@ const Home = ({ search = '' }) => {
 
     return (
         <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-            {auth.authState.isAuthenticated &&
-                <CreateArticle setArticles={setArticles} />}
-            {articles.length === 0 ?
-                <div>No articles</div> :
-                <div>
-                    <SortSelect sort={sort} dispatchSort={dispatchSort} />
-                    <Pagination
-                        count={totalPages}
-                        size="large"
-                        page={page}
-                        variant="outlined"
-                        shape="rounded"
-                        onChange={handleChange}
-                    />
-                    {articles.map(article => {
-                        return (
-                            <div
-                                key={article._id}
-                                style={{ marginBottom: '10px' }}
-                            >
-                                <ArticleCard article={article} setArticles={setArticles} />
-                            </div>
-                        )
-                    })}
-                    <Pagination
-                        count={totalPages}
-                        size="large"
-                        page={page}
-                        variant="outlined"
-                        shape="rounded"
-                        onChange={handleChange}
-                    />
-                </div>
-            }
+            <Grid container justify="center" spacing={2}>
+                <Grid item xs={8}>
+                    {auth.authState.isAuthenticated &&
+                        <CreateArticle setArticles={setArticles} />}
+                    {articles.length === 0 ?
+                        <div>No articles</div> :
+                        <div>
+                            <SortSelect sort={sort} dispatchSort={dispatchSort} />
+                            <Pagination
+                                count={totalPages}
+                                size="large"
+                                page={page}
+                                variant="outlined"
+                                shape="rounded"
+                                onChange={handleChange}
+                            />
+                            {articles.map(article => {
+                                return (
+                                    <div
+                                        key={article._id}
+                                        style={{ marginBottom: '10px' }}
+                                    >
+                                        <ArticleCard article={article} setArticles={setArticles} />
+                                    </div>
+                                )
+                            })}
+                            <Pagination
+                                count={totalPages}
+                                size="large"
+                                page={page}
+                                variant="outlined"
+                                shape="rounded"
+                                onChange={handleChange}
+                            />
+                        </div>
+                    }
+                </Grid>
+            </Grid>
         </div >
 
     )
