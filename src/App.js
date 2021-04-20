@@ -12,7 +12,10 @@ import Contact from './components/common/contact'
 import TemplatePage from './components/main/templatePage'
 import { useAuth } from './provider/authProvider'
 import { useError } from './provider/errorProvider'
+import CookieConsent from 'react-cookie-consent'
+// utils
 import axiosbase from './utils/axiosbase'
+import { getCookieByName } from './utils/cookie'
 
 import Loading from './components/main/loading'
 const App = () => {
@@ -40,6 +43,24 @@ const App = () => {
     authenticate();
     // eslint-disable-next-line
   }, [])
+
+  React.useEffect(() => {
+    const isAcceptCookie = getCookieByName('GDPRcookie')
+    if (isAcceptCookie === 'true') {
+      window['ga-disable-G-F4LNQR1YZZ'] = false;
+    } else {
+      window['ga-disable-G-F4LNQR1YZZ'] = true;
+    }
+  }, [])
+
+  const handleClickAcceptCookie = () => {
+    // window.location.reload()
+  }
+
+  const handleClickDeclineCookie = () => {
+    // window['ga-disable-G-F4LNQR1YZZ'] = true;
+    // window.location.reload()
+  }
   return (
     loading ? <Loading /> :
       <Router>
@@ -54,6 +75,25 @@ const App = () => {
             <Route path="/contact" component={Contact} />
             <Route path='/' component={TemplatePage} />
           </Switch>
+          <CookieConsent
+            location="bottom"
+            buttonText="OK"
+            cookieName="GDPRcookie"
+            style={{ background: "#2B373B" }}
+            buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+            expires={150}
+            onAccept={() => {
+              handleClickAcceptCookie()
+            }}
+            enableDeclineButton
+            declineButtonText="Decline"
+            onDecline={() => {
+              handleClickDeclineCookie()
+            }}
+          >
+            This website uses cookies to enhance the user experience.
+            {/* <span style={{ fontSize: "10px" }}>This bit of text is smaller :O</span> */}
+          </CookieConsent>
         </div>
       </Router >
   );
