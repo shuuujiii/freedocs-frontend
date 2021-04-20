@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import { AuthProvider } from './authProvider'
 import { ErrorProvider } from './errorProvider'
 import { MessageProvider } from './messageProvider'
@@ -8,7 +10,9 @@ export const Provider = ({ children }) => {
         < ErrorProvider >
             <MessageProvider>
                 <AuthProvider>
-                    {children}
+                    <Router>
+                        {children}
+                    </Router>
                 </AuthProvider>
             </MessageProvider>
         </ ErrorProvider >

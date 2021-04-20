@@ -1,7 +1,6 @@
 
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import { Provider } from './provider/totalProvider'
+import { Route, Switch, } from 'react-router-dom';
 import SignUp from './components/main/signUp'
 import SignIn from './components/main/signIn'
 import ErrorAlert from './components/main/errorAlert'
@@ -15,13 +14,15 @@ import { useError } from './provider/errorProvider'
 import CookieConsent from 'react-cookie-consent'
 // utils
 import axiosbase from './utils/axiosbase'
-import { getCookieByName } from './utils/cookie'
+import { useTracking } from './utils/useTracking'
 
 import Loading from './components/main/loading'
 const App = () => {
   const auth = useAuth();
   const error = useError();
   const [loading, setLoading] = React.useState(false)
+  useTracking(process.env.REACT_APP_GA_MEASUREMENT_ID)
+
   React.useEffect(() => {
     setLoading(true)
     const authenticate = async () => {
@@ -44,60 +45,47 @@ const App = () => {
     // eslint-disable-next-line
   }, [])
 
-  React.useEffect(() => {
-    const isAcceptCookie = getCookieByName('GDPRcookie')
-    if (isAcceptCookie === 'true') {
-      window['ga-disable-G-F4LNQR1YZZ'] = false;
-    } else {
-      window['ga-disable-G-F4LNQR1YZZ'] = true;
-    }
-  }, [])
-
   const handleClickAcceptCookie = () => {
-    // window.location.reload()
+    window.location.reload()
   }
 
   const handleClickDeclineCookie = () => {
-    // window['ga-disable-G-F4LNQR1YZZ'] = true;
-    // window.location.reload()
+    window.location.reload()
   }
   return (
     loading ? <Loading /> :
-      <Router>
-        <div className="App">
-          <ErrorAlert />
-          <Switch>
-            <Route path="/signup" component={SignUp} />
-            <Route path="/signin" component={SignIn} />
-            <Route path="/terms" component={Terms} />
-            <Route path="/privacypolicy" component={PrivacyPolicy} />
-            <Route path="/about" component={About} />
-            <Route path="/contact" component={Contact} />
-            <Route path='/' component={TemplatePage} />
-          </Switch>
-          <CookieConsent
-            location="bottom"
-            buttonText="OK"
-            cookieName="GDPRcookie"
-            style={{ background: "#2B373B" }}
-            buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-            expires={150}
-            onAccept={() => {
-              handleClickAcceptCookie()
-            }}
-            enableDeclineButton
-            declineButtonText="Decline"
-            onDecline={() => {
-              handleClickDeclineCookie()
-            }}
-          >
-            This website uses cookies to enhance the user experience.
-            {/* <span style={{ fontSize: "10px" }}>This bit of text is smaller :O</span> */}
-          </CookieConsent>
-        </div>
-      </Router >
+      <div className="App">
+        <ErrorAlert />
+        <Switch>
+          <Route path="/signup" component={SignUp} />
+          <Route path="/signin" component={SignIn} />
+          <Route path="/terms" component={Terms} />
+          <Route path="/privacypolicy" component={PrivacyPolicy} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route path='/' component={TemplatePage} />
+        </Switch>
+        <CookieConsent
+          location="bottom"
+          buttonText="OK"
+          cookieName={process.env.REACT_APP_GDPR_COOKIE_NAME}
+          style={{ background: "#2B373B" }}
+          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+          expires={150}
+          onAccept={() => {
+            handleClickAcceptCookie()
+          }}
+          enableDeclineButton
+          declineButtonText="Decline"
+          onDecline={() => {
+            handleClickDeclineCookie()
+          }}
+        >
+          This website uses cookies to enhance the user experience.
+          {/* <span style={{ fontSize: "10px" }}>This bit of text is smaller :O</span> */}
+        </CookieConsent>
+      </div>
   );
 }
 
-
-export default App;
+export default App
