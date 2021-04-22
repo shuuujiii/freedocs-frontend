@@ -18,7 +18,7 @@ export default function Footer() {
                 <Link style={{ marginLeft: '1rem', marginRight: '1rem', whiteSpace: 'nowrap' }} color="inherit" href="/about">
                     about
                 </Link>{'/'}
-                <Link style={{ marginLeft: '1rem', marginRight: '1rem', whiteSpace: 'nowrap' }} color="inherit" href="/contact">
+                <Link style={{ marginLeft: '1rem', marginRight: '1rem', whiteSpace: 'nowrap' }} color="inherit" href="https://docs.google.com/forms/d/e/1FAIpQLScuB1logXHSZVD6zYBnYlzF7IuG3vfROuhvQiZaJYZBU7hzlw/viewform">
                     お問い合わせ
                 </Link>
             </Typography>
