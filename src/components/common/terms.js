@@ -23,8 +23,9 @@ const Terms = () => {
     const defineWords = {
         me: '当方',
         myService: '本サービス',
-        domain: 'question-chain.herokuapp.com',
-        user: '登録ユーザー'
+        domain: 'freedocs.herokuapp.com',
+        user: '登録ユーザー',
+        serviceName: 'FreeDocs'
     }
     return (
         <div className={classes.root}>
@@ -50,10 +51,10 @@ const Terms = () => {
                                 (2)	「知的財産権」とは、著作権、特許権、実用新案権、意匠権、商標権その他の知的財産権（それらの権利を取得し、またはそれらの権利につき登録等を出願する権利を含みます。）を意味します。<br />
                                 (3)	「投稿データ」とは、{defineWords.user}が本サービスを利用して投稿その他送信するコンテンツ（文章、画像、動画その他のデータを含みますがこれらに限りません。）を意味します。<br />
                                 (4)	「{defineWords.me}」とは、本サービス運営者を意味します。<br />
-                                (5)	「{defineWords.me}ウェブサイト」とは、そのドメインが「【question-chain.herokuapp.com】」である、<br />
+                                (5)	「{defineWords.me}ウェブサイト」とは、そのドメインが「【{defineWords.domain}】」である、<br />
                                 {defineWords.me}が運営するウェブサイト（理由の如何を問わず、{defineWords.me}のウェブサイトのドメインまたは内容が変更された場合は、当該変更後のウェブサイトを含みます。）を意味します。<br />
                                 (6)	「{defineWords.user}」とは、第3条（登録）に基づいて本サービスの利用者としての登録がなされた個人または法人を意味します。<br />
-                                (7)	「本サービス」とは、{defineWords.me}が提供する【Question-chain】という名称のサービス（理由の如何を問わずサービスの名称または内容が変更された場合は、当該変更後のサービスを含みます。）を意味します。<br />
+                                (7)	「本サービス」とは、{defineWords.me}が提供する【{defineWords.serviceName}】という名称のサービス（理由の如何を問わずサービスの名称または内容が変更された場合は、当該変更後のサービスを含みます。）を意味します。<br />
                             </div>
                             <h1>第3条（登録）</h1>
                             <div>
@@ -83,13 +84,13 @@ const Terms = () => {
                                 これを第三者に利用させ、または貸与、譲渡、名義変更、売買等をしてはならないものとします。<br />
                                 2.	パスワードまたはユーザーIDの管理不十分、使用上の過誤、第三者の使用等によって生じた損害に関する責任は{defineWords.user}が負うものとします。<br />
                             </div>
-                            <h1>第6条（料金及び支払方法）</h1>
+                            {/* <h1>第6条（料金及び支払方法）</h1>
                             <div>
                                 1.	{defineWords.user}は、本サービス利用の対価として、別途{defineWords.me}が定め、{defineWords.me}ウェブサイトに表示する利用料金を、{defineWords.me}が指定する支払方法により{defineWords.me}に支払うものとします。<br />
                                 2.	{defineWords.user}が利用料金の支払を遅滞した場合、{defineWords.user}は年14.6％の割合による遅延損害金を{defineWords.me}に支払うものとします。<br />
-                            </div>
+                            </div> */}
 
-                            <h1>第7条（禁止事項）</h1>
+                            <h1>第6条（禁止事項）</h1>
                             <div>
                                 {defineWords.user}は、本サービスの利用にあたり、以下の各号のいずれかに該当する行為または該当すると{defineWords.me}が判断する行為をしてはなりません。<br />
                                 (1)	法令に違反する行為または犯罪行為に関連する行為<br />
@@ -123,7 +124,7 @@ const Terms = () => {
                                 (18)前各号の行為を試みること<br />
                                 (19)その他、{defineWords.me}が不適切と判断する行為<br />
                             </div>
-                            <h1>第8条（本サービスの停止等）</h1>
+                            <h1>第7条（本サービスの停止等）</h1>
                             <div>
                                 {defineWords.me}は、以下のいずれかに該当する場合には、{defineWords.user}に事前に通知することなく、本サービスの全部または一部の提供を停止または中断することができるものとします。<br />
                                 (1)	本サービスに係るコンピューター・システムの点検または保守作業を緊急に行う場合<br />
@@ -131,7 +132,7 @@ const Terms = () => {
                                 (3)	地震、落雷、火災、風水害、停電、天災地変などの不可抗力により本サービスの運営ができなくなった場合<br />
                                 (4)	その他、{defineWords.me}が停止または中断を必要と判断した場合<br />
                             </div>
-                            <h1>第9条（権利帰属）</h1>
+                            <h1>第8条（権利帰属）</h1>
                             <div>
                                 1.	{defineWords.me}ウェブサイト及び本サービスに関する知的財産権は全て{defineWords.me}または{defineWords.me}にライセンスを許諾している者に帰属しており、<br />
                                 本規約に基づく本サービスの利用許諾は、{defineWords.me}ウェブサイトまたは本サービスに関する{defineWords.me}または{defineWords.me}にライセンスを許諾している者の知的財産権の使用許諾を意味するものではありません。<br />
@@ -140,7 +141,7 @@ const Terms = () => {
                                 また、他の{defineWords.user}に対しても、本サービスを利用して{defineWords.user}が投稿その他送信した投稿データの使用、複製、配布、派生著作物を作成、表示及び実行することについての非独占的なライセンスを付与します。<br />
                                 4.	{defineWords.user}は、{defineWords.me}及び{defineWords.me}から権利を承継しまたは許諾された者に対して著作者人格権を行使しないことに同意するものとします。<br />
                             </div>
-                            <h1>第10条（登録抹消等）</h1>
+                            <h1>第9条（登録抹消等）</h1>
                             <div>
                                 1.	{defineWords.me}は、{defineWords.user}が、以下の各号のいずれかの事由に該当する場合は、事前に通知または催告することなく、投稿データを削除もしくは非表示にし、<br />
                                 当該{defineWords.user}について本サービスの利用を一時的に停止し、または{defineWords.user}としての登録を抹消することができます。<br />
@@ -153,18 +154,18 @@ const Terms = () => {
                                 (7)	その他、{defineWords.me}が本サービスの利用または{defineWords.user}としての登録の継続を適当でないと判断した場合<br />
                                 2.	前項各号のいずれかの事由に該当した場合、{defineWords.user}は、{defineWords.me}に対して負っている債務の一切について当然に期限の利益を失い、直ちに{defineWords.me}に対して全ての債務の支払を行わなければなりません。<br />
                             </div>
-                            <h1>第11条（退会）</h1>
+                            <h1>第10条（退会）</h1>
                             <div>
                                 1.	{defineWords.user}は、{defineWords.me}所定の手続の完了により、本サービスから退会し、自己の{defineWords.user}としての登録を抹消することができます。<br />
                                 2.	退会にあたり、{defineWords.me}に対して負っている債務が有る場合は、{defineWords.user}は、{defineWords.me}に対して負っている債務の一切について当然に期限の利益を失い、直ちに{defineWords.me}に対して全ての債務の支払を行わなければなりません。<br />
-                                3.	退会後の利用者情報の取扱いについては、第15条の規定に従うものとします。<br />
+                                3.	退会後の利用者情報の取扱いについては、第14条の規定に従うものとします。<br />
                             </div>
-                            <h1>第12条（本サービスの内容の変更、終了）</h1>
+                            <h1>第11条（本サービスの内容の変更、終了）</h1>
                             <div>
                                 1.	{defineWords.me}は、{defineWords.me}の都合により、本サービスの内容を変更し、または提供を終了することができます。<br />
                                 2.	{defineWords.me}が本サービスの提供を終了する場合、{defineWords.me}は{defineWords.user}に事前に通知するものとします。<br />
                             </div>
-                            <h1>第13条（保証の否認及び免責）</h1>
+                            <h1>第12条（保証の否認及び免責）</h1>
                             <div>
                                 1.	{defineWords.me}は、本サービスが{defineWords.user}の特定の目的に適合すること、期待する機能・商品的価値・正確性・有用性を有すること、<br />
                                 {defineWords.user}による本サービスの利用が{defineWords.user}に適用のある法令または業界団体の内部規則等に適合すること、<br />
@@ -173,41 +174,41 @@ const Terms = () => {
                                 また、付随的損害、間接損害、特別損害、将来の損害及び逸失利益にかかる損害については、賠償する責任を負わないものとします。<br />
                                 3.	本サービスまたは{defineWords.me}ウェブサイトに関連して{defineWords.user}と他の{defineWords.user}または第三者との間において生じた取引、連絡、紛争等については、{defineWords.user}が自己の責任によって解決するものとします。<br />
                             </div>
-                            <h1>第14条（秘密保持）</h1>
+                            <h1>第13条（秘密保持）</h1>
                             <div>
                                 {defineWords.user}は、本サービスに関連して{defineWords.me}が{defineWords.user}に対して秘密に取扱うことを求めて開示した非公知の情報について、<br />
                                 {defineWords.me}の事前の書面による承諾がある場合を除き、秘密に取扱うものとします。<br />
                             </div>
-                            <h1>第15条（利用者情報の取扱い）</h1>
+                            <h1>第14条（利用者情報の取扱い）</h1>
                             <div>
                                 1.	{defineWords.me}による{defineWords.user}の利用者情報の取扱いについては、別途{defineWords.me}プライバシーポリシー（https://{defineWords.domain}/privacypolicy）の定めによるものとし、<br />
                                 {defineWords.user}はこのプライバシーポリシーに従って{defineWords.me}が{defineWords.user}の利用者情報を取扱うことについて同意するものとします。<br />
                                 2.	{defineWords.me}は、{defineWords.user}が{defineWords.me}に提供した情報、データ等を、個人を特定できない形での統計的な情報として、{defineWords.me}の裁量で、利用及び公開することができるものとし、<br />
                                 {defineWords.user}はこれに異議を唱えないものとします。<br />
                             </div>
-                            <h1>第16条（本規約等の変更）</h1>
+                            <h1>第15条（本規約等の変更）</h1>
                             <div>
                                 {defineWords.me}は、{defineWords.me}が必要と認めた場合は、本規約を変更できるものとします。<br />
                                 本規約を変更する場合、変更後の本規約の施行時期及び内容を{defineWords.me}ウェブサイト上での掲示その他の適切な方法により周知し、または{defineWords.user}に通知します。、<br />
                                 但し、法令上{defineWords.user}の同意が必要となるような内容の変更の場合は、{defineWords.me}所定の方法で{defineWords.user}の同意を得るものとします。、<br />
                             </div>
-                            <h1>第17条（連絡／通知）</h1>
+                            <h1>第16条（連絡／通知）</h1>
                             <div>
                                 1.	本サービスに関する問い合わせその他{defineWords.user}から{defineWords.me}に対する連絡または通知、及び本規約の変更に関する通知その他{defineWords.me}から{defineWords.user}に対する連絡または通知は、{defineWords.me}の定める方法で行うものとします。<br />
                                 2.	{defineWords.me}が登録事項に含まれるメールアドレスその他の連絡先に連絡または通知を行った場合、{defineWords.user}は当該連絡または通知を受領したものとみなします。<br />
                             </div>
-                            <h1>第18条（サービス利用契約上の地位の譲渡等）</h1>
+                            <h1>第17条（サービス利用契約上の地位の譲渡等）</h1>
                             <div>
                                 1.	{defineWords.user}は、{defineWords.me}の書面による事前の承諾なく、利用契約上の地位または本規約に基づく権利もしくは義務につき、第三者に対し、譲渡、移転、担保設定、その他の処分をすることはできません。<br />
                                 2.	{defineWords.me}は本サービスにかかる事業を他社に譲渡した場合には、当該事業譲渡に伴い利用契約上の地位、本規約に基づく権利及び義務並びに{defineWords.user}の登録事項その他の顧客情報を当該事業譲渡の譲受人に譲渡することができるものとし、{defineWords.user}は、かかる譲渡につき本項において予め同意したものとします。<br />
                                 なお、本項に定める事業譲渡には、通常の事業譲渡のみならず、会社分割その他事業が移転するあらゆる場合を含むものとします。<br />
                             </div>
-                            <h1>第19条（分離可能性）</h1>
+                            <h1>第18条（分離可能性）</h1>
                             <div>
                                 本規約のいずれかの条項またはその一部が、消費者契約法その他の法令等により無効または執行不能と判断された場合であっても、<br />
                                 本規約の残りの規定及び一部が無効または執行不能と判断された規定の残りの部分は、継続して完全に効力を有するものとします。<br />
                             </div>
-                            <h1>第20条（準拠法及び管轄裁判所）</h1>
+                            <h1>第19条（準拠法及び管轄裁判所）</h1>
                             <div>
                                 1.	本規約及びサービス利用契約の準拠法は日本法とします。<br />
                                 2.	本規約またはサービス利用契約に起因し、または関連する一切の紛争については、神戸地方裁判所を第一審の専属的合意管轄裁判所とします。<br />
