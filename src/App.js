@@ -1,12 +1,11 @@
 
 import React from 'react'
-import { Route, Switch, } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import SignUp from './components/main/signUp'
 import SignIn from './components/main/signIn'
 import ErrorAlert from './components/main/errorAlert'
 import Terms from './components/common/terms'
 import PrivacyPolicy from './components/common/privacypolicy'
-import About from './components/common/about'
 import Contact from './components/common/contact'
 import { useAuth } from './provider/authProvider'
 import { useError } from './provider/errorProvider'
@@ -15,11 +14,10 @@ import CookieConsent from 'react-cookie-consent'
 import axiosbase from './utils/axiosbase'
 import { useTracking } from './utils/useTracking'
 
-
+// components
 import PrivateRoute from './utils/privateRoute'
 import Home from './components/main/home'
 import Profile from './components/main/profile'
-import Container from '@material-ui/core/Container';
 import NotFound from './components/main/notFound'
 import Header from './components/main/appBar'
 import Footer from './components/main/footer'
@@ -69,21 +67,16 @@ const App = () => {
           setSearch={setSearch}
         />
         <ErrorAlert />
-        <Container maxWidth="lg">
-
-          <Switch>
-            <Route exact path='/' render={() => <Home search={search} />} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/signin" component={SignIn} />
-            <Route path="/terms" component={Terms} />
-            <Route path="/privacypolicy" component={PrivacyPolicy} />
-            <Route path="/about" component={About} />
-            <Route path="/contact" component={Contact} />
-            <PrivateRoute path="/profile" component={Profile} />
-            <Route component={NotFound} />
-          </Switch>
-
-        </Container>
+        <Switch>
+          <Route exact path='/' render={() => <Home search={search} />} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/signin" component={SignIn} />
+          <Route path="/terms" component={Terms} />
+          <Route path="/privacypolicy" component={PrivacyPolicy} />
+          <Route path="/contact" component={Contact} />
+          <PrivateRoute path="/profile" component={Profile} />
+          <Route component={NotFound} />
+        </Switch>
         <Messages />
         <CookieConsent
           location="bottom"
@@ -101,8 +94,7 @@ const App = () => {
             handleClickDeclineCookie()
           }}
         >
-          This website uses cookies to enhance the user experience.
-          {/* <span style={{ fontSize: "10px" }}>This bit of text is smaller :O</span> */}
+          This website uses cookies to enhance the user experience.See <Link style={{ color: 'white' }} to="/privacypolicy">PrivacyPolicy</Link>
         </CookieConsent>
         <Footer />
 

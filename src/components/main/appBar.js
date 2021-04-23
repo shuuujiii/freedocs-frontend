@@ -124,82 +124,82 @@ export default function Header({ search, setSearch }) {
     }
 
     return (
-        <div style={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <div
-                        className={classes.title}
-                        onClick={e => { onClickTitle(e) }}
+        // <div style={{ flexGrow: 1, height: '8vh' }}>
+        <AppBar position="static" style={{}}>
+            <Toolbar>
+                <div
+                    className={classes.title}
+                    onClick={e => { onClickTitle(e) }}
+                >
+                    <Typography
+                        variant="h6"
                     >
-                        <Typography
-                            variant="h6"
+                        FreeDocs
+                    </Typography>
+                </div>
+                <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                        <SearchIcon />
+                    </div>
+                    <InputBase
+                        placeholder="Search…"
+                        classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                        }}
+                        value={search}
+                        onChange={e => { setSearch(e.target.value) }}
+                        inputProps={{ 'aria-label': 'search' }}
+                    />
+                </div>
+                <div style={{ flexGrow: 1 }} />
+                {auth.authState.isAuthenticated ? (
+                    <div>
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
                         >
-                            FreeDocs
-                        </Typography>
-                    </div>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
+                            <AccountCircle />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
                             }}
-                            value={search}
-                            onChange={e => { setSearch(e.target.value) }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleMyPage}>MyPage</MenuItem>
+                            <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        </Menu>
                     </div>
-                    <div style={{ flexGrow: 1 }} />
-                    {auth.authState.isAuthenticated ? (
-                        <div>
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={open}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleMyPage}>MyPage</MenuItem>
-                                <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                            </Menu>
-                        </div>
-                    ) : (
-                        <div>
-                            <Button
-                                className={classes.signin}
-                                href="/signin"
-                            >Sign in</Button>
-                            <Button
-                                className={classes.signup}
-                                variant="outlined"
-                                href="/signup"
-                            >Sign up</Button>
-                        </div>
-                    )}
-                </Toolbar>
-            </AppBar>
-        </div>
+                ) : (
+                    <div>
+                        <Button
+                            className={classes.signin}
+                            href="/signin"
+                        >Sign in</Button>
+                        <Button
+                            className={classes.signup}
+                            variant="outlined"
+                            href="/signup"
+                        >Sign up</Button>
+                    </div>
+                )}
+            </Toolbar>
+        </AppBar>
+        // </div>
     );
 }
 
