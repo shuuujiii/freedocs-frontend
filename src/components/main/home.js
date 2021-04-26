@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
+import useLocalStorage from '../../utils/useLocalStrage'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
@@ -15,8 +16,8 @@ import { useSortReducer } from '../article/sortReducer';
 import SortSelect from '../../components/article/sortSelect'
 import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
-import About from '../common/about'
-
+import GuestUserPage from './guestUserPage'
+import Switches from '../article/favoriteSwitch'
 const Home = ({ search = '' }) => {
     // const error = useError();
     // const classes = useStyles();
@@ -26,21 +27,28 @@ const Home = ({ search = '' }) => {
     const [sort, dispatchSort] = useSortReducer();
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
+    const [isFavoriteOnly, setIsFavoriteOnly] = useLocalStorage('showFavorite', 'false')
 
     const handleChange = (e, p) => {
         e.preventDefault()
         setPage(p);
     };
 
+    const handleChangeSwitch = () => {
+        setIsFavoriteOnly(isFavoriteOnly === 'true' ? 'false' : 'true')
+    }
+
     React.useEffect(() => {
         let mounted = true
         const getData = async () => {
+            console.log('getdata')
             let p = new URLSearchParams();
             p.append('search', search);
             p.append('page', page)
             p.append('sortkey', sort.key)
             p.append('order', sort.order)
-            const res = await axiosbase.get('/article/all?' + p)
+            p.append('isFavoriteOnly', isFavoriteOnly)
+            const res = await axiosbase.get('/article/user?' + p)
             if (mounted) {
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
@@ -48,55 +56,54 @@ const Home = ({ search = '' }) => {
         }
         getData()
         return () => mounted = false
-    }, [search, page, sort, auth.authState.user])
+    }, [search, page, sort, auth.authState.user, isFavoriteOnly])
 
     return (
-        // <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-        <div>
-            {!auth.authState.user && <About />}
-            <Container maxWidth="lg">
-                <Grid container justify="center" spacing={2}>
-                    <Grid item xs={8}>
-                        {auth.authState.isAuthenticated &&
-                            <CreateArticle setArticles={setArticles} />}
-                        <div id='main'></div>
-                        {articles.length === 0 ?
-                            <div>No articles</div> :
-                            <div>
-                                <SortSelect sort={sort} dispatchSort={dispatchSort} />
-                                <Pagination
-                                    count={totalPages}
-                                    size="large"
-                                    page={page}
-                                    variant="outlined"
-                                    shape="rounded"
-                                    onChange={handleChange}
-                                />
-                                {articles.map(article => {
-                                    return (
-                                        <div
-                                            key={article._id}
-                                            style={{ marginBottom: '10px' }}
-                                        >
-                                            <ArticleCard article={article} setArticles={setArticles} />
-                                        </div>
-                                    )
-                                })}
-                                <Pagination
-                                    count={totalPages}
-                                    size="large"
-                                    page={page}
-                                    variant="outlined"
-                                    shape="rounded"
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        }
+        !auth.authState.isAuthenticated ?
+            <GuestUserPage /> :
+            <div>
+                <Container maxWidth="lg">
+                    <Grid container justify="center" spacing={2}>
+                        <Grid item xs={8}>
+                            <CreateArticle setArticles={setArticles} />
+                            <div id='main'></div>
+                            {articles.length === 0 ?
+                                <div>No articles</div> :
+                                <div>
+                                    <SortSelect sort={sort} dispatchSort={dispatchSort} />
+                                    <Switches checked={isFavoriteOnly === 'true'} setChecked={handleChangeSwitch} />
+                                    <Pagination
+                                        count={totalPages}
+                                        size="large"
+                                        page={page}
+                                        variant="outlined"
+                                        shape="rounded"
+                                        onChange={handleChange}
+                                    />
+                                    {articles.map(article => {
+                                        return (
+                                            <div
+                                                key={article._id}
+                                                style={{ marginBottom: '10px' }}
+                                            >
+                                                <ArticleCard article={article} setArticles={setArticles} />
+                                            </div>
+                                        )
+                                    })}
+                                    <Pagination
+                                        count={totalPages}
+                                        size="large"
+                                        page={page}
+                                        variant="outlined"
+                                        shape="rounded"
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            }
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Container>
-        </div >
-
+                </Container>
+            </div >
     )
 }
 
