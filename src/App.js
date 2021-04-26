@@ -63,6 +63,7 @@ const App = () => {
   return (
     loading ? <Loading /> :
       <div className="App">
+        <div>{'envi:' + process.env.REACT_APP_API}</div>
         <Header search={search}
           setSearch={setSearch}
         />
