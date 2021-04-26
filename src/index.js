@@ -8,6 +8,8 @@ import { Provider } from './provider/totalProvider'
 ReactDOM.render(
   <Provider>
     <App />
+
+
   </Provider>
   ,
   document.getElementById('root')
