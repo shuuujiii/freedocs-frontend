@@ -12,6 +12,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import CommentIcon from '@material-ui/icons/Comment';
+import MailIcon from '@material-ui/icons/Mail';
+import Badge from '@material-ui/core/Badge';
 // utils
 import axiosbase from '../../utils/axiosbase'
 
@@ -24,6 +26,11 @@ import Comments from '../article/comments'
 
 
 const useStyles = makeStyles((theme) => ({
+    aaa: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
     root: {
         display: 'flex',
         justifyContent: 'left',
@@ -141,19 +148,25 @@ const ArticleCard = ({ article, setArticles }) => {
                     color={likes ? "secondary" : "default"}
                     aria-label="add to favorites"
                     onClick={() => { onClickLikes() }}>
-                    <FavoriteIcon />
+                    <Badge badgeContent={article.likes.length} color="secondary">
+                        <FavoriteIcon />
+                    </Badge>
                 </IconButton>
                 <IconButton
                     color={good ? "primary" : "default"}
                     aria-label="good"
                     onClick={() => { onClickGood() }}>
-                    <ThumbUpIcon />
+                    <Badge badgeContent={article.good.length} color="primary">
+                        <ThumbUpIcon />
+                    </Badge>
                 </IconButton>
                 <IconButton
                     color={bad ? "primary" : "default"}
                     aria-label="bad"
                     onClick={() => { onClickBad() }}>
-                    <ThumbDownIcon />
+                    <Badge badgeContent={article.bad.length} color="primary">
+                        <ThumbDownIcon />
+                    </Badge>
                 </IconButton>
                 <IconButton
                     coler="default"
@@ -161,7 +174,9 @@ const ArticleCard = ({ article, setArticles }) => {
                     aria-expanded={expanded}
                     aria-label="show more"
                 >
+                    {/* <Badge badgeContent={article.comment.length} color='primary'> */}
                     <CommentIcon />
+                    {/* </Badge> */}
                 </IconButton>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>

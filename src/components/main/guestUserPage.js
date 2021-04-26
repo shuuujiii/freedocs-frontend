@@ -42,6 +42,7 @@ const GuestUserPage = ({ search = '' }) => {
             p.append('order', sort.order)
             const res = await axiosbase.get('/article/all?' + p)
             if (mounted) {
+                console.log('res.data', res.data.docs)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
             }

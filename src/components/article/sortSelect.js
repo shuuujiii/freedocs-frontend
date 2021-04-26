@@ -38,6 +38,13 @@ export default function SortSelect({ sort, dispatchSort }) {
                 >
                     <option value={SORT.URL_ASC}>URL(asc)</option>
                     <option value={SORT.URL_DESC}>URL(desc)</option>
+                    <option value={SORT.LIKES_ASC}>like(asc)</option>
+                    <option value={SORT.LIKES_DESC}>like(desc)</option>
+                    <option value={SORT.GOOD_ASC}>good(asc)</option>
+                    <option value={SORT.GOOD_DESC}>good(desc)</option>
+                    <option value={SORT.BAD_ASC}>bad(desc)</option>
+                    <option value={SORT.BAD_DESC}>bad(asc)</option>
+
                 </Select>
             </FormControl>
         </div>
