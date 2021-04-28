@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
 const UserValidator = Joi.object().keys({
     username: Joi.string().alphanum().min(3).max(30).required(),
     password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
+    email: Joi.string().email({
+        tlds: {
+            allow: false,
+        }
+    }).allow(''),
     confirmPassword: Joi.any().equal(Joi.ref('password')).required().options({ messages: { 'any.only': 'confirm password does not match' } }),
     admin: Joi.boolean(),
 }).with('username', 'password')
@@ -56,6 +61,7 @@ export default function SignUp() {
     const history = useHistory();
     const auth = useAuth();
     const [username, setUsername] = React.useState('')
+    const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
 
@@ -71,6 +77,7 @@ export default function SignUp() {
 
         axiosbase.post('/users', {
             username: username,
+            email: email,
             password: password,
         }).then(
             res => {
@@ -82,7 +89,6 @@ export default function SignUp() {
         ).catch(error.setError)
     }
     return (
-
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
@@ -107,6 +113,7 @@ export default function SignUp() {
                                 onChange={e => { setUsername(e.target.value) }}
                             />
                         </Grid>
+
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -133,6 +140,19 @@ export default function SignUp() {
                                 autoComplete="current-password"
                                 value={confirmPassword}
                                 onChange={e => { setConfirmPassword(e.target.value) }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                id="email"
+                                label="email (optional)"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                value={email}
+                                onChange={e => { setEmail(e.target.value) }}
                             />
                         </Grid>
                         {/* <Grid item xs={12}>
