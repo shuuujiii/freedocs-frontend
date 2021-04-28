@@ -12,7 +12,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import CommentIcon from '@material-ui/icons/Comment';
-import MailIcon from '@material-ui/icons/Mail';
+import ReportIcon from '@material-ui/icons/Report';
 import Badge from '@material-ui/core/Badge';
 // utils
 import axiosbase from '../../utils/axiosbase'
@@ -23,7 +23,7 @@ import { useAuth } from '../../provider/authProvider';
 // components
 import TagChips from '../../components/article/tagChips'
 import Comments from '../article/comments'
-
+import FormDialog from './Report'
 
 const useStyles = makeStyles((theme) => ({
     aaa: {
@@ -60,8 +60,14 @@ const ArticleCard = ({ article, setArticles }) => {
     const [likes, setLikes] = React.useState(false)
     const [good, setGood] = React.useState(false)
     const [bad, setBad] = React.useState(false)
+    const [openReport, setOpenReport] = React.useState(false);
+
     const handleExpandClick = () => {
         setExpanded(!expanded);
+    };
+
+    const handleClose = () => {
+        setOpenReport(false);
     };
 
     React.useEffect(() => {
@@ -127,69 +133,79 @@ const ArticleCard = ({ article, setArticles }) => {
     }
 
     return (
-        <Card>
-            <CardContent>
-                <Paper
-                    elevation={0}
-                    component="ul"
-                    className={classes.root}
-                >
-                    <TagChips
-                        tags={article.tags}
-                        setTags={() => { }}
-                        deletable={false} />
-                </Paper>
-            </CardContent>
-            <CardContent>
-                <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
-            </CardContent>
-            <CardActions disableSpacing>
-                <IconButton
-                    color={likes ? "secondary" : "default"}
-                    aria-label="add to favorites"
-                    onClick={() => { onClickLikes() }}>
-                    <Badge badgeContent={article.likes.length} color="secondary">
-                        <FavoriteIcon />
-                    </Badge>
-                </IconButton>
-                <IconButton
-                    color={good ? "primary" : "default"}
-                    aria-label="good"
-                    onClick={() => { onClickGood() }}>
-                    <Badge badgeContent={article.good.length} color="primary">
-                        <ThumbUpIcon />
-                    </Badge>
-                </IconButton>
-                <IconButton
-                    color={bad ? "primary" : "default"}
-                    aria-label="bad"
-                    onClick={() => { onClickBad() }}>
-                    <Badge badgeContent={article.bad.length} color="primary">
-                        <ThumbDownIcon />
-                    </Badge>
-                </IconButton>
-                <IconButton
-                    coler="default"
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    {/* <Badge badgeContent={article.comment.length} color='primary'> */}
-                    <CommentIcon />
-                    {/* </Badge> */}
-                </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <div>
+            <Card>
                 <CardContent>
-                    <div style={{ whiteSpace: 'pre-wrap' }}>
-                        {article.description}
-                    </div>
+                    <Paper
+                        elevation={0}
+                        component="ul"
+                        className={classes.root}
+                    >
+                        <TagChips
+                            tags={article.tags}
+                            setTags={() => { }}
+                            deletable={false} />
+                    </Paper>
                 </CardContent>
                 <CardContent>
-                    <Comments article_id={article._id} />
+                    <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
                 </CardContent>
-            </Collapse>
-        </Card>
+                <CardActions disableSpacing>
+                    <IconButton
+                        color={likes ? "secondary" : "default"}
+                        aria-label="add to favorites"
+                        onClick={() => { onClickLikes() }}>
+                        <Badge badgeContent={article.likes.length} color="secondary">
+                            <FavoriteIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton
+                        color={good ? "primary" : "default"}
+                        aria-label="good"
+                        onClick={() => { onClickGood() }}>
+                        <Badge badgeContent={article.good.length} color="primary">
+                            <ThumbUpIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton
+                        color={bad ? "primary" : "default"}
+                        aria-label="bad"
+                        onClick={() => { onClickBad() }}>
+                        <Badge badgeContent={article.bad.length} color="primary">
+                            <ThumbDownIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton
+                        coler="default"
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                    >
+                        <CommentIcon />
+                    </IconButton>
+                    {auth.authState.user ? <IconButton
+                        style={{ marginLeft: 'auto' }}
+                        coler="default"
+                        onClick={() => setOpenReport(!openReport)}
+                        aria-label="report"
+                    >
+                        <ReportIcon />
+                    </IconButton> : null}
+
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                        <div style={{ whiteSpace: 'pre-wrap' }}>
+                            {article.description}
+                        </div>
+                    </CardContent>
+                    <CardContent>
+                        <Comments article_id={article._id} />
+                    </CardContent>
+                </Collapse>
+            </Card>
+            <FormDialog open={openReport} handleClose={handleClose} article_id={article._id} />
+        </div>
     )
 }
 

@@ -13,14 +13,10 @@ import { useSortReducer } from '../article/sortReducer';
 
 // components
 import SortSelect from '../article/sortSelect'
-import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
 import About from '../common/about'
 
 const GuestUserPage = ({ search = '' }) => {
-    // const error = useError();
-    // const classes = useStyles();
-    // const history = useHistory();
     const auth = useAuth();
     const [articles, setArticles] = React.useState([]);
     const [sort, dispatchSort] = useSortReducer();
@@ -42,7 +38,6 @@ const GuestUserPage = ({ search = '' }) => {
             p.append('order', sort.order)
             const res = await axiosbase.get('/article/all?' + p)
             if (mounted) {
-                console.log('res.data', res.data.docs)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
             }
@@ -52,7 +47,6 @@ const GuestUserPage = ({ search = '' }) => {
     }, [search, page, sort, auth.authState.user])
 
     return (
-        // <div style={{ marginTop: '10px', marginBottom: '10px' }}>
         <div>
             <About />
             <Container maxWidth="lg">

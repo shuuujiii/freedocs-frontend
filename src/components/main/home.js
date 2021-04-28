@@ -41,7 +41,6 @@ const Home = ({ search = '' }) => {
     React.useEffect(() => {
         let mounted = true
         const getData = async () => {
-            console.log('getdata')
             let p = new URLSearchParams();
             p.append('search', search);
             p.append('page', page)
