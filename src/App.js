@@ -23,6 +23,7 @@ import Header from './components/main/appBar'
 import Footer from './components/main/footer'
 import Messages from './components/main/messages'
 import Loading from './components/main/loading'
+import EmailAuth from './components/main/emailAuth'
 const App = () => {
   const auth = useAuth();
   const error = useError();
@@ -69,6 +70,7 @@ const App = () => {
         <ErrorAlert />
         <Switch>
           <Route exact path='/' render={() => <Home search={search} />} />
+          <Route path="/auth/email/:token" component={EmailAuth} />
           <Route path="/signup" component={SignUp} />
           <Route path="/signin" component={SignIn} />
           <Route path="/terms" component={Terms} />
