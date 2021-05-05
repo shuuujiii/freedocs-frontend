@@ -24,6 +24,7 @@ import Footer from './components/main/footer'
 import Messages from './components/main/messages'
 import Loading from './components/main/loading'
 import EmailAuth from './components/main/emailAuth'
+import Setting from './components/main/setting'
 const App = () => {
   const auth = useAuth();
   const error = useError();
@@ -52,7 +53,7 @@ const App = () => {
     }
     authenticate();
     // eslint-disable-next-line
-  }, [])
+  }, [auth.authSteate?.user])
 
   const handleClickAcceptCookie = () => {
     window.location.reload()
@@ -77,6 +78,7 @@ const App = () => {
           <Route path="/privacypolicy" component={PrivacyPolicy} />
           <Route path="/contact" component={Contact} />
           <PrivateRoute path="/profile" component={Profile} />
+          <PrivateRoute path="/setting" component={Setting} />
           <Route component={NotFound} />
         </Switch>
         <Messages />

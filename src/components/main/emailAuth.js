@@ -12,11 +12,10 @@ export default function EmailAuth(props) {
         error.init()
     }
     React.useEffect(() => {
-        console.log('useEffect')
         axiosbase.post('/users/auth/email', {
             token: token
         })
-            .then(res => {
+            .then(() => {
                 init()
                 setAuthenticated(true)
             })

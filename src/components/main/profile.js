@@ -1,5 +1,5 @@
 import React from 'react'
-import axiosbase from '../../utils/axiosbase'
+// import axiosbase from '../../utils/axiosbase'
 // import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -10,12 +10,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Box } from '@material-ui/core';
-import { CircularProgress, Button } from '@material-ui/core';
 
 // utils
-import { useHistory } from 'react-router-dom'
-import { useMessage } from '../../provider/messageProvider'
-import { useError } from '../../provider/errorProvider'
+import { useAuth } from '../../provider/authProvider'
 const useStyles = makeStyles((theme) => ({
     root: {
         // maxWidth: 345,
@@ -52,34 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile() {
     const classes = useStyles();
-    const history = useHistory();
-    const message = useMessage();
-    const error = useError();
-
-    const [loading, setLoading] = React.useState(false)
-    const [username, setUsername] = React.useState('')
-
-    const onClickDeleteAccount = (e) => {
-        e.preventDefault()
-        setLoading(true)
-        axiosbase.delete('/users').then(
-            res => {
-                setLoading(false)
-                console.log('response', res)
-                message.successMessage('delete user')
-                history.push('/')
-            }
-        ).catch(err => {
-            error.setError(err)
-            setLoading(false)
-        })
-    }
-    React.useEffect(() => {
-        axiosbase.get('/users')
-            .then(res => {
-                setUsername(res.data.username)
-            })
-    }, [])
+    const auth = useAuth();
+    const username = auth.authState.user.username
 
     return (
         <Card className={classes.root}>
@@ -90,7 +61,6 @@ function Profile() {
                     </IconButton>
                 }
                 title="Profile"
-            // subheader="September 14, 2016"
             />
             <Box display="flex" justifyContent="center" alignItems="center">
                 <Avatar aria-label="recipe" className={classes.avatar}>
@@ -99,20 +69,10 @@ function Profile() {
             </Box>
             <CardContent>
                 <Box display="flex" justifyContent="center">
-                    {username}
+                    username:{username}
                 </Box>
             </CardContent>
-            <CardContent>
-                <Box display="flex" justifyContent="center">
-                    <Button
-                        className={classes.button}
-                        onClick={e => { onClickDeleteAccount(e) }}
-                        disabled={loading}>
-                        {loading && <CircularProgress size={14} />}
-                        {!loading && 'Delete Account'}
-                    </Button>
-                </Box>
-            </CardContent>
+
         </Card>
     );
 }

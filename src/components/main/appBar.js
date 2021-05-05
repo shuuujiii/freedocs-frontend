@@ -102,9 +102,9 @@ export default function Header({ search, setSearch }) {
         history.push('/profile');
     };
 
-    const handleMyPage = () => {
+    const handleSetting = () => {
         handleClose()
-        history.push('/userpage');
+        history.push('/setting');
     };
 
     const handleLogout = () => {
@@ -179,8 +179,8 @@ export default function Header({ search, setSearch }) {
                             open={open}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleMyPage}>MyPage</MenuItem>
                             <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                            <MenuItem onClick={handleSetting}>Setting</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </div>
