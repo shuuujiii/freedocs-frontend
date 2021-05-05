@@ -19,7 +19,8 @@ export const useTracking = (
         script2.text = `window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${measurementId}');`;
+                gtag('config', '${measurementId}'),
+                {'cookie_domain': '${process.env.REACT_APP_GOOGLE_COOKIE_DOMAIN}',};`;
         document.head.appendChild(script2);
     }
     React.useEffect(() => {
