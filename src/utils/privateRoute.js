@@ -14,11 +14,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     const auth = useAuth();
     const error = useError();
     const history = useHistory();
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => {
         const authenticate = async () => {
-            await axiosbase.post('/users/authenticate')
+            await axiosbase.post('/users/silent')
                 .then((res) => {
                     error.init()
                     if (res.data.payload.user) {
@@ -26,11 +26,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                     } else {
                         auth.notAuthenticated()
                     }
-                    setLoading(true)
+                    setLoading(false)
                 }).catch(e => {
                     error.setError(e)
                     auth.notAuthenticated()
-                    setLoading(true)
+                    setLoading(false)
                 })
         }
         authenticate();
@@ -38,7 +38,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     }, [])
     return (
         <Route {...rest} render={props => {
-            if (!loading) { return <Loading /> }
+            if (loading) { return <Loading /> }
             if (auth.authState.isAuthenticated) {
                 return <Component {...props} {...rest} />
             } else {
