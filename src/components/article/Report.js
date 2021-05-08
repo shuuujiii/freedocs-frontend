@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Radio from '@material-ui/core/Radio';
@@ -19,7 +19,7 @@ import axiosbase from '../../utils/axiosbase'
 import { useMessage } from '../../provider/messageProvider';
 import { useError } from '../../provider/errorProvider'
 
-export default function FormDialog({ open, handleClose, article_id }) {
+export default function ReportDialog({ open, handleClose, article_id }) {
     const message = useMessage();
     const error = useError();
     const [detail, setDetail] = React.useState('')
@@ -55,53 +55,53 @@ export default function FormDialog({ open, handleClose, article_id }) {
     }
 
     return (
-        <div>
-            <Dialog open={open} onClose={handleCloseInit} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Report</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        <FormControl component="fieldset">
-                            {/* <FormLabel component="legend">Report</FormLabel> */}
-                            <RadioGroup aria-label="gender" name="gender1" value={radioButtonValue} onChange={handleChangeRadioButton}>
-                                <FormControlLabel value="sex" control={<Radio />} label="性的なコンテンツ" />
-                                <FormControlLabel value="violence" control={<Radio />} label="暴力的または不快なコンテンツ" />
-                                <FormControlLabel value="danger" control={<Radio />} label="危険な内容" />
-                                <FormControlLabel value="spam" control={<Radio />} label="スパム" />
-                                <FormControlLabel value="right" control={<Radio />} label="権利に関する内容" />
-                                <FormControlLabel value="tag" control={<Radio />} label="タグの不備" />
-                                <FormControlLabel value="url" control={<Radio />} label="URLの不備" />
-                                <FormControlLabel value="other" control={<Radio />} label="その他" />
-                            </RadioGroup>
-                        </FormControl>
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        variant="outlined"
-                        id="name"
-                        label="detail"
-                        type="text"
-                        fullWidth
-                        multiline
-                        rows={3}
-                        value={detail}
-                        onChange={(e) => { setDetail(e.target.value) }}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseInit} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClickSendReport} color="primary">
-                        Send
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
+        <Dialog open={open} onClose={handleCloseInit} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Report</DialogTitle>
+            <DialogContent>
+                <FormControl component="fieldset">
+                    <RadioGroup
+                        aria-label="gender"
+                        name="gender1"
+                        value={radioButtonValue}
+                        onChange={handleChangeRadioButton}
+                    >
+                        <FormControlLabel value="sex" control={<Radio />} label="性的なコンテンツ" />
+                        <FormControlLabel value="violence" control={<Radio />} label="暴力的または不快なコンテンツ" />
+                        <FormControlLabel value="danger" control={<Radio />} label="危険な内容" />
+                        <FormControlLabel value="spam" control={<Radio />} label="スパム" />
+                        <FormControlLabel value="right" control={<Radio />} label="権利に関する内容" />
+                        <FormControlLabel value="tag" control={<Radio />} label="タグの不備" />
+                        <FormControlLabel value="url" control={<Radio />} label="URLの不備" />
+                        <FormControlLabel value="other" control={<Radio />} label="その他" />
+                    </RadioGroup>
+                </FormControl>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    variant="outlined"
+                    id="name"
+                    label="detail"
+                    type="text"
+                    fullWidth
+                    multiline
+                    rows={3}
+                    value={detail}
+                    onChange={(e) => { setDetail(e.target.value) }}
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseInit} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleClickSendReport} color="primary">
+                    Send
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
-FormDialog.propTypes = {
+ReportDialog.propTypes = {
     article_id: PropTypes.string,
     open: PropTypes.bool,
     handleClickOpen: PropTypes.func,
