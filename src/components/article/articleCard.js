@@ -23,7 +23,7 @@ import { useAuth } from '../../provider/authProvider';
 // components
 import TagChips from '../../components/article/tagChips'
 import Comments from '../article/comments'
-import FormDialog from './Report'
+import ReportDialog from './Report'
 
 const useStyles = makeStyles((theme) => ({
     aaa: {
@@ -204,7 +204,7 @@ const ArticleCard = ({ article, setArticles }) => {
                     </CardContent>
                 </Collapse>
             </Card>
-            <FormDialog open={openReport} handleClose={handleClose} article_id={article._id} />
+            <ReportDialog open={openReport} handleClose={handleClose} article_id={article._id} />
         </div>
     )
 }
