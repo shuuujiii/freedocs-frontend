@@ -35,6 +35,13 @@ export default function CreateArticle() {
     const [url, setUrl] = React.useState('');
     const [description, setDescription] = React.useState('')
     const [tags, setTags] = React.useState([])
+
+    const init = () => {
+        error.init()
+        setUrl('')
+        setDescription('')
+        setTags([])
+    }
     const onClickSave = async (e) => {
         e.preventDefault();
         const tag_ids = tags.map(tag => tag._id)
@@ -54,13 +61,13 @@ export default function CreateArticle() {
             description: description,
             tags: tag_ids,
         }).then(() => {
-            error.init()
             message.successMessage('created')
-            setUrl('')
-            setDescription('')
-            setTags([])
-            window.location.reload()
-        }).catch(error.setError);
+            init()
+            // window.location.reload()
+        }).catch(e => {
+            error.setError(e)
+        }
+        );
     }
     return (
         <Paper>
