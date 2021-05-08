@@ -44,7 +44,7 @@ function Settings() {
         e.preventDefault()
         setLoading(true)
         axiosbase.delete('/users').then(
-            res => {
+            () => {
                 setLoading(false)
                 message.successMessage('delete user')
                 auth.logout()
@@ -116,11 +116,10 @@ const ChangePasswordButton = () => {
             message.init()
             error.init()
             setLoading(true)
-            const res = await axiosbase.post('/users/changepassword', {
+            await axiosbase.post('/users/changepassword', {
                 oldPassword: oldPassword,
                 newPassword: newPassword,
             })
-            // auth.authenticated(res.)
             message.successMessage('password changed!')
         } catch (e) {
             error.setError(e)
