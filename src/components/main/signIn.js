@@ -59,7 +59,7 @@ export default function SignIn() {
             password: password
         }).then((res) => {
             error.init()
-            auth.authenticated(res.data.payload.user)
+            auth.authenticated(res.data.user)
             setLoading(false)
             history.push(history.location.state?.from || '/')
         }).catch(err => {

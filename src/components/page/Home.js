@@ -8,6 +8,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import axiosbase from '../../utils/axiosbase'
 
 // provider
+import { useHistory } from 'react-router-dom'
 import { useAuth } from '../../provider/authProvider';
 import { useSortReducer } from '../article/sortReducer';
 
@@ -16,13 +17,13 @@ import SortSelect from '../article/sortSelect'
 import ArticleCard from '../article/articleCard'
 import About from '../common/about'
 
-const GuestUserPage = ({ search = '' }) => {
+const Home = ({ search = '' }) => {
     const auth = useAuth();
     const [articles, setArticles] = React.useState([]);
     const [sort, dispatchSort] = useSortReducer();
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
-
+    const history = useHistory();
     const handleChange = (e, p) => {
         e.preventDefault()
         setPage(p);
@@ -50,7 +51,7 @@ const GuestUserPage = ({ search = '' }) => {
         <div>
             {auth.authState.user ? <div>
                 show ranking
-                <button onClick={() => history.push('/articles')}>list</button>
+                <button onClick={() => { history.push('/articles') }}>list</button>
             </div> : <div>
                 <About />
                 <div>show ranking for new user</div>
@@ -61,8 +62,8 @@ const GuestUserPage = ({ search = '' }) => {
     )
 }
 
-GuestUserPage.propTypes = {
+Home.propTypes = {
     search: PropTypes.string,
 }
 
-export default GuestUserPage;
+export default Home;

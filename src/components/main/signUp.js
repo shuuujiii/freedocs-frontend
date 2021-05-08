@@ -68,6 +68,7 @@ export default function SignUp() {
     const classes = useStyles();
     const onSubmitSignUp = async (e) => {
         e.preventDefault()
+        error.init()
         try {
             await UserValidator.validateAsync({ username: username, password: password, confirmPassword: confirmPassword })
         } catch (err) {
@@ -82,7 +83,7 @@ export default function SignUp() {
         }).then(
             res => {
                 if (res.status === StatusCodes.CREATED) {
-                    auth.authenticated();
+                    auth.authenticated(res.data.user);
                     history.push('/');
                 }
             }

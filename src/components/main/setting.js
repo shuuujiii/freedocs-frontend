@@ -46,8 +46,8 @@ function Settings() {
         axiosbase.delete('/users').then(
             res => {
                 setLoading(false)
-                console.log('response', res)
                 message.successMessage('delete user')
+                auth.logout()
                 history.push('/')
             }
         ).catch(err => {
@@ -116,10 +116,11 @@ const ChangePasswordButton = () => {
             message.init()
             error.init()
             setLoading(true)
-            await axiosbase.post('/users/changepassword', {
+            const res = await axiosbase.post('/users/changepassword', {
                 oldPassword: oldPassword,
                 newPassword: newPassword,
             })
+            // auth.authenticated(res.)
             message.successMessage('password changed!')
         } catch (e) {
             error.setError(e)
@@ -209,8 +210,7 @@ const ChangeEmailButton = () => {
             const res = await axiosbase.post('/users/changeemail', {
                 email: email,
             })
-            auth.authenticated(res.data)
-            setEmail(res.data.email)
+            auth.authenticated(res.data.user)
             message.successMessage('email changed!')
         } catch (e) {
             error.setError(e)
