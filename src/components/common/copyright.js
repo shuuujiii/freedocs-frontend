@@ -5,17 +5,9 @@ import Typography from '@material-ui/core/Typography';
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" style={{ whiteSpace: 'nowrap' }}>
+        <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
             {'Copyright © ' + new Date().getFullYear() + ' shuji watanabe.'}
         </Typography>
-        //     <Typography variant="body2" color="textSecondary" align="center">
-        //         {'Copyright © '}
-        //         <Link color="inherit" href="">
-        //             shuji watanabe
-        //   </Link>{' '}
-        //         {new Date().getFullYear()}
-        //         {'.'}
-        //     </Typography>
     );
 }
 
