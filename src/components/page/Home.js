@@ -1,69 +1,149 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-// import Grid from '@material-ui/core/Grid';
-// import Container from '@material-ui/core/Container';
-
-// import Pagination from '@material-ui/lab/Pagination';
+// import PropTypes from 'prop-types'
 // utils
-// import axiosbase from '../../utils/axiosbase'
+import axiosbase from '../../utils/axiosbase'
 
 // provider
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../provider/authProvider';
-// import { useSortReducer } from '../article/sortReducer';
 
-// components
-// import SortSelect from '../article/sortSelect'
-// import ArticleCard from '../article/articleCard'
-import About from '../common/about'
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+const useStyles = makeStyles((theme) => ({
+    icon: {
+        marginRight: theme.spacing(2),
+    },
+    heroContent: {
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(8, 0, 6),
+    },
+    heroButtons: {
+        marginTop: theme.spacing(4),
+    },
+    rankTitle: {
+        width: '100%',
+        borderBottom: 'solid 1px',
+        textAlign: 'center',
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+    cardGrid: {
+        paddingTop: theme.spacing(8),
+        paddingBottom: theme.spacing(8),
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    cardMedia: {
+        paddingTop: '56.25%', // 16:9
+    },
+    cardContent: {
+        flexGrow: 1,
+    },
+    footer: {
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(6),
+    },
+}));
 
-const Home = () => {
+export default function Home() {
+    const classes = useStyles();
     const auth = useAuth();
-    // const [articles, setArticles] = React.useState([]);
-    // const [sort, dispatchSort] = useSortReducer();
-    // const [page, setPage] = React.useState(1);
-    // const [totalPages, setTotalPages] = React.useState(0)
-    const history = useHistory();
-    // const handleChange = (e, p) => {
-    //     e.preventDefault()
-    //     setPage(p);
-    // };
-
-    // React.useEffect(() => {
-    //     let mounted = true
-    //     const getData = async () => {
-    //         let p = new URLSearchParams();
-    //         p.append('search', search);
-    //         p.append('page', page)
-    //         p.append('sortkey', sort.key)
-    //         p.append('order', sort.order)
-    //         const res = await axiosbase.get('/article/all?' + p)
-    //         if (mounted) {
-    //             setArticles(res.data.docs);
-    //             setTotalPages(res.data.totalPages)
-    //         }
-    //     }
-    //     getData()
-    //     return () => mounted = false
-    // }, [search, page, sort, auth.authState.user])
-
+    const [likesArticles, setLikesArticles] = React.useState([])
+    const [goodArticles, setGoodArticles] = React.useState([])
+    React.useEffect(() => {
+        let mounted = true
+        const getRankingData = async () => {
+            const res = await axiosbase.get('/article/ranking')
+            if (mounted) {
+                setLikesArticles(res.data.likesRanking)
+                setGoodArticles(res.data.goodRanking)
+            }
+        }
+        getRankingData()
+        return () => mounted = false
+    }, [])
     return (
-        <div>
-            {auth.authState.user ? <div>
-                show ranking
-                <button onClick={() => { history.push('/articles') }}>list</button>
-            </div> : <div>
-                <About />
-                <div>show ranking for new user</div>
-            </div>}
+        <React.Fragment>
+            <CssBaseline />
+            <main>
+                {auth.authState.user ? null :
+                    <div className={classes.heroContent}>
+                        <Container maxWidth="sm">
+                            <Typography component="h3" variant="h3" align="center" color="textPrimary" gutterBottom>
+                                Collect Free Documents For Development
+                            </Typography>
+                            <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                                share your documentation or information for free!
+                            </Typography>
+                            <div className={classes.heroButtons}>
+                                <Grid container spacing={2} justify="center">
+                                    <Grid item>
+                                        <Button variant="contained" color="primary">
+                                            SignUp
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </Container>
+                    </div>
+                }
+                <Container className={classes.cardGrid} maxWidth="md">
+                    <div className={classes.rankTitle}>
+                        <Typography variant="h4" color="textSecondary">LikesRanking</Typography>
+                    </div>
+                    <Grid container spacing={4}>
+                        {likesArticles.map((article) => (
+                            <Grid item key={article._id} xs={12} sm={6} md={4}>
+                                <Card className={classes.card}>
+                                    <CardContent className={classes.cardContent}>
+                                        <IconButton
+                                            color="secondary">
+                                            <FavoriteIcon />×{article.count}
+                                        </IconButton>
+                                        <Typography>
+                                            <Link to={{ pathname: article.url || '#' }} target='_blank' >{article.url}</Link>
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
 
-        </div >
-
-    )
+                    </Grid>
+                    <div className={classes.rankTitle}>
+                        <Typography variant="h4" color="textSecondary">GoodRanking</Typography>
+                    </div>
+                    <Grid container spacing={4}>
+                        {goodArticles.map((article) => (
+                            <Grid item key={article._id} xs={12} sm={6} md={4}>
+                                <Card className={classes.card}>
+                                    <CardContent className={classes.cardContent}>
+                                        <IconButton
+                                            color="primary">
+                                            <ThumbUpIcon />×{article.count}
+                                        </IconButton>
+                                        <Typography>
+                                            <Link to={{ pathname: article.url || '#' }} target='_blank' >{article.url}</Link>
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Container>
+            </main>
+        </React.Fragment>
+    );
 }
-
-Home.propTypes = {
-    search: PropTypes.string,
-}
-
-export default Home;
