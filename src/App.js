@@ -1,12 +1,11 @@
 
 import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom';
-import SignUp from './components/main/signUp'
-import SignIn from './components/main/signIn'
-import ErrorAlert from './components/main/errorAlert'
-import Terms from './components/common/terms'
-import PrivacyPolicy from './components/common/privacypolicy'
-import Contact from './components/common/contact'
+import SignUp from './components/page/SignUp'
+import SignIn from './components/page/SignIn'
+import ErrorAlert from './components/common/ErrorAlert'
+import Terms from './components/page/Terms'
+import PrivacyPolicy from './components/page/PrivacyPolicy'
 import CookieConsent from 'react-cookie-consent'
 // utils
 import { useTracking } from './utils/useTracking'
@@ -14,14 +13,14 @@ import { useTracking } from './utils/useTracking'
 // components
 import PrivateRoute from './utils/privateRoute'
 import Home from './components/page/Home'
-import Profile from './components/main/profile'
-import NotFound from './components/main/notFound'
-import Header from './components/main/appBar'
-import Footer from './components/main/footer'
-import Messages from './components/main/messages'
-import EmailAuth from './components/main/emailAuth'
-import Setting from './components/main/setting'
-import ArticlesPage from './components/main/ArticlesPage'
+import Profile from './components/page/Profile'
+import NotFound from './components/page/NotFound'
+import Header from './components/common/Header'
+import Footer from './components/common/Footer'
+import Messages from './components/common/Messages'
+import EmailAuth from './components/page/EmailAuth'
+import Setting from './components/page/Setting'
+import ArticlesPage from './components/page/ArticlesPage'
 const App = () => {
   const [search, setSearch] = React.useState('')
 
@@ -47,7 +46,7 @@ const App = () => {
         <Route path="/signin" component={SignIn} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacypolicy" component={PrivacyPolicy} />
-        <Route path="/contact" component={Contact} />
+        {/* <Route path="/contact" component={Contact} /> */}
         {/* <PrivateRoute path='/articles' render={() => <ArticlesPage search={search} />} /> */}
         <PrivateRoute path='/articles' component={ArticlesPage} />
         <PrivateRoute path="/profile" component={Profile} />

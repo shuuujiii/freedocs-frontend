@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container';
 
 // component
 import Copyright from '../common/copyright'
-import Loading from '../main/loading'
+import Loading from '../common/Loading'
 
 // util
 import axiosbase from '../../utils/axiosbase'

@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import Copyright from '../common/copyright'
+import Copyright from './copyright'
 
 export default function Footer() {
     return (

@@ -13,7 +13,7 @@ import { useAuth } from '../../provider/authProvider';
 import { useSortReducer } from '../article/sortReducer';
 
 // components
-import SortSelect from '../../components/article/sortSelect'
+import SortSelect from '../article/sortSelect'
 import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
 import Switches from '../article/favoriteSwitch'

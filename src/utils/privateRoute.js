@@ -9,7 +9,7 @@ import { useError } from '../provider/errorProvider'
 import axiosbase from './axiosbase'
 
 // components
-import Loading from '../components/main/loading'
+import Loading from '../components/common/Loading'
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const auth = useAuth();
     const error = useError();
