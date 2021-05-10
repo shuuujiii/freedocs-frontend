@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
-import useLocalStorage from '../../utils/useLocalStrage'
+// import useLocalStorage from '../../utils/useLocalStrage'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
@@ -16,7 +16,7 @@ import { useSortReducer } from '../article/sortReducer';
 import SortSelect from '../article/sortSelect'
 import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
-import Switches from '../article/favoriteSwitch'
+// import Switches from '../article/favoriteSwitch'
 const ArticlesPage = ({ search = '' }) => {
     // const error = useError();
     // const classes = useStyles();
@@ -26,16 +26,16 @@ const ArticlesPage = ({ search = '' }) => {
     const [sort, dispatchSort] = useSortReducer();
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
-    const [isFavoriteOnly, setIsFavoriteOnly] = useLocalStorage('showFavorite', 'false')
+    // const [isFavoriteOnly, setIsFavoriteOnly] = useLocalStorage('showFavorite', 'false')
 
     const handleChange = (e, p) => {
         e.preventDefault()
         setPage(p);
     };
 
-    const handleChangeSwitch = () => {
-        setIsFavoriteOnly(isFavoriteOnly === 'true' ? 'false' : 'true')
-    }
+    // const handleChangeSwitch = () => {
+    //     setIsFavoriteOnly(isFavoriteOnly === 'true' ? 'false' : 'true')
+    // }
 
     React.useEffect(() => {
         let mounted = true
@@ -45,8 +45,8 @@ const ArticlesPage = ({ search = '' }) => {
             p.append('page', page)
             p.append('sortkey', sort.key)
             p.append('order', sort.order)
-            p.append('isFavoriteOnly', isFavoriteOnly)
-            const res = await axiosbase.get('/article/user?' + p)
+            // p.append('isFavoriteOnly', isFavoriteOnly)
+            const res = await axiosbase.get('/article/lists?' + p)
             if (mounted) {
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
@@ -54,21 +54,23 @@ const ArticlesPage = ({ search = '' }) => {
         }
         getData()
         return () => mounted = false
-    }, [search, page, sort, auth.authState.user, isFavoriteOnly])
+        // }, [search, page, sort, auth.authState.user, isFavoriteOnly])
+    }, [search, page, sort, auth.authState.user])
+
 
     return (
         <div>
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
-                        <CreateArticle setArticles={setArticles} />
-                        <div id='main'></div>
+                        {auth.authState.user && <CreateArticle setArticles={setArticles} />}
+
                         <SortSelect sort={sort} dispatchSort={dispatchSort} />
-                        <Switches checked={isFavoriteOnly === 'true'} setChecked={handleChangeSwitch} />
+                        {/* {auth.authState.user && <Switches checked={isFavoriteOnly === 'true'} setChecked={handleChangeSwitch} />} */}
+
                         {articles.length === 0 ?
                             <div>No articles</div> :
                             <div>
-
                                 <Pagination
                                     count={totalPages}
                                     size="large"

@@ -48,7 +48,7 @@ const App = () => {
         <Route path="/privacypolicy" component={PrivacyPolicy} />
         {/* <Route path="/contact" component={Contact} /> */}
         {/* <PrivateRoute path='/articles' render={() => <ArticlesPage search={search} />} /> */}
-        <PrivateRoute path='/articles' component={ArticlesPage} />
+        <Route path='/lists' component={ArticlesPage} />
         <PrivateRoute path="/profile" component={Profile} />
         <PrivateRoute path="/setting" component={Setting} />
         <Route component={NotFound} />

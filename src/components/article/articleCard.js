@@ -76,7 +76,7 @@ const ArticleCard = ({ article, setArticles }) => {
             setGood(article.good.includes(auth.authState.user._id))
             setBad(article.bad.includes(auth.authState.user._id))
         }
-    }, [])
+    }, [auth.authState.user])
 
     const onClickLikes = () => {
         auth.authState.isAuthenticated ?

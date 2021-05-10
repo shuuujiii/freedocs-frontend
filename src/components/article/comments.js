@@ -8,10 +8,13 @@ import ReplyIcon from '@material-ui/icons/Reply';
 // utils
 import axiosbase from '../../utils/axiosbase'
 
+import { useAuth } from '../../provider/authProvider'
+
 // components
 import AddComment from './addComment'
 const Comments = ({ article_id = '605d81cd977f9b9bf6f42d2a' }) => {
     const [comments, setComments] = React.useState([])
+    const auth = useAuth()
     React.useEffect(() => {
         let p = new URLSearchParams();
         p.append('article', article_id);
@@ -57,7 +60,7 @@ const Comments = ({ article_id = '605d81cd977f9b9bf6f42d2a' }) => {
                 </IconButton>
 
                 {
-                    showReply && <AddComment
+                    auth.authState.user && showReply && <AddComment
                         article_id={article_id}
                         parent_id={comment._id}
                         setComments={setComments} />
@@ -74,9 +77,11 @@ const Comments = ({ article_id = '605d81cd977f9b9bf6f42d2a' }) => {
 
     return (
         <div>
-            <AddComment article_id={article_id}
-                parent_id={null}
-                setComments={setComments} />
+            {auth.authState.user &&
+                <AddComment article_id={article_id}
+                    parent_id={null}
+                    setComments={setComments} />
+            }
             <CommentTree comments={comments}
                 setComments={setComments} />
 
