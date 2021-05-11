@@ -10,7 +10,6 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import CommentIcon from '@material-ui/icons/Comment';
 import ReportIcon from '@material-ui/icons/Report';
 import Badge from '@material-ui/core/Badge';
@@ -59,7 +58,7 @@ const ArticleCard = ({ article, setArticles }) => {
     const [expanded, setExpanded] = React.useState(false);
     const [likes, setLikes] = React.useState(false)
     const [good, setGood] = React.useState(false)
-    const [bad, setBad] = React.useState(false)
+    // const [bad, setBad] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -74,7 +73,6 @@ const ArticleCard = ({ article, setArticles }) => {
         if (auth.authState.user) {
             setLikes(article.likes.includes(auth.authState.user._id))
             setGood(article.good.includes(auth.authState.user._id))
-            setBad(article.bad.includes(auth.authState.user._id))
         }
     }, [auth.authState.user])
 
@@ -84,6 +82,7 @@ const ArticleCard = ({ article, setArticles }) => {
                 _id: article._id,
                 likes: !likes,
             }).then(res => {
+                console.log('likes res', res.data)
                 setArticles(prev => {
                     return prev.map(article =>
                         article._id === res.data._id ? res.data : article
@@ -108,25 +107,7 @@ const ArticleCard = ({ article, setArticles }) => {
                     )
                 })
                 setGood(res.data.good.includes(auth.authState.user._id))
-                setBad(res.data.bad.includes(auth.authState.user._id))
-            })
-            :
-            history.push('/signin')
-    }
-
-    const onClickBad = () => {
-        auth.authState.isAuthenticated ?
-            axiosbase.post('/article/bad', {
-                _id: article._id,
-                bad: !bad,
-            }).then(res => {
-                setArticles(prev => {
-                    return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
-                    )
-                })
-                setGood(res.data.good.includes(auth.authState.user._id))
-                setBad(res.data.bad.includes(auth.authState.user._id))
+                // setBad(res.data.bad.includes(auth.authState.user._id))
             })
             :
             history.push('/signin')
@@ -165,14 +146,6 @@ const ArticleCard = ({ article, setArticles }) => {
                         onClick={() => { onClickGood() }}>
                         <Badge badgeContent={article.good.length} color="primary">
                             <ThumbUpIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton
-                        color={bad ? "primary" : "default"}
-                        aria-label="bad"
-                        onClick={() => { onClickBad() }}>
-                        <Badge badgeContent={article.bad.length} color="primary">
-                            <ThumbDownIcon />
                         </Badge>
                     </IconButton>
                     <IconButton
