@@ -14,10 +14,9 @@ import { useSortReducer } from '../article/sortReducer';
 
 // components
 import SortSelect from '../article/sortSelect'
-// import CreateArticle from '../article/createArticle'
+import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
-// import Switches from '../article/favoriteSwitch'
-const ArticlesPage = ({ search = '' }) => {
+const MyArticle = ({ search = '' }) => {
     // const error = useError();
     // const classes = useStyles();
     // const history = useHistory();
@@ -45,8 +44,10 @@ const ArticlesPage = ({ search = '' }) => {
             p.append('page', page)
             p.append('sortkey', sort.key)
             p.append('order', sort.order)
-            const res = await axiosbase.get('/article/lists?' + p)
+            // p.append('isFavoriteOnly', isFavoriteOnly)
+            const res = await axiosbase.get('/article/mylist?' + p)
             if (mounted) {
+                console.log('mylist', res.data.docs)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
             }
@@ -62,7 +63,7 @@ const ArticlesPage = ({ search = '' }) => {
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
-                        {/* {auth.authState.user && <CreateArticle setArticles={setArticles} />} */}
+                        {auth.authState.user && <CreateArticle setArticles={setArticles} />}
 
                         <SortSelect sort={sort} dispatchSort={dispatchSort} />
                         {/* {auth.authState.user && <Switches checked={isFavoriteOnly === 'true'} setChecked={handleChangeSwitch} />} */}
@@ -105,8 +106,8 @@ const ArticlesPage = ({ search = '' }) => {
     )
 }
 
-ArticlesPage.propTypes = {
+MyArticle.propTypes = {
     search: PropTypes.string,
 }
 
-export default ArticlesPage;
+export default MyArticle;

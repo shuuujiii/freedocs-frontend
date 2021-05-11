@@ -6,16 +6,13 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-
 // utils
-// import axios from 'axios';
 import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider';
 import { useMessage } from '../../provider/messageProvider';
 
 // components
-import Tags from './tags';
-
+import { Tags } from './Tags'
 // validation
 import Joi from 'joi'
 
@@ -44,8 +41,8 @@ export default function CreateArticle() {
     }
     const onClickSave = async (e) => {
         e.preventDefault();
+        error.init()
         const tag_ids = tags.map(tag => tag._id)
-
         try {
             await ArticleValidator.validateAsync({
                 url: url,
@@ -63,7 +60,7 @@ export default function CreateArticle() {
         }).then(() => {
             message.successMessage('created')
             init()
-            // window.location.reload()
+            window.location.reload()
         }).catch(e => {
             error.setError(e)
         }

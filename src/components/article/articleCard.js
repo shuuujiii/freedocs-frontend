@@ -12,17 +12,21 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
 import ReportIcon from '@material-ui/icons/Report';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Badge from '@material-ui/core/Badge';
 // utils
 import axiosbase from '../../utils/axiosbase'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
-
+import { useError } from '../../provider/errorProvider'
+import { useMessage } from '../../provider/messageProvider'
 // components
-import TagChips from '../../components/article/tagChips'
+import { TagChips } from './Tags'
 import Comments from '../article/comments'
 import ReportDialog from './Report'
+import EditArticle from './editArticle'
 
 const useStyles = makeStyles((theme) => ({
     aaa: {
@@ -55,10 +59,12 @@ const ArticleCard = ({ article, setArticles }) => {
     const classes = useStyles();
     const history = useHistory();
     const auth = useAuth();
+    const error = useError()
+    const message = useMessage()
     const [expanded, setExpanded] = React.useState(false);
     const [likes, setLikes] = React.useState(false)
     const [good, setGood] = React.useState(false)
-    // const [bad, setBad] = React.useState(false)
+    const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -76,20 +82,40 @@ const ArticleCard = ({ article, setArticles }) => {
         }
     }, [auth.authState.user])
 
+    const handleClickReport = () => {
+        if (auth.authState.user) {
+            setOpenReport(!openReport)
+            return
+        }
+        history.push('/signin')
+    }
+    const onClickEdit = () => {
+        setEdit(true)
+    }
+
+    const handleClickDelete = () => {
+        axiosbase.delete('/article', { data: { _id: article._id } }).then(
+            () => {
+                message.successMessage('contents deleted')
+                window.location.reload()
+            }
+        ).catch(err => {
+            error.setError(err)
+        })
+    }
+
     const onClickLikes = () => {
         auth.authState.isAuthenticated ?
             axiosbase.post('/article/likes', {
                 _id: article._id,
                 likes: !likes,
             }).then(res => {
-                console.log('likes res', res.data)
                 setArticles(prev => {
                     return prev.map(article =>
                         article._id === res.data._id ? res.data : article
                     )
                 })
                 setLikes(res.data.likes.includes(auth.authState.user._id))
-
             })
             :
             history.push('/signin')
@@ -107,78 +133,96 @@ const ArticleCard = ({ article, setArticles }) => {
                     )
                 })
                 setGood(res.data.good.includes(auth.authState.user._id))
-                // setBad(res.data.bad.includes(auth.authState.user._id))
             })
             :
             history.push('/signin')
     }
 
     return (
-        <div>
-            <Card>
-                <CardContent>
-                    <Paper
-                        elevation={0}
-                        component="ul"
-                        className={classes.root}
-                    >
-                        <TagChips
-                            tags={article.tags}
-                            setTags={() => { }}
-                            deletable={false} />
-                    </Paper>
-                </CardContent>
-                <CardContent>
-                    <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
-                </CardContent>
-                <CardActions disableSpacing>
-                    <IconButton
-                        color={likes ? "secondary" : "default"}
-                        aria-label="add to favorites"
-                        onClick={() => { onClickLikes() }}>
-                        <Badge badgeContent={article.likes.length} color="secondary">
-                            <FavoriteIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton
-                        color={good ? "primary" : "default"}
-                        aria-label="good"
-                        onClick={() => { onClickGood() }}>
-                        <Badge badgeContent={article.good.length} color="primary">
-                            <ThumbUpIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton
-                        coler="default"
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        <CommentIcon />
-                    </IconButton>
-                    {auth.authState.user ? <IconButton
-                        style={{ marginLeft: 'auto' }}
-                        coler="default"
-                        onClick={() => setOpenReport(!openReport)}
-                        aria-label="report"
-                    >
-                        <ReportIcon />
-                    </IconButton> : null}
+        edit ?
+            <EditArticle setIsEdit={setEdit} article={article} setArticles={setArticles} /> :
+            <div>
+                <Card>
+                    <CardContent>
+                        <Paper
+                            elevation={0}
+                            component="ul"
+                            className={classes.root}
+                        >
+                            <TagChips
+                                tags={article.tags} />
+                        </Paper>
+                    </CardContent>
+                    <CardContent>
+                        <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
+                    </CardContent>
+                    <CardActions disableSpacing>
+                        <IconButton
+                            color={likes ? "secondary" : "default"}
+                            aria-label="add to favorites"
+                            onClick={() => { onClickLikes() }}>
+                            <Badge badgeContent={article.likes.length} color="secondary">
+                                <FavoriteIcon />
+                            </Badge>
+                        </IconButton>
+                        <IconButton
+                            color={good ? "primary" : "default"}
+                            aria-label="good"
+                            onClick={() => { onClickGood() }}>
+                            <Badge badgeContent={article.good.length} color="primary">
+                                <ThumbUpIcon />
+                            </Badge>
+                        </IconButton>
+                        <IconButton
+                            coler="default"
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <CommentIcon />
+                        </IconButton>
+                        {auth.authState.user?._id === article.user ?
+                            <div style={{ marginLeft: 'auto' }}
+                            ><IconButton
+                                coler="default"
+                                onClick={onClickEdit}
+                                aria-label="edit"
+                            >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    style={{ marginLeft: 'auto' }}
+                                    coler="default"
+                                    onClick={handleClickDelete}
+                                    aria-label="delete"
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </div>
 
-                </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-                        <div style={{ whiteSpace: 'pre-wrap' }}>
-                            {article.description}
-                        </div>
-                    </CardContent>
-                    <CardContent>
-                        <Comments article_id={article._id} />
-                    </CardContent>
-                </Collapse>
-            </Card>
-            <ReportDialog open={openReport} handleClose={handleClose} article_id={article._id} />
-        </div>
+                            : <IconButton
+                                style={{ marginLeft: 'auto' }}
+                                coler="default"
+                                onClick={handleClickReport}
+                                aria-label="report"
+                            >
+                                <ReportIcon />
+                            </IconButton>}
+
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                            <div style={{ whiteSpace: 'pre-wrap' }}>
+                                {article.description}
+                            </div>
+                        </CardContent>
+                        <CardContent>
+                            <Comments article_id={article._id} />
+                        </CardContent>
+                    </Collapse>
+                </Card>
+                <ReportDialog open={openReport} handleClose={handleClose} article_id={article._id} />
+            </div >
     )
 }
 

@@ -179,6 +179,7 @@ export default function Header({ search, setSearch }) {
                     </div>
                     <div style={{ flexGrow: 1 }} />
                     {auth.authState.isAuthenticated ? (
+                        // login user
                         <div>
                             <IconButton
                                 aria-label="account of current user"
@@ -210,6 +211,7 @@ export default function Header({ search, setSearch }) {
                             </Menu>
                         </div>
                     ) : (
+                        // guest user
                         <div>
                             <Button
                                 className={classes.signin}

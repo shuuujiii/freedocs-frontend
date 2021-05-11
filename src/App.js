@@ -21,6 +21,7 @@ import Messages from './components/common/Messages'
 import EmailAuth from './components/page/EmailAuth'
 import Setting from './components/page/Setting'
 import ArticlesPage from './components/page/ArticlesPage'
+import MyArticle from './components/page/MyArticle'
 const App = () => {
   const [search, setSearch] = React.useState('')
 
@@ -51,6 +52,7 @@ const App = () => {
         <Route path='/lists' component={ArticlesPage} />
         <PrivateRoute path="/profile" component={Profile} />
         <PrivateRoute path="/setting" component={Setting} />
+        <PrivateRoute path="/mylist" component={MyArticle} />
         <Route component={NotFound} />
       </Switch>
       <Messages />

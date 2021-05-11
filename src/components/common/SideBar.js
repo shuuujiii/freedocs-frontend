@@ -48,7 +48,7 @@ export default function SideBar({ open, setOpen, auth }) {
     }
 
     const onClickMyArticle = () => {
-
+        history.push('/mylist')
     }
 
     return (

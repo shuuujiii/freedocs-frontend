@@ -7,13 +7,12 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
 // utils
-// import axios from 'axios'
 import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider'
 import { useMessage } from '../../provider/messageProvider'
-
 // components
-import Tags from './tags'
+import { Tags } from './Tags'
+
 
 const EditArticle = ({ setIsEdit, article, setArticles }) => {
     const error = useError();
@@ -23,26 +22,29 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
     const [tags, setTags] = React.useState(article.tags)
     const onClickSave = (e) => {
         e.preventDefault()
+        error.init()
+        const tag_ids = tags.map(tag => tag._id)
         axiosbase.put('/article', {
             _id: article._id,
             url: url,
             description: description,
-            tags: tags.map(tag => tag._id)
+            tags: tag_ids
         }).then(
-            () => {
+            (res) => {
                 message.successMessage('edited')
-                axiosbase.get('/article')
-                    .then(res => {
-                        error.init()
-                        setArticles(res.data)
-                        setIsEdit(false)
-                    })
+                setArticles(prev => {
+                    return prev.map(article =>
+                        article._id === res.data._id ? res.data : article
+                    )
+                })
+                setIsEdit(false)
             }
         ).catch(error.setError)
     }
     const onClickCancel = () => {
         setIsEdit(false)
     }
+
     return (
         <Paper >
             <Box
@@ -53,7 +55,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 m={1}
             >
                 <Box>
-                    <Tags tags={tags} setTags={setTags} deletable={true} />
+                    <Tags tags={tags} setTags={setTags} />
                 </Box>
                 <Box
                     display="flex"
