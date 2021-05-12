@@ -113,7 +113,7 @@ export default function Header({ search, setSearch }) {
 
     const handleProfile = () => {
         handleClose()
-        history.push('/profile');
+        history.push(`/profile/${auth.authState.user.username}`);
     };
 
     const handleSetting = () => {

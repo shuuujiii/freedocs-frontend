@@ -159,7 +159,7 @@ const ArticleCard = ({ article, setArticles }) => {
                     <CardContent>
                         <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
                         <Typography variant="subtitle2" align="right" color="textSecondary" component="p">
-                            <Link to={'/#'} target='_blank' > @{article.author} </Link>
+                            <Link to={`/profile/${article.author}`} > @{article.author} </Link>
                             added {moment(article.createdAt).fromNow()}
                         </Typography>
                     </CardContent>

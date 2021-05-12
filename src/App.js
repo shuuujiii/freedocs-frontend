@@ -51,7 +51,7 @@ const App = () => {
         {/* <PrivateRoute path='/articles' render={() => <ArticlesPage search={search} />} /> */}
         <Route path='/lists/:tag' component={ArticlesPage} />
         <Route path='/lists' component={ArticlesPage} />
-        <PrivateRoute path="/profile" component={Profile} />
+        <Route path="/profile/:username" component={Profile} />
         <PrivateRoute path="/setting" component={Setting} />
         {/* <PrivateRoute path="/mylist" component={MyArticle} /> */}
         <Route component={NotFound} />

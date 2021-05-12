@@ -1,5 +1,5 @@
 import React from 'react'
-// import axiosbase from '../../utils/axiosbase'
+import axiosbase from '../../utils/axiosbase'
 // import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -10,9 +10,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Box } from '@material-ui/core';
-
+import { useParams } from 'react-router-dom'
 // utils
-import { useAuth } from '../../provider/authProvider'
+// import { useAuth } from '../../provider/authProvider'
 const useStyles = makeStyles((theme) => ({
     root: {
         // maxWidth: 345,
@@ -49,8 +49,16 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile() {
     const classes = useStyles();
-    const auth = useAuth();
-    const username = auth.authState.user.username
+    const params = useParams()
+    // const username = params.username
+    const [profile, setProfile] = React.useState({})
+
+    React.useEffect(() => {
+        axiosbase.get(`/users/profile?username=${params.username}`)
+            .then(res => {
+                setProfile(res.data)
+            })
+    }, [])
 
     return (
         <Card className={classes.root}>
@@ -64,12 +72,15 @@ function Profile() {
             />
             <Box display="flex" justifyContent="center" alignItems="center">
                 <Avatar aria-label="recipe" className={classes.avatar}>
-                    {username ? username[0].toUpperCase() : ''}
+                    {profile.username ? profile.username[0].toUpperCase() : ''}
                 </Avatar>
             </Box>
             <CardContent>
                 <Box display="flex" justifyContent="center">
-                    username:{username}
+                    username:{profile.username}
+                </Box>
+                <Box display="flex" justifyContent="center">
+                    posts:{profile.posts}
                 </Box>
             </CardContent>
 
