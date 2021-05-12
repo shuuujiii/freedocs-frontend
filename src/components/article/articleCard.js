@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -15,6 +17,8 @@ import ReportIcon from '@material-ui/icons/Report';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Badge from '@material-ui/core/Badge';
+
+import moment from 'moment'
 // utils
 import axiosbase from '../../utils/axiosbase'
 
@@ -66,7 +70,7 @@ const ArticleCard = ({ article, setArticles }) => {
     const [good, setGood] = React.useState(false)
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
-
+    console.log('card', article)
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -155,6 +159,9 @@ const ArticleCard = ({ article, setArticles }) => {
                     </CardContent>
                     <CardContent>
                         <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
+                        <Typography variant="subtitle2" align="right" color="textSecondary" component="p">
+                            {moment(article.createdAt).fromNow()}
+                        </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton
