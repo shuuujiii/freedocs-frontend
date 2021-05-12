@@ -72,7 +72,7 @@ export const TagChips = ({ tags }) => {
     const history = useHistory()
 
     const onClickChip = (tagname) => {
-        history.push(`/lists/${tagname}`)
+        history.push(`/lists/tags/${tagname}`)
     }
     return (
         tags.map(tag => {

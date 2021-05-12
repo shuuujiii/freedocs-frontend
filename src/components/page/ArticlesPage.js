@@ -51,9 +51,12 @@ const ArticlesPage = (search = '') => {
             if (params.tag) {
                 p.append('tag', params.tag)
             }
+            if (params.user) {
+                console.log('param user', params.user)
+                p.append('username', params.user)
+            }
             const res = await axiosbase.get('/article/lists?' + p)
             if (mounted) {
-                console.log('sort', sort)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
             }
@@ -69,6 +72,11 @@ const ArticlesPage = (search = '') => {
             {params.tag &&
                 <div>
                     <Typography variant="h4" align="center" color="textSecondary">Tagged #{params.tag}</Typography>
+                </div>
+            }
+            {params.user &&
+                <div>
+                    <Typography variant="h4" align="center" color="textSecondary">Posted @{params.user}</Typography>
                 </div>
             }
             <Container maxWidth="lg">

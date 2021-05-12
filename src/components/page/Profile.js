@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Box } from '@material-ui/core';
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 // utils
 // import { useAuth } from '../../provider/authProvider'
 const useStyles = makeStyles((theme) => ({
@@ -80,7 +80,7 @@ function Profile() {
                     username:{profile.username}
                 </Box>
                 <Box display="flex" justifyContent="center">
-                    posts:{profile.posts}
+                    posts:<Link to={`/lists/user/${profile.username}`}>{profile.posts}</Link>
                 </Box>
             </CardContent>
 
