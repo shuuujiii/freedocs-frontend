@@ -49,6 +49,7 @@ const App = () => {
         <Route path="/privacypolicy" component={PrivacyPolicy} />
         {/* <Route path="/contact" component={Contact} /> */}
         {/* <PrivateRoute path='/articles' render={() => <ArticlesPage search={search} />} /> */}
+        <Route path='/lists/:tag' component={ArticlesPage} />
         <Route path='/lists' component={ArticlesPage} />
         <PrivateRoute path="/profile" component={Profile} />
         <PrivateRoute path="/setting" component={Setting} />

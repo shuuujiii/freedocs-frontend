@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-
+import { useParams } from 'react-router-dom'
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
@@ -17,10 +18,9 @@ import SortSelect from '../article/sortSelect'
 // import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
 // import Switches from '../article/favoriteSwitch'
-const ArticlesPage = ({ search = '' }) => {
-    // const error = useError();
-    // const classes = useStyles();
-    // const history = useHistory();
+
+const ArticlesPage = (search = '') => {
+    const params = useParams()
     const auth = useAuth();
     const [articles, setArticles] = React.useState([]);
     const [sort, dispatchSort] = useSortReducer();
@@ -45,6 +45,9 @@ const ArticlesPage = ({ search = '' }) => {
             p.append('page', page)
             p.append('sortkey', sort.key)
             p.append('order', sort.order)
+            if (params.tag) {
+                p.append('tag', params.tag)
+            }
             const res = await axiosbase.get('/article/lists?' + p)
             if (mounted) {
                 setArticles(res.data.docs);
@@ -54,11 +57,16 @@ const ArticlesPage = ({ search = '' }) => {
         getData()
         return () => mounted = false
         // }, [search, page, sort, auth.authState.user, isFavoriteOnly])
-    }, [search, page, sort, auth.authState.user])
+    }, [search, page, sort, auth.authState.user, params.tag])
 
 
     return (
         <div>
+            {params.tag &&
+                <div>
+                    <Typography variant="h4" align="center" color="textSecondary">Tagged #{params.tag}</Typography>
+                </div>
+            }
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
@@ -106,7 +114,8 @@ const ArticlesPage = ({ search = '' }) => {
 }
 
 ArticlesPage.propTypes = {
-    search: PropTypes.string,
+    props: PropTypes.object,
+    // search: PropTypes.string,
 }
 
 export default ArticlesPage;

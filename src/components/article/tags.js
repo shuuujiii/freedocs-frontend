@@ -8,6 +8,7 @@ import Chip from '@material-ui/core/Chip';
 // utils
 import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider';
+import { useHistory } from 'react-router-dom'
 // component
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -68,6 +69,11 @@ Tags.propTypes = {
 
 export const TagChips = ({ tags }) => {
     const classes = useStyles();
+    const history = useHistory()
+
+    const onClickChip = (tagname) => {
+        history.push(`/lists/${tagname}`)
+    }
     return (
         tags.map(tag => {
             return (
@@ -75,6 +81,7 @@ export const TagChips = ({ tags }) => {
                     <Chip
                         className={classes.chip}
                         label={tag.name}
+                        onClick={() => { onClickChip(tag.name) }}
                     />
                 </li>
             )

@@ -70,7 +70,6 @@ const ArticleCard = ({ article, setArticles }) => {
     const [good, setGood] = React.useState(false)
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
-    console.log('card', article)
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
