@@ -7,23 +7,26 @@ import { useParams } from 'react-router-dom'
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
-// import useLocalStorage from '../../utils/useLocalStrage'
+import useLocalStorage from '../../utils/useLocalStrage'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
-import { useSortReducer } from '../article/sortReducer';
+// import { useSortReducer } from '../article/sortReducer';
 
 // components
-import SortSelect from '../article/sortSelect'
+import { SortSelect, initialSortValue } from '../article/sortSelect'
 // import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
 // import Switches from '../article/favoriteSwitch'
+
+
 
 const ArticlesPage = (search = '') => {
     const params = useParams()
     const auth = useAuth();
     const [articles, setArticles] = React.useState([]);
-    const [sort, dispatchSort] = useSortReducer();
+    // const [sort, dispatchSort] = useSortReducer();
+    const [sort, dispatchSort] = useLocalStorage('sort', initialSortValue)
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
     // const [isFavoriteOnly, setIsFavoriteOnly] = useLocalStorage('showFavorite', 'false')
@@ -50,6 +53,7 @@ const ArticlesPage = (search = '') => {
             }
             const res = await axiosbase.get('/article/lists?' + p)
             if (mounted) {
+                console.log('sort', sort)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
             }

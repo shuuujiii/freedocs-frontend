@@ -5,8 +5,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-// reducer
-import { SORT } from './sortReducer'
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -17,10 +15,54 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SortSelect({ sort, dispatchSort }) {
+export const SORT = {
+    LIKES_DESC: "LIKES_DESC",
+    LIKES_ASC: "LIKES_ASC",
+    CREATED_AT_DESC: 'CREATE_AT_DESC',
+    CREATED_AT_ASC: 'CREATE_AT_ASC',
+}
+
+export const initialSortValue = {
+    key: 'likeCount',
+    value: SORT.LIKES_DESC,
+    order: 'desc',
+}
+
+export function SortSelect({ sort, dispatchSort }) {
     const classes = useStyles();
     const handleChange = (event) => {
-        dispatchSort({ type: event.target.value })
+        switch (event.target.value) {
+            case SORT.LIKES_DESC:
+                dispatchSort({
+                    key: 'likeCount',
+                    value: SORT.LIKES_DESC,
+                    order: 'desc',
+                })
+                break;
+            case SORT.LIKES_ASC:
+                dispatchSort({
+                    key: 'likeCount',
+                    value: SORT.LIKES_ASC,
+                    order: 'asc',
+                })
+                break;
+            case SORT.CREATED_AT_DESC:
+                dispatchSort({
+                    key: 'createdAt',
+                    value: SORT.CREATED_AT_DESC,
+                    order: 'desc',
+                })
+                break;
+            case SORT.CREATED_AT_ASC:
+                dispatchSort({
+                    key: 'createdAt',
+                    value: SORT.CREATED_AT_ASC,
+                    order: 'asc',
+                })
+                break;
+            default:
+                return dispatchSort(initialSortValue);
+        }
     };
     return (
         <div>
