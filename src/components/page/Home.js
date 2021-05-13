@@ -62,14 +62,15 @@ export default function Home() {
     const classes = useStyles();
     const auth = useAuth();
     const [likesArticles, setLikesArticles] = React.useState([])
-    const [goodArticles, setGoodArticles] = React.useState([])
+    const [voteArticles, setVoteArticles] = React.useState([])
     React.useEffect(() => {
         let mounted = true
         const getRankingData = async () => {
             const res = await axiosbase.get('/article/ranking')
             if (mounted) {
+                // console.log('ranking data', res.data)
                 setLikesArticles(res.data.likesRanking)
-                setGoodArticles(res.data.goodRanking)
+                setVoteArticles(res.data.voteRanking)
             }
         }
         getRankingData()
@@ -123,10 +124,10 @@ export default function Home() {
 
                     </Grid>
                     <div className={classes.rankTitle}>
-                        <Typography variant="h4" color="textSecondary">GoodRanking</Typography>
+                        <Typography variant="h4" color="textSecondary">VoteRanking</Typography>
                     </div>
                     <Grid container spacing={4}>
-                        {goodArticles.map((article) => (
+                        {voteArticles.map((article) => (
                             <Grid item key={article._id} xs={12} sm={6} md={4}>
                                 <Card className={classes.card}>
                                     <CardContent className={classes.cardContent}>
