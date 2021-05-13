@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
+import qs from 'query-string'
 import { fade, makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,7 +16,7 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu'
 // util
 import axiosbase from '../../utils/axiosbase'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { StatusCodes } from 'http-status-codes'
 
 // context
@@ -91,11 +92,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Header({ search, setSearch }) {
+export default function Header() {
     const classes = useStyles();
     const history = useHistory();
     const error = useError();
     const auth = useAuth();
+    const [search, setSearch] = React.useState(qs.parse(useLocation().search).search || '')
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openAccountMenu = Boolean(anchorEl);
     const [open, setOpen] = React.useState(false);
@@ -137,6 +139,29 @@ export default function Header({ search, setSearch }) {
         history.push('/')
     }
 
+    const handleKeyPress = (e) => {
+        // error.init()
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            let p = new URLSearchParams();
+            if (search) {
+                p.append('search', search)
+            }
+            history.push(`/lists?${p}`)
+        }
+        // if (e.key === 'Enter') {
+        //     e.preventDefault()
+        //     axiosbase.post('/tag', {
+        //         name: inputTag
+        //     })
+        //         .then(res => {
+        //             console.log(res.data)
+        //             setTags(prev => [...prev, res.data])
+        //             setInputTag('')
+        //         }).catch(error.setError)
+        // }
+    }
+
     return (
         <div>
             <AppBar position="static" style={{}}>
@@ -173,6 +198,7 @@ export default function Header({ search, setSearch }) {
                                 input: classes.inputInput,
                             }}
                             value={search}
+                            onKeyPress={handleKeyPress}
                             onChange={e => { setSearch(e.target.value) }}
                             inputProps={{ 'aria-label': 'search' }}
                         />

@@ -77,7 +77,7 @@ const ArticleCard = ({ article, setArticles }) => {
     const message = useMessage()
     const [expanded, setExpanded] = React.useState(false);
     const [likes, setLikes] = React.useState(false)
-    const [good, setGood] = React.useState(false)
+    // const [good, setGood] = React.useState(false)
     const [upvote, setUpvote] = React.useState(false)
     const [downvote, setDownvote] = React.useState(false)
     const [edit, setEdit] = React.useState(false)

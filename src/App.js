@@ -23,8 +23,6 @@ import Setting from './components/page/Setting'
 import ArticlesPage from './components/page/ArticlesPage'
 // import MyArticle from './components/page/MyArticle'
 const App = () => {
-  const [search, setSearch] = React.useState('')
-
   useTracking(process.env.REACT_APP_GA_MEASUREMENT_ID)
 
   const handleClickAcceptCookie = () => {
@@ -36,9 +34,7 @@ const App = () => {
   }
   return (
     <div className="App">
-      <Header search={search}
-        setSearch={setSearch}
-      />
+      <Header />
       <ErrorAlert />
       <Switch>
         <Route exact path='/' component={Home} />

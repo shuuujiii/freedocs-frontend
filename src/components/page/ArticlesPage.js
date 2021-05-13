@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import qs from 'query-string'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
@@ -11,48 +12,55 @@ import useLocalStorage from '../../utils/useLocalStrage'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
-// import { useSortReducer } from '../article/sortReducer';
 
 // components
 import { SortSelect, initialSortValue } from '../article/sortSelect'
 import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
-// import Switches from '../article/favoriteSwitch'
+// const useQuery = () => {
+//     return new URLSearchParams(useLocation().search);
+// }
 
-
-
-const ArticlesPage = (search = '') => {
+const ArticlesPage = () => {
     const params = useParams()
     const auth = useAuth();
+    // const query = useQuery();
+    const query = useLocation().search
+    // const [search, setSearch] = React.useState('')
     const [articles, setArticles] = React.useState([]);
     // const [sort, dispatchSort] = useSortReducer();
     const [sort, dispatchSort] = useLocalStorage('sort', initialSortValue)
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
-    // const [isFavoriteOnly, setIsFavoriteOnly] = useLocalStorage('showFavorite', 'false')
-
     const handleChange = (e, p) => {
         e.preventDefault()
         setPage(p);
     };
 
-    // const handleChangeSwitch = () => {
-    //     setIsFavoriteOnly(isFavoriteOnly === 'true' ? 'false' : 'true')
-    // }
+    const createParams = (search) => {
+        let p = new URLSearchParams();
+        if (search) {
+            p.append('search', search)
+        }
+        p.append('page', page)
+        p.append('sortkey', sort.key)
+        p.append('order', sort.order)
+        return p
+    }
 
     React.useEffect(() => {
+        // console.log('useEffect article Page')
+        let qp = qs.parse(query)
+        // console.log('query parameter', qp)
         let mounted = true
         const getData = async () => {
-            let p = new URLSearchParams();
-            p.append('search', search);
-            p.append('page', page)
-            p.append('sortkey', sort.key)
-            p.append('order', sort.order)
+            let p = createParams(qp.search)
+
             if (params.tag) {
                 p.append('tag', params.tag)
             }
             if (params.user) {
-                console.log('param user', params.user)
+                // console.log('param user', params.user)
                 p.append('username', params.user)
             }
             const res = await axiosbase.get('/article/lists?' + p)
@@ -64,7 +72,9 @@ const ArticlesPage = (search = '') => {
         getData()
         return () => mounted = false
         // }, [search, page, sort, auth.authState.user, isFavoriteOnly])
-    }, [search, page, sort, auth.authState.user, params.tag])
+    }, [query, page, sort, auth.authState.user, params.tag])
+    // }, [page, sort, auth.authState.user, params.tag])
+
 
 
     return (
@@ -83,10 +93,7 @@ const ArticlesPage = (search = '') => {
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
                         {auth.authState.user && <CreateArticle setArticles={setArticles} />}
-
                         <SortSelect sort={sort} dispatchSort={dispatchSort} />
-                        {/* {auth.authState.user && <Switches checked={isFavoriteOnly === 'true'} setChecked={handleChangeSwitch} />} */}
-
                         {articles.length === 0 ?
                             <div>No articles</div> :
                             <div>
