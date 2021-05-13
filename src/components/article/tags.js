@@ -15,10 +15,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'left',
         flexWrap: 'wrap',
-        listStyle: 'none',
-        padding: theme.spacing(1),
-        margin: 'auto',
-        alignItems: 'center',
+        '& > *': {
+            margin: theme.spacing(0.5),
+        },
+        boxSizing: 'border-box'
     },
     chip: {
         marginRight: theme.spacing(0.5),
@@ -44,13 +44,22 @@ export const Tags = ({ tags, setTags }) => {
         }
     }
 
+    const handleDelete = (id) => {
+        setTags(prev => prev.filter(tag => tag._id !== id))
+    }
+
     return (
-        <Paper
-            elevation={0}
-            component="ul"
-            className={classes.root}
-        >
-            <DeletableTagChips tags={tags} setTags={setTags} />
+        <div className={classes.root}>
+            {tags.map(tag => {
+                return (
+                    <Chip
+                        key={tag._id}
+                        className={classes.chip}
+                        label={tag.name}
+                        onDelete={() => { handleDelete(tag._id) }}
+                    />
+                )
+            })}
             <TextField
                 style={{ outlineWidth: '0' }}
                 value={inputTag}
@@ -58,7 +67,7 @@ export const Tags = ({ tags, setTags }) => {
                 onKeyPress={handleKeyPress}
                 placeholder={'input tag'}
             />
-        </Paper>
+        </div>
     )
 }
 
@@ -75,44 +84,21 @@ export const TagChips = ({ tags }) => {
         history.push(`/lists/tags/${tagname}`)
     }
     return (
-        tags.map(tag => {
-            return (
-                <li key={tag._id}>
+        <div className={classes.root}>
+            {tags.map(tag => {
+                return (
                     <Chip
+                        key={tag._id}
                         className={classes.chip}
                         label={tag.name}
                         onClick={() => { onClickChip(tag.name) }}
                     />
-                </li>
-            )
-        })
+                )
+            })}
+        </div>
     );
 }
 TagChips.propTypes = {
     tags: PropTypes.array,
 }
 
-export const DeletableTagChips = ({ tags, setTags }) => {
-    const classes = useStyles();
-    const handleDelete = (id) => {
-        setTags(prev => prev.filter(tag => tag._id !== id))
-    }
-    return (
-        tags.map(tag => {
-            return (
-                <li key={tag._id}>
-                    <Chip
-                        className={classes.chip}
-                        label={tag.name}
-                        onDelete={() => { handleDelete(tag._id) }}
-                    />
-                </li>
-            )
-        })
-    );
-}
-
-DeletableTagChips.propTypes = {
-    tags: PropTypes.array,
-    onDelete: PropTypes.func,
-}

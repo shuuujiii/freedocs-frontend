@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-
-import Paper from '@material-ui/core/Paper';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -33,19 +33,27 @@ import ReportDialog from './Report'
 import EditArticle from './editArticle'
 
 const useStyles = makeStyles((theme) => ({
-    aaa: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    },
-    root: {
+    card_main: {
         display: 'flex',
-        justifyContent: 'left',
-        flexWrap: 'wrap',
-        listStyle: 'none',
-        padding: theme.spacing(1),
-        margin: 'auto',
-        alignItems: 'center',
+    },
+    card_vote: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    card_content: {
+        // override root
+        padding: 8,
+        '&:last-child': {
+            paddingBottom: 8,
+        },
+        // end override root
+        display: 'flex',
+        flex: 'auto',
+        flexDirection: 'column',
+    },
+    card_link: {
+        marginTop: theme.spacing(2)
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -146,23 +154,29 @@ const ArticleCard = ({ article, setArticles }) => {
             <EditArticle setIsEdit={setEdit} article={article} setArticles={setArticles} /> :
             <div>
                 <Card>
-                    <CardContent>
-                        <Paper
-                            elevation={0}
-                            component="ul"
-                            className={classes.root}
-                        >
-                            <TagChips
-                                tags={article.tags} />
-                        </Paper>
-                    </CardContent>
-                    <CardContent>
-                        <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
-                        <Typography variant="subtitle2" align="right" color="textSecondary" component="p">
-                            <Link to={`/profile/${article.author}`} > @{article.author} </Link>
-                            added {moment(article.createdAt).fromNow()}
-                        </Typography>
-                    </CardContent>
+                    <div className={classes.card_main}>
+                        <div className={classes.card_vote}>
+                            <IconButton>
+                                <KeyboardArrowUpIcon />
+                            </IconButton>
+                            <div style={{ textAlign: 'center' }}>Vote</div>
+                            <IconButton>
+                                <KeyboardArrowDownIcon />
+                            </IconButton>
+
+                        </div>
+                        <CardContent classes={{ root: classes.card_content }}>
+                            <TagChips tags={article.tags} />
+                            <div className={classes.card_link}>
+                                <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
+                                <Typography variant="subtitle2" align="right" color="textSecondary" component="p">
+                                    <Link to={`/profile/${article.author}`} > @{article.author} </Link>
+                                    added {moment(article.createdAt).fromNow()}
+                                </Typography>
+                            </div>
+                        </CardContent>
+                        {/* </div> */}
+                    </div>
                     <CardActions disableSpacing>
                         <IconButton
                             color={likes ? "secondary" : "default"}
