@@ -11,7 +11,6 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
 import ReportIcon from '@material-ui/icons/Report';
 import EditIcon from '@material-ui/icons/Edit';
@@ -53,7 +52,10 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     card_link: {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 'auto',
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -76,6 +78,8 @@ const ArticleCard = ({ article, setArticles }) => {
     const [expanded, setExpanded] = React.useState(false);
     const [likes, setLikes] = React.useState(false)
     const [good, setGood] = React.useState(false)
+    const [upvote, setUpvote] = React.useState(false)
+    const [downvote, setDownvote] = React.useState(false)
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
     const handleExpandClick = () => {
@@ -88,8 +92,10 @@ const ArticleCard = ({ article, setArticles }) => {
 
     React.useEffect(() => {
         if (auth.authState.user) {
+            setUpvote(article.votes?.upvoteUsers.includes(auth.authState.user._id))
+            setDownvote(article.votes?.downvoteUsers.includes(auth.authState.user._id))
             setLikes(article.likes.includes(auth.authState.user._id))
-            setGood(article.good.includes(auth.authState.user._id))
+            // setGood(article.good.includes(auth.authState.user._id))
         }
     }, [auth.authState.user])
 
@@ -132,18 +138,42 @@ const ArticleCard = ({ article, setArticles }) => {
             history.push('/signin')
     }
 
-    const onClickGood = () => {
+    const getVoteCount = () => {
+        return article.votes.upvoteUsers.length - article.votes.downvoteUsers.length
+    }
+    const onClickUpVote = () => {
         auth.authState.isAuthenticated ?
-            axiosbase.post('/article/good', {
+            axiosbase.post('/article/upvote', {
                 _id: article._id,
-                good: !good,
+                vote: !upvote
             }).then(res => {
                 setArticles(prev => {
                     return prev.map(article =>
                         article._id === res.data._id ? res.data : article
                     )
                 })
-                setGood(res.data.good.includes(auth.authState.user._id))
+                setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
+                setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
+
+                console.log('upvote res', res.data)
+            })
+            :
+            history.push('/signin')
+    }
+
+    const onClickDownVote = () => {
+        auth.authState.isAuthenticated ?
+            axiosbase.post('/article/downvote', {
+                _id: article._id,
+                vote: !downvote
+            }).then(res => {
+                setArticles(prev => {
+                    return prev.map(article =>
+                        article._id === res.data._id ? res.data : article
+                    )
+                })
+                setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
+                setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
             })
             :
             history.push('/signin')
@@ -156,11 +186,25 @@ const ArticleCard = ({ article, setArticles }) => {
                 <Card>
                     <div className={classes.card_main}>
                         <div className={classes.card_vote}>
-                            <IconButton>
+                            <IconButton
+                                onClick={onClickUpVote}
+                                color={upvote ? "secondary" : 'default'}
+                            >
                                 <KeyboardArrowUpIcon />
                             </IconButton>
-                            <div style={{ textAlign: 'center' }}>Vote</div>
-                            <IconButton>
+
+                            <div style={{ textAlign: 'center' }}>
+                                <Typography variant="h6" align="center" color="textSecondary" component="p">
+                                    {getVoteCount()}
+                                </Typography>
+                                <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
+                                    Votes
+                                </Typography>
+                            </div>
+                            <IconButton
+                                onClick={onClickDownVote}
+                                color={downvote ? "secondary" : 'default'}
+                            >
                                 <KeyboardArrowDownIcon />
                             </IconButton>
 
@@ -169,7 +213,7 @@ const ArticleCard = ({ article, setArticles }) => {
                             <TagChips tags={article.tags} />
                             <div className={classes.card_link}>
                                 <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
-                                <Typography variant="subtitle2" align="right" color="textSecondary" component="p">
+                                <Typography style={{ marginTop: 'auto' }} variant="subtitle2" align="right" color="textSecondary" component="p">
                                     <Link to={`/profile/${article.author}`} > @{article.author} </Link>
                                     added {moment(article.createdAt).fromNow()}
                                 </Typography>
@@ -186,14 +230,14 @@ const ArticleCard = ({ article, setArticles }) => {
                                 <FavoriteIcon />
                             </Badge>
                         </IconButton>
-                        <IconButton
+                        {/* <IconButton
                             color={good ? "primary" : "default"}
                             aria-label="good"
                             onClick={() => { onClickGood() }}>
                             <Badge badgeContent={article.good.length} color="primary">
                                 <ThumbUpIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton
                             coler="default"
                             onClick={handleExpandClick}

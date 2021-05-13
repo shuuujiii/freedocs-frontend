@@ -15,7 +15,7 @@ import { useAuth } from '../../provider/authProvider';
 
 // components
 import { SortSelect, initialSortValue } from '../article/sortSelect'
-// import CreateArticle from '../article/createArticle'
+import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
 // import Switches from '../article/favoriteSwitch'
 
@@ -82,7 +82,7 @@ const ArticlesPage = (search = '') => {
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
-                        {/* {auth.authState.user && <CreateArticle setArticles={setArticles} />} */}
+                        {auth.authState.user && <CreateArticle setArticles={setArticles} />}
 
                         <SortSelect sort={sort} dispatchSort={dispatchSort} />
                         {/* {auth.authState.user && <Switches checked={isFavoriteOnly === 'true'} setChecked={handleChangeSwitch} />} */}
