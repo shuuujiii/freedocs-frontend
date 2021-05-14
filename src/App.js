@@ -9,6 +9,7 @@ import PrivacyPolicy from './components/page/PrivacyPolicy'
 import CookieConsent from 'react-cookie-consent'
 // utils
 import { useTracking } from './utils/useTracking'
+import { useLocation } from 'react-router-dom'
 
 // components
 import PrivateRoute from './utils/privateRoute'
@@ -23,7 +24,9 @@ import Setting from './components/page/Setting'
 import ArticlesPage from './components/page/ArticlesPage'
 // import MyArticle from './components/page/MyArticle'
 const App = () => {
-  useTracking(process.env.REACT_APP_GA_MEASUREMENT_ID)
+  if (window.location.hostname !== 'localhost') {
+    useTracking(process.env.REACT_APP_GA_MEASUREMENT_ID)
+  }
 
   const handleClickAcceptCookie = () => {
     window.location.reload()
