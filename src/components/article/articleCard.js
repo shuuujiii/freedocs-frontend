@@ -23,12 +23,13 @@ import axiosbase from '../../utils/axiosbase'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
-import { useError } from '../../provider/errorProvider'
-import { useMessage } from '../../provider/messageProvider'
+// import { useError } from '../../provider/errorProvider'
+// import { useMessage } from '../../provider/messageProvider'
 // components
 import { TagChips } from './Tags'
 import Comments from '../article/comments'
 import ReportDialog from './Report'
+import DeleteDialog from './DeleteDialog'
 import EditArticle from './editArticle'
 
 const useStyles = makeStyles((theme) => ({
@@ -73,8 +74,8 @@ const ArticleCard = ({ article, setArticles }) => {
     const classes = useStyles();
     const history = useHistory();
     const auth = useAuth();
-    const error = useError()
-    const message = useMessage()
+    // const error = useError()
+    // const message = useMessage()
     const [expanded, setExpanded] = React.useState(false);
     const [likes, setLikes] = React.useState(false)
     // const [good, setGood] = React.useState(false)
@@ -82,6 +83,7 @@ const ArticleCard = ({ article, setArticles }) => {
     const [downvote, setDownvote] = React.useState(false)
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -89,6 +91,10 @@ const ArticleCard = ({ article, setArticles }) => {
     const handleClose = () => {
         setOpenReport(false);
     };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false)
+    }
 
     React.useEffect(() => {
         if (auth.authState.user) {
@@ -111,14 +117,8 @@ const ArticleCard = ({ article, setArticles }) => {
     }
 
     const handleClickDelete = () => {
-        axiosbase.delete('/article', { data: { _id: article._id } }).then(
-            () => {
-                message.successMessage('contents deleted')
-                window.location.reload()
-            }
-        ).catch(err => {
-            error.setError(err)
-        })
+        setOpenDelete(true)
+
     }
 
     const onClickLikes = () => {
@@ -154,8 +154,6 @@ const ArticleCard = ({ article, setArticles }) => {
                 })
                 setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
                 setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
-
-                console.log('upvote res', res.data)
             })
             :
             history.push('/signin')
@@ -263,6 +261,7 @@ const ArticleCard = ({ article, setArticles }) => {
                                 >
                                     <DeleteIcon />
                                 </IconButton>
+                                <DeleteDialog open={openDelete} handleClose={handleCloseDelete} _id={article._id} />
                             </div>
 
                             : <IconButton

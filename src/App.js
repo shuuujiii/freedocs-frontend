@@ -9,7 +9,6 @@ import PrivacyPolicy from './components/page/PrivacyPolicy'
 import CookieConsent from 'react-cookie-consent'
 // utils
 import { useTracking } from './utils/useTracking'
-import { useLocation } from 'react-router-dom'
 
 // components
 import PrivateRoute from './utils/privateRoute'

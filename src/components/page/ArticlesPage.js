@@ -4,7 +4,7 @@ import qs from 'query-string'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { useParams, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
@@ -22,7 +22,7 @@ import ArticleCard from '../article/articleCard'
 // }
 
 const ArticlesPage = () => {
-    const params = useParams()
+    // const params = useParams()
     const auth = useAuth();
     // const query = useQuery();
     const query = useLocation().search
@@ -50,7 +50,6 @@ const ArticlesPage = () => {
     }
 
     React.useEffect(() => {
-        console.log('page useEffect')
         let mounted = true
         const getData = async () => {
             let p = createParams(qp.search)
