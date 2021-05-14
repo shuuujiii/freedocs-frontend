@@ -34,6 +34,7 @@ const App = () => {
   const handleClickDeclineCookie = () => {
     window.location.reload()
   }
+
   return (
     <div className="App">
       <Header />
