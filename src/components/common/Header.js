@@ -14,11 +14,16 @@ import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu'
+import Tooltip from '@material-ui/core/Tooltip';
+import AddIcon from '@material-ui/icons/Add';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 // util
 import axiosbase from '../../utils/axiosbase'
 import { useHistory, useLocation } from 'react-router-dom'
 import { StatusCodes } from 'http-status-codes'
 
+import CreateDialog from '../article/CreateDialog'
 // context
 import { useAuth } from '../../provider/authProvider'
 import { useError } from '../../provider/errorProvider'
@@ -100,28 +105,33 @@ export default function Header() {
     const query = useLocation().search
     const qp = qs.parse(query)
     const [search, setSearch] = React.useState(qp.search || '')
+    const [openCreateDialog, setOpenCreateDialog] = React.useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openAccountMenu = Boolean(anchorEl);
-    const [open, setOpen] = React.useState(false);
+    const [openSidebar, setOpenSidebar] = React.useState(false);
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClickAddPost = () => {
+        setOpenCreateDialog(true)
+    }
+
+    const handleCloseMenu = () => {
         setAnchorEl(null)
     }
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpenSidebar(true);
     };
 
     const handleProfile = () => {
-        handleClose()
+        handleCloseMenu()
         history.push(`/profile/${auth.authState.user.username}`);
     };
 
     const handleSetting = () => {
-        handleClose()
+        handleCloseMenu()
         history.push('/setting');
     };
 
@@ -214,7 +224,16 @@ export default function Header() {
                     <div style={{ flexGrow: 1 }} />
                     {auth.authState.isAuthenticated ? (
                         // login user
-                        <div>
+                        <div style={{display:'flex'}}>
+                            <Tooltip title="Add Post" arrow>
+                                <IconButton
+                                    color="inherit"
+                                    onClick={handleClickAddPost}
+                                >
+                                    <AddBoxIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <CreateDialog open={openCreateDialog} setOpen={setOpenCreateDialog} />
                             <IconButton
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
@@ -237,12 +256,13 @@ export default function Header() {
                                     horizontal: 'right',
                                 }}
                                 open={openAccountMenu}
-                                onClose={handleClose}
+                                onClose={handleCloseMenu}
                             >
                                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                                 <MenuItem onClick={handleSetting}>Setting</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
+
                         </div>
                     ) : (
                         // guest user
@@ -260,7 +280,7 @@ export default function Header() {
                     )}
                 </Toolbar>
             </AppBar>
-            <SideBar open={open} setOpen={setOpen} auth={auth} />
+            <SideBar open={openSidebar} setOpen={setOpenSidebar} auth={auth} />
         </div>
     );
 }

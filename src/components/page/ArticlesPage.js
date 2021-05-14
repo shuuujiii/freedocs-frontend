@@ -14,7 +14,7 @@ import useLocalStorage from '../../utils/useLocalStrage'
 import { useAuth } from '../../provider/authProvider';
 
 // components
-import { SortSelect, initialSortValue } from '../article/sortSelect'
+// import { SortSelect, initialSortValue } from '../article/sortSelect'
 import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
 // const useQuery = () => {
@@ -30,7 +30,7 @@ const ArticlesPage = () => {
     // const [search, setSearch] = React.useState('')
     const [articles, setArticles] = React.useState([]);
     // const [sort, dispatchSort] = useSortReducer();
-    const [sort, dispatchSort] = useLocalStorage('sort', initialSortValue)
+    // const [sort, dispatchSort] = useLocalStorage('sort', initialSortValue)
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
     const handleChange = (e, p) => {
@@ -38,30 +38,30 @@ const ArticlesPage = () => {
         setPage(p);
     };
 
-    const createParams = (search) => {
+    const createParams = () => {
         let p = new URLSearchParams();
-        if (search) {
-            p.append('search', search)
+        if (qp.tag) {
+            p.append('tag', qp.tag)
+        }
+        if (qp.user) {
+            p.append('username', qp.user)
+        }
+        if (qp.favorite) {
+            p.append('favorite', qp.favorite)
+        }
+        if (qp.search) {
+            p.append('search', qp.search)
         }
         p.append('page', page)
-        p.append('sortkey', sort.key)
-        p.append('order', sort.order)
+        p.append('sortkey', qp.sortkey || 'createdAt')
+        p.append('order', qp.sortorder || 'desc')
         return p
     }
 
     React.useEffect(() => {
         let mounted = true
         const getData = async () => {
-            let p = createParams(qp.search)
-            if (qp.tag) {
-                p.append('tag', qp.tag)
-            }
-            if (qp.user) {
-                p.append('username', qp.user)
-            }
-            if (qp.favorite) {
-                p.append('favorite', qp.favorite)
-            }
+            let p = createParams()
             const res = await axiosbase.get('/article/lists?' + p)
             if (mounted) {
                 setArticles(res.data.docs);
@@ -71,7 +71,9 @@ const ArticlesPage = () => {
         getData()
         return () => mounted = false
         // }, [search, page, sort, auth.authState.user, isFavoriteOnly])
-    }, [query, page, sort, auth.authState.user])
+        // }, [query, page, sort, auth.authState.user])
+    }, [query, page, auth.authState.user])
+
     // }, [page, sort, auth.authState.user, params.tag])
 
 
@@ -91,11 +93,11 @@ const ArticlesPage = () => {
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
-                        {auth.authState.user && <CreateArticle setArticles={setArticles} />}
-                        <SortSelect sort={sort} dispatchSort={dispatchSort} />
+                        {/* {auth.authState.user && <CreateArticle setArticles={setArticles} />} */}
+                        {/* <SortSelect sort={sort} dispatchSort={dispatchSort} /> */}
                         {articles.length === 0 ?
                             <div>No articles</div> :
-                            <div>
+                            <div style={{ marginTop: '16px' }}>
                                 <Pagination
                                     count={totalPages}
                                     size="large"

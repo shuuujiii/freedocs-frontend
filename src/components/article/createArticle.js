@@ -16,7 +16,6 @@ import { Tags } from './Tags'
 // validation
 import Joi from 'joi'
 
-
 const ArticleValidator = Joi.object({
     url: Joi.string().uri().required(),
     description: Joi.string().allow(null).allow(''),
