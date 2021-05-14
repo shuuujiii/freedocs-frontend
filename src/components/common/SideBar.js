@@ -49,7 +49,7 @@ export default function SideBar({ open, setOpen, auth }) {
         history.push(`/lists?${p}`)
     }
 
-    const onClickMyArticle = (e) => {
+    const onClickMyPosts = (e) => {
         e.preventDefault()
         let p = new URLSearchParams();
         if (auth.authState.user.username) {
@@ -88,9 +88,9 @@ export default function SideBar({ open, setOpen, auth }) {
                                 <ListItemIcon><FavoriteIcon /></ListItemIcon>
                                 <ListItemText primary={'Favorite'} />
                             </ListItem>
-                            <ListItem button key={'MyArticle'} onClick={onClickMyArticle}>
+                            <ListItem button key={'MyPosts'} onClick={onClickMyPosts}>
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
-                                <ListItemText primary={'MyArticle'} />
+                                <ListItemText primary={'MyPosts'} />
                             </ListItem>
                         </List>
                     </React.Fragment> :
