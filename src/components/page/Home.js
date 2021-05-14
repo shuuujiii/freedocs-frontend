@@ -68,7 +68,7 @@ export default function Home() {
         const getRankingData = async () => {
             const res = await axiosbase.get('/article/ranking')
             if (mounted) {
-                // console.log('ranking data', res.data)
+                console.log('ranking data', res.data)
                 setLikesArticles(res.data.likesRanking)
                 setVoteArticles(res.data.voteRanking)
             }
