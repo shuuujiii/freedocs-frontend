@@ -17,7 +17,7 @@ import { Tags } from './Tags'
 const EditArticle = ({ setIsEdit, article, setArticles }) => {
     const error = useError();
     const message = useMessage();
-    const [url, setUrl] = React.useState(article.url)
+    // const [url, setUrl] = React.useState(article.url)
     const [description, setDescription] = React.useState(article.description)
     const [tags, setTags] = React.useState(article.tags)
     const onClickSave = (e) => {
@@ -26,7 +26,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
         const tag_ids = tags.map(tag => tag._id)
         axiosbase.put('/article', {
             _id: article._id,
-            url: url,
+            // url: url,
             description: description,
             tags: tag_ids
         }).then(
@@ -68,9 +68,10 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                         placeholder="input url"
                         variant="outlined"
                         fullWidth
+                        disabled
                         size="small"
-                        value={url}
-                        onChange={e => { setUrl(e.target.value) }}
+                        value={article.url}
+                    // onChange={e => { setUrl(e.target.value) }}
                     />
                 </Box>
                 <Box m={1}>
