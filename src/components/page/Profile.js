@@ -80,7 +80,7 @@ function Profile() {
                     username:{profile.username}
                 </Box>
                 <Box display="flex" justifyContent="center">
-                    posts:<Link to={`/lists/user/${profile.username}`}>{profile.posts}</Link>
+                    posts:<Link to={`/lists?user=${profile.username}`}>{profile.posts}</Link>
                 </Box>
             </CardContent>
 

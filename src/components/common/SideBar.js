@@ -9,7 +9,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+// import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import { useHistory } from 'react-router-dom'
 const useStyles = makeStyles({
@@ -39,16 +39,24 @@ export default function SideBar({ open, setOpen, auth }) {
         history.push('/lists')
     }
 
-    const onClickFavorite = () => {
-
+    const onClickFavorite = (e) => {
+        e.preventDefault()
+        let p = new URLSearchParams();
+        if (auth.authState.user.username) {
+            p.append('user', auth.authState.user.username)
+            p.append('favorite', true)
+        }
+        history.push(`/lists?${p}`)
     }
 
-    const onClickGood = () => {
-
-    }
-
-    const onClickMyArticle = () => {
-        history.push(`/lists/user/${auth.authState.user.username}`)
+    const onClickMyArticle = (e) => {
+        e.preventDefault()
+        let p = new URLSearchParams();
+        if (auth.authState.user.username) {
+            p.append('user', auth.authState.user.username)
+        }
+        history.push(`/lists?${p}`)
+        // history.push(`/lists/user/${auth.authState.user.username}`)
     }
 
     return (
@@ -79,10 +87,6 @@ export default function SideBar({ open, setOpen, auth }) {
                             <ListItem button key={'Favorite'} onClick={onClickFavorite}>
                                 <ListItemIcon><FavoriteIcon /></ListItemIcon>
                                 <ListItemText primary={'Favorite'} />
-                            </ListItem>
-                            <ListItem button key={'Good'} onClick={onClickGood}>
-                                <ListItemIcon><ThumbUpIcon /></ListItemIcon>
-                                <ListItemText primary={'Good'} />
                             </ListItem>
                             <ListItem button key={'MyArticle'} onClick={onClickMyArticle}>
                                 <ListItemIcon><InboxIcon /></ListItemIcon>

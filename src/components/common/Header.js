@@ -97,7 +97,9 @@ export default function Header() {
     const history = useHistory();
     const error = useError();
     const auth = useAuth();
-    const [search, setSearch] = React.useState(qs.parse(useLocation().search).search || '')
+    const query = useLocation().search
+    const qp = qs.parse(query)
+    const [search, setSearch] = React.useState(qp.search || '')
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openAccountMenu = Boolean(anchorEl);
     const [open, setOpen] = React.useState(false);
@@ -143,23 +145,29 @@ export default function Header() {
         // error.init()
         if (e.key === 'Enter') {
             e.preventDefault()
-            let p = new URLSearchParams();
-            if (search) {
-                p.append('search', search)
+            let p;
+            // no query string
+            if (!query) {
+                if (search) {
+                    p = new URLSearchParams()
+                    p.append('search', search)
+                }
             }
+            // has query
+
+            if (query) {
+                if (qp.search) {
+                    qp.search = search
+                    p = qs.stringify(qp)
+
+                } else {
+                    qp.search = search
+                    p = qs.stringify(qp)
+                }
+            }
+
             history.push(`/lists?${p}`)
         }
-        // if (e.key === 'Enter') {
-        //     e.preventDefault()
-        //     axiosbase.post('/tag', {
-        //         name: inputTag
-        //     })
-        //         .then(res => {
-        //             console.log(res.data)
-        //             setTags(prev => [...prev, res.data])
-        //             setInputTag('')
-        //         }).catch(error.setError)
-        // }
     }
 
     return (

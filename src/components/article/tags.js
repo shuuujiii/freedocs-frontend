@@ -81,7 +81,7 @@ export const TagChips = ({ tags }) => {
     const history = useHistory()
 
     const onClickChip = (tagname) => {
-        history.push(`/lists/tags/${tagname}`)
+        history.push(`/lists?tag=${tagname}`)
     }
     return (
         <div className={classes.root}>

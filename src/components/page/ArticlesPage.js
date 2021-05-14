@@ -26,6 +26,7 @@ const ArticlesPage = () => {
     const auth = useAuth();
     // const query = useQuery();
     const query = useLocation().search
+    let qp = qs.parse(query)
     // const [search, setSearch] = React.useState('')
     const [articles, setArticles] = React.useState([]);
     // const [sort, dispatchSort] = useSortReducer();
@@ -49,19 +50,18 @@ const ArticlesPage = () => {
     }
 
     React.useEffect(() => {
-        // console.log('useEffect article Page')
-        let qp = qs.parse(query)
-        // console.log('query parameter', qp)
+        console.log('page useEffect')
         let mounted = true
         const getData = async () => {
             let p = createParams(qp.search)
-
-            if (params.tag) {
-                p.append('tag', params.tag)
+            if (qp.tag) {
+                p.append('tag', qp.tag)
             }
-            if (params.user) {
-                // console.log('param user', params.user)
-                p.append('username', params.user)
+            if (qp.user) {
+                p.append('username', qp.user)
+            }
+            if (qp.favorite) {
+                p.append('favorite', qp.favorite)
             }
             const res = await axiosbase.get('/article/lists?' + p)
             if (mounted) {
@@ -72,21 +72,21 @@ const ArticlesPage = () => {
         getData()
         return () => mounted = false
         // }, [search, page, sort, auth.authState.user, isFavoriteOnly])
-    }, [query, page, sort, auth.authState.user, params.tag])
+    }, [query, page, sort, auth.authState.user])
     // }, [page, sort, auth.authState.user, params.tag])
 
 
 
     return (
         <div>
-            {params.tag &&
+            {qp.tag &&
                 <div>
-                    <Typography variant="h4" align="center" color="textSecondary">Tagged #{params.tag}</Typography>
+                    <Typography variant="h4" align="center" color="textSecondary">Tagged #{qp.tag}</Typography>
                 </div>
             }
-            {params.user &&
+            {qp.user &&
                 <div>
-                    <Typography variant="h4" align="center" color="textSecondary">Posted @{params.user}</Typography>
+                    <Typography variant="h4" align="center" color="textSecondary">Posted @{qp.user}</Typography>
                 </div>
             }
             <Container maxWidth="lg">
