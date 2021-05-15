@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import axiosbase from '../../utils/axiosbase'
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -8,6 +8,12 @@ import { CircularProgress, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import WarningIcon from '@material-ui/icons/Warning';
 // utils
 import { useHistory } from 'react-router-dom'
 import { useMessage } from '../../provider/messageProvider'
@@ -29,31 +35,88 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-function Settings() {
-    const classes = useStyles();
+function DeleteAccountDialog({ open, handleClose }) {
+    const message = useMessage()
+    const error = useError()
     const history = useHistory();
-    const message = useMessage();
-    const error = useError();
-    const auth = useAuth();
-
-    const [loading, setLoading] = React.useState(false)
-    const username = auth.authState.user.username
-
-    const onClickDeleteAccount = (e) => {
-        e.preventDefault()
-        setLoading(true)
+    const auth = useAuth()
+    const [username, setUsername] = React.useState('')
+    const init = () => {
+        setUsername('')
+    }
+    const onClickDelete = () => {
         axiosbase.delete('/users').then(
             () => {
-                setLoading(false)
                 message.successMessage('delete user')
                 auth.logout()
                 history.push('/')
             }
         ).catch(err => {
             error.setError(err)
-            setLoading(false)
         })
+    }
+    return (
+        <div>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Delete Account"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Are you sure you want to delete your account? This cannot be undone.<br />
+                        {/* <div style={{ verticalAlign: 'center' }}><WarningIcon />To delete your account type your username.</div> */}
+                    </DialogContentText>
+                    <WarningIcon />
+                    <DialogContentText id="alert-dialog-description">
+                        To delete your account type your username.
+                    </DialogContentText>
+                    <TextField
+                        id="outlined-url"
+                        label="username"
+                        placeholder="input username"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        autoFocus
+                        value={username}
+                        onChange={e => { setUsername(e.target.value) }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button disabled={username !== auth.authState.user.username} onClick={onClickDelete} variant="outlined" color="secondary" >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+
+DeleteAccountDialog.propTypes = {
+    open: PropTypes.bool,
+    handleClose: PropTypes.func,
+    _id: PropTypes.string,
+}
+
+function Settings() {
+    const classes = useStyles();
+    // const history = useHistory();
+    // const message = useMessage();
+    // const error = useError();
+    const auth = useAuth();
+    const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = React.useState(false)
+
+    // const [loading, setLoading] = React.useState(false)
+    const username = auth.authState.user.username
+    const handleClose = () => {
+        setOpenDeleteAccountDialog(false);
+    };
+    const onClickDeleteAccount = (e) => {
+        e.preventDefault()
+        setOpenDeleteAccountDialog(true)
     }
 
     return (
@@ -83,10 +146,13 @@ function Settings() {
                             fullWidth
                             style={{ marginTop: '16px' }}
                             onClick={e => { onClickDeleteAccount(e) }}
-                            disabled={loading}>
-                            {loading && <CircularProgress size={14} />}
-                            {!loading && 'Delete Account'}
+                        // disabled={loading}>
+                        // {loading && <CircularProgress size={14} />}
+                        // {!loading && 'Delete Account'}
+                        >
+                            Delete Account
                         </Button>
+                        <DeleteAccountDialog open={openDeleteAccountDialog} handleClose={handleClose} />
                     </div>
                 </Grid>
             </Grid>
