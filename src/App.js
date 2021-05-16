@@ -17,6 +17,9 @@ import Profile from './components/page/Profile'
 import NotFound from './components/page/NotFound'
 import Header from './components/common/Header'
 import Footer from './components/common/Footer'
+import ResetPassword from './components/page/ResetPassword'
+import ForgotPassword from './components/page/ForgotPassword'
+
 import Messages from './components/common/Messages'
 import EmailAuth from './components/page/EmailAuth'
 import Setting from './components/page/Setting'
@@ -42,6 +45,8 @@ const App = () => {
       <Switch>
         <Route exact path='/' component={Home} />
         <Route path="/auth/email/:token" component={EmailAuth} />
+        <Route path="/resetpassword/:token" component={ResetPassword} />
+        <Route path="/forgotpassword/" component={ForgotPassword} />
         <Route path="/signup" component={SignUp} />
         <Route path="/signin" component={SignIn} />
         <Route path="/terms" component={Terms} />

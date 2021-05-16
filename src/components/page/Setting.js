@@ -41,9 +41,14 @@ function DeleteAccountDialog({ open, handleClose }) {
     const history = useHistory();
     const auth = useAuth()
     const [username, setUsername] = React.useState('')
-    const init = () => {
+    // const init = () => {
+    //     setUsername('')
+    // }
+    const closeDialog = () => {
+        handleClose()
         setUsername('')
     }
+
     const onClickDelete = () => {
         axiosbase.delete('/users').then(
             () => {
@@ -59,7 +64,7 @@ function DeleteAccountDialog({ open, handleClose }) {
         <div>
             <Dialog
                 open={open}
-                onClose={handleClose}
+                onClose={closeDialog}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >

@@ -15,9 +15,7 @@ import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu'
 import Tooltip from '@material-ui/core/Tooltip';
-import AddIcon from '@material-ui/icons/Add';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 // util
 import axiosbase from '../../utils/axiosbase'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -224,7 +222,7 @@ export default function Header() {
                     <div style={{ flexGrow: 1 }} />
                     {auth.authState.isAuthenticated ? (
                         // login user
-                        <div style={{display:'flex'}}>
+                        <div style={{ display: 'flex' }}>
                             <Tooltip title="Add Post" arrow>
                                 <IconButton
                                     color="inherit"

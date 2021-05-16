@@ -7,10 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
-// import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 // utils
 import axiosbase from '../../utils/axiosbase'
 import { useError } from '../../provider/errorProvider';
