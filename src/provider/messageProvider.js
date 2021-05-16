@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-const MessageContext = React.createContext()
+export const MessageContext = React.createContext()
 const initialMessageState = {
     open: false,
     message: '',

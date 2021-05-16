@@ -25,6 +25,7 @@ export default function ReportDialog({ open, handleClose, article_id }) {
     const [detail, setDetail] = React.useState('')
     const [radioButtonValue, setRadioButtonValue] = React.useState('other');
 
+    // console.log('error', error)
     const handleChangeRadioButton = (event) => {
         setRadioButtonValue(event.target.value);
     };
@@ -56,26 +57,46 @@ export default function ReportDialog({ open, handleClose, article_id }) {
 
     return (
         <Dialog open={open} onClose={handleCloseInit} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Report</DialogTitle>
+            <DialogTitle data-testid='report-title' id="report-form-dialog-title">Report</DialogTitle>
             <DialogContent>
                 <FormControl component="fieldset">
                     <RadioGroup
-                        aria-label="gender"
-                        name="gender1"
+                        data-testid='report-radio-group'
+                        aria-label="report"
+                        name="report"
                         value={radioButtonValue}
                         onChange={handleChangeRadioButton}
                     >
-                        <FormControlLabel value="sex" control={<Radio />} label="性的なコンテンツ" />
-                        <FormControlLabel value="violence" control={<Radio />} label="暴力的または不快なコンテンツ" />
-                        <FormControlLabel value="danger" control={<Radio />} label="危険な内容" />
-                        <FormControlLabel value="spam" control={<Radio />} label="スパム" />
-                        <FormControlLabel value="right" control={<Radio />} label="権利に関する内容" />
-                        <FormControlLabel value="tag" control={<Radio />} label="タグの不備" />
-                        <FormControlLabel value="url" control={<Radio />} label="URLの不備" />
-                        <FormControlLabel value="other" control={<Radio />} label="その他" />
+                        <FormControlLabel value="sex" control={<Radio
+                            inputProps={{
+                                "data-testid": `radio-button-sex`,
+                            }} />} label="Sexual content" />
+                        <FormControlLabel value="violence" control={<Radio
+                            inputProps={{
+                                "data-testid": `radio-button-violent`,
+                            }} />} label="Violent or repulsive content" />
+                        <FormControlLabel value="danger" control={<Radio
+                            inputProps={{
+                                "data-testid": `radio-button-hateful`,
+                            }} />} label="Hateful or abusive content" />
+                        <FormControlLabel value="spam" control={<Radio
+                            inputProps={{
+                                "data-testid": `radio-button-spam`,
+                            }} />} label="Spam or misleading" />
+                        <FormControlLabel value="tag" control={<Radio
+                            inputProps={{
+                                "data-testid": `radio-button-tag`,
+                            }} />} label="About Tag" />
+                        <FormControlLabel value="url" control={<Radio inputProps={{
+                            "data-testid": `radio-button-url`,
+                        }} />} label="About URL" />
+                        <FormControlLabel value="other" control={<Radio inputProps={{
+                            "data-testid": `radio-button-others`,
+                        }} />} label="Others" />
                     </RadioGroup>
                 </FormControl>
                 <TextField
+                    data-testid='report-text'
                     autoFocus
                     margin="dense"
                     variant="outlined"
@@ -90,10 +111,14 @@ export default function ReportDialog({ open, handleClose, article_id }) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCloseInit} color="primary">
+                <Button
+                    data-testid='report-cancel-button'
+                    onClick={handleCloseInit} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={handleClickSendReport} color="primary">
+                <Button
+                    data-testid='report-send-button'
+                    onClick={handleClickSendReport} color="primary">
                     Send
                 </Button>
             </DialogActions>
@@ -104,6 +129,5 @@ export default function ReportDialog({ open, handleClose, article_id }) {
 ReportDialog.propTypes = {
     article_id: PropTypes.string,
     open: PropTypes.bool,
-    handleClickOpen: PropTypes.func,
     handleClose: PropTypes.func,
 }

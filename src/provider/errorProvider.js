@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-const ErrorContext = React.createContext()
+export const ErrorContext = React.createContext()
 const initialErrorState = {
     hasError: false,
     message: null,
