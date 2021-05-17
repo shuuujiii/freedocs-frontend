@@ -85,7 +85,7 @@ describe('Report', () => {
         userEvent.type(reportText, 'report reason{enter}reason1{enter}reason2');
         expect(reportText).toHaveValue('report reason\nreason1\nreason2')
     })
-    test.only('should call axios post', () => {
+    test('should call axios post', () => {
         const { getByTestId } = render(
             <Errors.ErrorContext.Provider value={{ setError: jest.fn() }}>
                 <Messages.MessageContext.Provider value={{ successMessage: jest.fn() }}>

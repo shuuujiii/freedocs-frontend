@@ -29,18 +29,27 @@ export const Tags = ({ tags, setTags }) => {
     const classes = useStyles();
     const error = useError();
     const [inputTag, setInputTag] = React.useState('')
-    const handleKeyPress = (e) => {
+
+    const handleKeyPress = async (e) => {
         error.init()
         if (e.key === 'Enter') {
-            e.preventDefault()
-            axiosbase.post('/tag', {
-                name: inputTag
-            })
-                .then(res => {
-                    console.log(res.data)
-                    setTags(prev => [...prev, res.data])
-                    setInputTag('')
-                }).catch(error.setError)
+            // e.preventDefault()
+            try {
+                const res = await axiosbase.post('/tag', {
+                    name: inputTag
+                })
+                setTags(prev => [...prev, res.data])
+                setInputTag('')
+            } catch (e) {
+                error.setError(e)
+            }
+            // axiosbase.post('/tag', {
+            //     name: inputTag
+            // })
+            //     .then(res => {
+            //         console.log(res.data)
+            //         setTags(prev => [...prev, res.data])
+            //     }).catch(error.setError).finally(init())
         }
     }
 
@@ -53,6 +62,7 @@ export const Tags = ({ tags, setTags }) => {
             {tags.map(tag => {
                 return (
                     <Chip
+                        data-testid='tag-chip'
                         key={tag._id}
                         className={classes.chip}
                         label={tag.name}
@@ -61,6 +71,7 @@ export const Tags = ({ tags, setTags }) => {
                 )
             })}
             <TextField
+                data-testid='tag-textfield'
                 style={{ outlineWidth: '0' }}
                 value={inputTag}
                 onChange={e => { setInputTag(e.target.value) }}
