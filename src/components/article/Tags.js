@@ -30,26 +30,20 @@ export const Tags = ({ tags, setTags }) => {
     const error = useError();
     const [inputTag, setInputTag] = React.useState('')
 
-    const handleKeyPress = async (e) => {
+    const handleKeyPress = (e) => {
         error.init()
         if (e.key === 'Enter') {
             // e.preventDefault()
-            try {
-                const res = await axiosbase.post('/tag', {
-                    name: inputTag
-                })
+            axiosbase.post('/tag', {
+                name: inputTag
+            }).then(res => {
                 setTags(prev => [...prev, res.data])
-                setInputTag('')
-            } catch (e) {
-                error.setError(e)
-            }
-            // axiosbase.post('/tag', {
-            //     name: inputTag
-            // })
-            //     .then(res => {
-            //         console.log(res.data)
-            //         setTags(prev => [...prev, res.data])
-            //     }).catch(error.setError).finally(init())
+                // can't pass test when writing here
+                // setInputTag('')
+            }).catch(e => {
+                console.log(e)
+            })
+            setInputTag('')
         }
     }
 

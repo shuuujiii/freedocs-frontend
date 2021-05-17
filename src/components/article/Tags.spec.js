@@ -65,18 +65,15 @@ describe('Tags', () => {
                 <Tags tags={tags} setTags={setTags} setInputTag={jest.fn()} />
             </Errors.ErrorContext.Provider>
         )
-        axios.post.mockReturnValue(Promise.resolve({ data: { _id: '1', name: 'tagname' } }));
-        // can't fix act warning ...
+        axios.post.mockImplementation(() => { return Promise.resolve({ data: { _id: '1', name: 'tagname' } }) });
         act(() => {
             userEvent.type(getByTestId('tag-textfield').querySelector('input'), 'tag4{enter}')
         })
         expect(axios.post).toHaveBeenCalledTimes(1);
         expect(axios.post).toHaveBeenCalledWith(
             `/tag`, { name: 'tag4' },
-
         );
-
-        // expect(await findByTestId('tag-textfield').querySelector('input')).toHaveValue('')
-
+        expect(getByTestId('tag-textfield').querySelector('input')).toHaveValue('')
     })
+
 })
