@@ -17,7 +17,7 @@ export default function DeleteDialog({ open, handleClose, _id }) {
         axiosbase.delete('/article', { data: { _id: _id } }).then(
             () => {
                 message.successMessage('contents deleted')
-                window.location.reload()
+                // window.location.reload()
             }
         ).catch(err => {
             error.setError(err)
@@ -33,14 +33,21 @@ export default function DeleteDialog({ open, handleClose, _id }) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Delete Item"}</DialogTitle>
+                <DialogTitle
+                    id="alert-dialog-title"
+                    data-testid='delete-dialog-title'
+                >{"Delete Item"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText
+                        data-testid='delete-dialog-message'
+                        id="alert-dialog-description">
                         Are you sure you want to delete this item? This cannot be undone.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClickDelete} color="primary" autoFocus>
+                    <Button
+                        data-testid='delete-dialog-button'
+                        onClick={onClickDelete} color="primary" autoFocus>
                         Delete
                     </Button>
                 </DialogActions>

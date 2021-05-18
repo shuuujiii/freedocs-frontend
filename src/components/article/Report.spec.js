@@ -86,25 +86,19 @@ describe('Report', () => {
         expect(reportText).toHaveValue('report reason\nreason1\nreason2')
     })
     test('should call axios post', () => {
-        const { getByTestId } = render(
-            <Errors.ErrorContext.Provider value={{ setError: jest.fn() }}>
-                <Messages.MessageContext.Provider value={{ successMessage: jest.fn() }}>
-                    <ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />
-                </Messages.MessageContext.Provider>
-            </Errors.ErrorContext.Provider>
-        )
-        jest.spyOn(Errors, 'useError').mockImplementation(() => {
-            return {
-                setError: jest.fn()
-            }
-        })
-        // why it doesn't work ???
-        // jest.spyOn(Messages, 'useMessagyarn e').mockImplementation(() => {
+        // const error = jest.spyOn(Errors, 'useError').mockImplementation(() => {
         //     return {
-        //         successMessage: jest.fn()
+        //         setError: jest.fn()
         //     }
         // })
-
+        const message = jest.spyOn(Messages, 'useMessage').mockImplementation(() => {
+            return {
+                successMessage: jest.fn()
+            }
+        })
+        const { getByTestId } = render(
+            <ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />
+        )
         const response = 'response'
         axios.post.mockResolvedValue(response)
         act(() => {
@@ -114,6 +108,31 @@ describe('Report', () => {
         expect(axios.post).toHaveBeenCalledWith(
             `/report`, { "id": '1243', "title": "other", "detail": "" },
         );
+        expect(message).toHaveBeenCalledTimes(1)
     })
-
+    test('should call axios post occur error', () => {
+        const error = jest.spyOn(Errors, 'useError').mockImplementation(() => {
+            return {
+                setError: jest.fn()
+            }
+        })
+        // const message = jest.spyOn(Messages, 'useMessage').mockImplementation(() => {
+        //     return {
+        //         successMessage: jest.fn()
+        //     }
+        // })
+        const { getByTestId } = render(
+            <ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />
+        )
+        const response = 'response'
+        axios.post.mockImplementation(() => Promise.reject())
+        act(() => {
+            userEvent.click(getByTestId('report-send-button'))
+        })
+        expect(axios.post).toHaveBeenCalledTimes(1);
+        expect(axios.post).toHaveBeenCalledWith(
+            `/report`, { "id": '1243', "title": "other", "detail": "" },
+        );
+        expect(error).toHaveBeenCalledTimes(1)
+    })
 });
