@@ -42,13 +42,15 @@ const Comments = ({ article_id }) => {
             <div style={{ paddingLeft: `${comment.depth * 10}px` }}>
                 <div style={{ whiteSpace: 'pre-wrap' }}>
                     {comment.comment}
+                    <IconButton
+                        data-testid='comment-reply-button'
+                        aria-label="reply"
+                        onClick={() => { setShowReply(!showReply) }}>
+                        <ReplyIcon />
+                    </IconButton>
                 </div>
-                <IconButton
-                    aria-label="reply"
-                    onClick={() => { setShowReply(!showReply) }}>
-                    <ReplyIcon />
-                </IconButton>
-                <IconButton
+
+                {/* <IconButton
                     aria-label="up"
                     onClick={() => { }}>
                     <ThumbUpIcon />
@@ -57,7 +59,7 @@ const Comments = ({ article_id }) => {
                     aria-label="down"
                     onClick={() => { }}>
                     <ThumbDownIcon />
-                </IconButton>
+                </IconButton> */}
 
                 {
                     auth.authState.user && showReply && <AddComment
