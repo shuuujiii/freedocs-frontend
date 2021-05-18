@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axiosbase from '../utils/axiosbase'
-const AuthContext = React.createContext()
+export const AuthContext = React.createContext()
 
 const authInitialState = {
     isAuthenticated: false,

@@ -12,7 +12,7 @@ import { useAuth } from '../../provider/authProvider'
 
 // components
 import AddComment from './addComment'
-const Comments = ({ article_id = '605d81cd977f9b9bf6f42d2a' }) => {
+const Comments = ({ article_id }) => {
     const [comments, setComments] = React.useState([])
     const auth = useAuth()
     React.useEffect(() => {
