@@ -52,7 +52,9 @@ export const Tags = ({ tags, setTags }) => {
     }
 
     return (
-        <div className={classes.root}>
+        <div
+            data-testid='tags'
+            className={classes.root}>
             {tags.map(tag => {
                 return (
                     <Chip
@@ -65,6 +67,7 @@ export const Tags = ({ tags, setTags }) => {
                 )
             })}
             <TextField
+                autoFocus
                 data-testid='tag-textfield'
                 style={{ outlineWidth: '0' }}
                 value={inputTag}

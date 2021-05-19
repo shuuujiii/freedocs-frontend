@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -8,9 +8,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from '@material-ui/core/Box';
+import Alert from '@material-ui/lab/Alert';
 // utils
 import axiosbase from '../../utils/axiosbase'
-import { useError } from '../../provider/errorProvider';
 import { useMessage } from '../../provider/messageProvider';
 
 // components
@@ -18,65 +18,54 @@ import { Tags } from './Tags'
 // validation
 import Joi from 'joi'
 
-const ArticleValidator = Joi.object({
-    url: Joi.string().uri().required(),
-    description: Joi.string().allow(null).allow(''),
-    // user: Joi.string().required(),
-    tags: Joi.array().items(Joi.allow(null)).required(),
-    // likes: Joi.array().items(Joi.objectId().allow(null)).required(),
-    // good: Joi.array().items(Joi.objectId().allow(null)).required(),
-})
+const validateUrl = (value) => {
+    const result = Joi.string().uri().required().validate(value)
+    return result.error ? result.error.details[0].message : null
+}
 export default function CreateDialog({ open, setOpen }) {
-    // const [open, setOpen] = React.useState(false);
-    const error = useError();
     const message = useMessage();
-    const [url, setUrl] = React.useState('');
-    const [description, setDescription] = React.useState('')
+    const [error, setError] = React.useState('')
+    const initialUrlState = { input: '', error: validateUrl(''), touched: false }
+    const [url, setUrl] = React.useState(initialUrlState);
+    const [description, setDescription] = useState('')
     const [tags, setTags] = React.useState([])
 
-    const init = () => {
-        // error.init()
-        setUrl('')
-        setDescription('')
-        setTags([])
-        setOpen(false)
-    }
     const onClickSave = async (e) => {
         e.preventDefault();
-        error.init()
+        setError('')
         const tag_ids = tags.map(tag => tag._id)
         try {
-            await ArticleValidator.validateAsync({
-                url: url,
+            const res = await axiosbase.post('/article', {
+                url: url.input,
                 description: description,
                 tags: tag_ids,
             })
-        } catch (err) {
-            error.setErrorMessage(err.message)
-            init()
-            return
-        }
-        axiosbase.post('/article', {
-            url: url,
-            description: description,
-            tags: tag_ids,
-        }).then(() => {
             message.successMessage('created')
-            init()
+            setUrl(initialUrlState)
+            setDescription('')
+            setTags([])
+            setOpen(false)
             window.location.reload()
-        }).catch(e => {
-            error.setError(e)
+        } catch (e) {
+            setError(e.response?.data?.message || 'sorry something wrong...')
         }
-        );
     }
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
 
     const handleClose = () => {
-        init()
+        setError('')
+        setUrl(initialUrlState)
+        setDescription('')
+        setTags([])
         setOpen(false);
     };
+
+    function onChangeUri(e) {
+        setUrl({
+            input: e.target.value,
+            error: validateUrl(e.target.value),
+            touched: true
+        })
+    }
 
     return (
         <Dialog
@@ -85,12 +74,18 @@ export default function CreateDialog({ open, setOpen }) {
             fullWidth
             maxWidth='sm'
             aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Add Post</DialogTitle>
+            <DialogTitle
+                data-testid='create-dialog-title'
+                id="form-dialog-title">Add Post</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    To subscribe to this website, please enter your email address here. We will send updates
-                    occasionally.
+                <DialogContentText
+                    data-testid='create-dialog-content-text'
+                >
+                    Please share your infomation about free documents for developers!
                 </DialogContentText>
+                {error &&
+                    <Alert severity="error">{error}</Alert>
+                }
                 <Box
                     display="flex"
                     flexDirection="column"
@@ -98,27 +93,30 @@ export default function CreateDialog({ open, setOpen }) {
                     p={1}
                     m={1}
                 >
-                    {/* <Box> */}
-                    <Tags tags={tags} setTags={setTags} />
-                    {/* </Box> */}
+                    <Tags
+                        data-testid='create-dialog-tags'
+                        tags={tags} setTags={setTags} />
                     <Box
                         display="flex"
-                        flexDirection="row"
+                        flexDirection="column"
                         m={1}
                     >
                         <TextField
+                            data-testid='create-dialog-url-textfield'
                             id="outlined-url"
-                            label="URL"
+                            label="URL (required)"
                             placeholder="input url"
                             variant="outlined"
                             fullWidth
                             size="small"
-                            value={url}
-                            onChange={e => { setUrl(e.target.value) }}
+                            value={url.input}
+                            onChange={e => { onChangeUri(e) }}
                         />
+                        <div data-testid='create-dialog-uri-error'><span style={{ color: 'red' }}>{url.touched && url.error ? url.error : null}</span></div>
                     </Box>
                     <Box m={1}>
                         <TextField
+                            data-testid='create-dialog-description-textfield'
                             multiline={true}
                             fullWidth
                             rows={5}
@@ -131,7 +129,11 @@ export default function CreateDialog({ open, setOpen }) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClickSave} color="primary">
+                <Button
+                    data-testid='create-dialog-button'
+                    onClick={onClickSave} color="primary"
+                    disabled={url.error ? true : false}
+                >
                     Add
                 </Button>
             </DialogActions>
