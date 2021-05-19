@@ -99,8 +99,8 @@ describe('Report', () => {
         const { getByTestId } = render(
             <ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />
         )
-        const response = 'response'
-        axios.post.mockResolvedValue(response)
+        // const response = 'response'
+        // axios.post.mockResolvedValue(response)
         act(() => {
             userEvent.click(getByTestId('report-send-button'))
         })
