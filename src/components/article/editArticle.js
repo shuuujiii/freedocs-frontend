@@ -26,7 +26,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
         const tag_ids = tags.map(tag => tag._id)
         axiosbase.put('/article', {
             _id: article._id,
-            // url: url,
+            url: article.url,
             description: description,
             tags: tag_ids
         }).then(
@@ -54,15 +54,16 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 p={1}
                 m={1}
             >
-                <Box>
-                    <Tags tags={tags} setTags={setTags} />
-                </Box>
+                <Tags
+                    data-testid='tags'
+                    tags={tags} setTags={setTags} />
                 <Box
                     display="flex"
                     flexDirection="row"
                     m={1}
                 >
                     <TextField
+                        data-testid='edit-article-url-textfield'
                         id="outlined-url"
                         label="URL"
                         placeholder="input url"
@@ -76,6 +77,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 </Box>
                 <Box m={1}>
                     <TextField
+                        data-testid='edit-article-description-textfield'
                         multiline={true}
                         fullWidth
                         label="description"
@@ -86,6 +88,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 </Box>
                 <Box m={1}>
                     <Button
+                        data-testid='edit-article-save-button'
                         variant="contained"
                         fullWidth
                         onClick={e => { onClickSave(e) }}
@@ -93,6 +96,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 </Box>
                 <Box m={1}>
                     <Button
+                        data-testid='edit-article-cancel-button'
                         variant="contained"
                         fullWidth
                         onClick={e => { onClickCancel(e) }}
