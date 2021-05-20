@@ -1,6 +1,5 @@
 import React from 'react'
 import { render, screen, act } from '@testing-library/react'
-// import { act } from '@testing-library/react-hooks'
 import userEvent from '@testing-library/user-event'
 import EditArticle from './editArticle'
 import axios from 'axios'
@@ -21,6 +20,7 @@ jest.mock("axios", () => ({
         return this;
     })
 }));
+
 const mockArticle = {
     _id: '1',
     url: 'http://google.com',
@@ -34,16 +34,20 @@ describe('EditArticle', () => {
     let mockError
     const mocksetArticles = jest.fn()
     const mocksetIsEdit = jest.fn()
+    const mockSuccessMessage = jest.fn()
+    const mockErrorInit = jest.fn()
+    const mockSetError = jest.fn()
     beforeEach(() => {
         mockMessage = jest.spyOn(Message, 'useMessage').mockImplementation(() => {
             return {
-                successMessage: jest.fn()
+                successMessage: mockSuccessMessage
             }
         })
+        // successMessage = jest.spyOn(mockMessage, 'successMessage').mockResolveValue('aaa')
         mockError = jest.spyOn(Error, 'useError').mockImplementation(() => {
             return {
-                init: jest.fn(),
-                setError: jest.fn()
+                init: mockErrorInit,
+                setError: mockSetError
             }
         })
     })
@@ -86,8 +90,9 @@ describe('EditArticle', () => {
         expect(await mocksetArticles).toHaveBeenCalledTimes(1)
         expect(mocksetIsEdit).toHaveBeenCalledTimes(1)
         //  mockMessage called 15 times and mockError called 30 times ...
-        // expect(mockMessage).toHaveBeenCalledTimes(1)
-        // expect(mockError).toHaveBeenCalledTimes(1)
+        // expect(mockMessage.successMessage).toHaveBeenCalledTimes(1)
+        expect(mockSuccessMessage).toHaveBeenCalledTimes(1)
+        expect(mockErrorInit).toHaveBeenCalledTimes(1)
     })
     test('post error', async () => {
         axios.put.mockImplementation(() => { return Promise.reject() })
@@ -104,7 +109,9 @@ describe('EditArticle', () => {
         })
         expect(await mocksetArticles).toHaveBeenCalledTimes(0)
         expect(await mocksetIsEdit).toHaveBeenCalledTimes(0)
-        expect(await mockError).toHaveBeenCalledTimes(2)
+        expect(await mockErrorInit).toHaveBeenCalledTimes(1)
+        expect(await mockSetError).toHaveBeenCalledTimes(1)
+        expect(await mockSuccessMessage).toHaveBeenCalledTimes(0)
     })
 
 
