@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, getByText } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ReportDialog from './Report'
 import { act, renderHook } from '@testing-library/react-hooks';
@@ -9,19 +9,19 @@ import axios from 'axios';
 
 import * as Messages from '../../provider/messageProvider';
 import * as Errors from '../../provider/errorProvider'
-import { useError } from '../../provider/errorProvider'
+// import { useError } from '../../provider/errorProvider'
 // https://qiita.com/ossan-engineer/items/4757d7457fafd44d2d2f
 // jest.mock('axios');
-jest.mock("axios", () => ({
-    post: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve();
-    }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
+// jest.mock("axios", () => ({
+//     post: jest.fn((_url, _body) => {
+//         url = _url
+//         body = _body
+//         return Promise.resolve();
+//     }),
+//     create: jest.fn(function () {
+//         return this;
+//     })
+// }));
 
 describe('Report', () => {
     test('should render Report', () => {
@@ -42,7 +42,7 @@ describe('Report', () => {
     })
 
     test('should select reason when clicked', () => {
-        const { getByTestId, getByText } = render(<ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />)
+        const { getByTestId } = render(<ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />)
         const radio_sex = getByTestId('radio-button-sex')
         const radio_violent = getByTestId('radio-button-violent')
         const radio_hateful = getByTestId('radio-button-hateful')
@@ -60,9 +60,7 @@ describe('Report', () => {
         expect(radio_url.checked).toBe(false);
         expect(radio_others.checked).toBe(true);
 
-        act(() => {
-            userEvent.click(radio_sex)
-        })
+        userEvent.click(radio_sex)
         expect(radio_sex.checked).toBe(true);
         expect(radio_violent.checked).toBe(false);
         expect(radio_hateful.checked).toBe(false);
@@ -85,46 +83,38 @@ describe('Report', () => {
         userEvent.type(reportText, 'report reason{enter}reason1{enter}reason2');
         expect(reportText).toHaveValue('report reason\nreason1\nreason2')
     })
-    test('should call axios post', () => {
+    test('should call axios post', async () => {
         // const error = jest.spyOn(Errors, 'useError').mockImplementation(() => {
         //     return {
         //         setError: jest.fn()
         //     }
         // })
+        const successMessage = jest.fn()
         const message = jest.spyOn(Messages, 'useMessage').mockImplementation(() => {
             return {
-                successMessage: jest.fn()
+                successMessage: successMessage
             }
         })
         const { getByTestId } = render(
             <ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />
         )
-        // const response = 'response'
-        // axios.post.mockResolvedValue(response)
-        act(() => {
-            userEvent.click(getByTestId('report-send-button'))
-        })
+        userEvent.click(getByTestId('report-send-button'))
         expect(axios.post).toHaveBeenCalledTimes(1);
         expect(axios.post).toHaveBeenCalledWith(
             `/report`, { "id": '1243', "title": "other", "detail": "" },
         );
-        expect(message).toHaveBeenCalledTimes(1)
+        expect(await successMessage).toHaveBeenCalledTimes(1)
     })
-    test('should call axios post occur error', () => {
+    test('should call axios post occur error', async () => {
+        const setError = jest.fn()
         const error = jest.spyOn(Errors, 'useError').mockImplementation(() => {
             return {
-                setError: jest.fn()
+                setError: setError
             }
         })
-        // const message = jest.spyOn(Messages, 'useMessage').mockImplementation(() => {
-        //     return {
-        //         successMessage: jest.fn()
-        //     }
-        // })
         const { getByTestId } = render(
             <ReportDialog open={true} handleClose={jest.fn()} article_id={'1243'} />
         )
-        const response = 'response'
         axios.post.mockImplementation(() => Promise.reject())
         act(() => {
             userEvent.click(getByTestId('report-send-button'))
@@ -133,6 +123,7 @@ describe('Report', () => {
         expect(axios.post).toHaveBeenCalledWith(
             `/report`, { "id": '1243', "title": "other", "detail": "" },
         );
-        expect(error).toHaveBeenCalledTimes(1)
+        expect(await setError).toHaveBeenCalledTimes(1)
+
     })
 });

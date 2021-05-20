@@ -2,23 +2,10 @@ import React from 'react'
 import { renderHook, act } from '@testing-library/react-hooks'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import axios from 'axios'
+import mockAxios from 'axios'
 import DeleteDialog from './DeleteDialog'
 import * as Error from '../../provider/errorProvider'
 import * as Message from '../../provider/messageProvider'
-jest.mock("axios", () => ({
-    post: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve({ data: { _id: '1', name: 'tagname' } });
-    }),
-    delete: jest.fn((_url, _body) => {
-        return Promise.resolve()
-    }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
 
 describe('DeleteDialog', () => {
     test('should render', () => {
@@ -37,13 +24,13 @@ describe('DeleteDialog', () => {
             }
         })
         render(< DeleteDialog open={true} handleClose={jest.fn()} _id={'1'} />)
-        axios.delete.mockImplementation(() => {
+        mockAxios.delete.mockImplementation(() => {
             return Promise.resolve()
         })
         act(() => {
             userEvent.click(screen.getByTestId('delete-dialog-button'))
         })
-        expect(axios.delete).toHaveBeenCalledTimes(1)
+        expect(mockAxios.delete).toHaveBeenCalledTimes(1)
         expect(message).toHaveBeenCalledTimes(1)
     })
     test(' call bad api', () => {
@@ -53,13 +40,13 @@ describe('DeleteDialog', () => {
             }
         })
         render(< DeleteDialog open={true} handleClose={jest.fn()} _id={'1'} />)
-        axios.delete.mockImplementation(() => {
+        mockAxios.delete.mockImplementation(() => {
             return Promise.reject()
         })
         act(() => {
             userEvent.click(screen.getByTestId('delete-dialog-button'))
         })
-        expect(axios.delete).toHaveBeenCalledTimes(1)
+        expect(mockAxios.delete).toHaveBeenCalledTimes(1)
         expect(error).toHaveBeenCalledTimes(1)
     })
 })

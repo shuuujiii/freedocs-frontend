@@ -1,22 +1,12 @@
 import React from 'react'
-import { getByRole, render, screen, fireEvent, findByTestId, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from '@testing-library/react-hooks'
 import { Tags } from './Tags'
-import axios from 'axios'
+import mockAxios from 'axios'
 // import { act as utilAct } from 'react-dom/test-utils';
 import * as Errors from '../../provider/errorProvider'
 
-jest.mock("axios", () => ({
-    post: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve({ data: { _id: '1', name: 'tagname' } });
-    }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
 describe('Tags', () => {
     test('Tags layout with tags', () => {
         const tags = [{ _id: '1', name: 'tag1' }, { _id: '2', name: 'tag2' }]
@@ -56,24 +46,22 @@ describe('Tags', () => {
         })
         expect(getByTestId('tag-textfield').querySelector('input')).toHaveValue('tag3')
     })
-    test('Tags posted collectly', async () => {
+    test('Tags post', async () => {
         const tags = []
         const setTags = jest.fn()
         const setError = jest.fn()
-        const { getByTestId, queryAllByTestId, getByRole } = render(
+        const { getByTestId, } = render(
             <Errors.ErrorContext.Provider value={{ init: jest.fn(), setError: setError }}>
                 <Tags tags={tags} setTags={setTags} setInputTag={jest.fn()} />
             </Errors.ErrorContext.Provider>
         )
-        axios.post.mockImplementation(() => { return Promise.resolve({ data: { _id: '1', name: 'tagname' } }) });
-        act(() => {
-            userEvent.type(getByTestId('tag-textfield').querySelector('input'), 'tag4{enter}')
-        })
-        expect(axios.post).toHaveBeenCalledTimes(1);
-        expect(axios.post).toHaveBeenCalledWith(
+        mockAxios.post.mockImplementation(() => { return Promise.resolve({ data: { _id: '1', name: 'tagname' } }) });
+        userEvent.type(getByTestId('tag-textfield').querySelector('input'), 'tag4{enter}')
+        expect(mockAxios.post).toHaveBeenCalledTimes(1);
+        expect(mockAxios.post).toHaveBeenCalledWith(
             `/tag`, { name: 'tag4' },
         );
-        expect(getByTestId('tag-textfield').querySelector('input')).toHaveValue('')
+        expect(await getByTestId('tag-textfield').querySelector('input')).toHaveValue('')
     })
 
 })

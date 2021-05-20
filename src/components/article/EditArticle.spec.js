@@ -2,24 +2,9 @@ import React from 'react'
 import { render, screen, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import EditArticle from './editArticle'
-import axios from 'axios'
+import mockAxios from 'axios'
 import * as Message from '../../provider/messageProvider';
 import * as Error from '../../provider/errorProvider'
-jest.mock("axios", () => ({
-    put: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve();
-    }),
-    // post: jest.fn((_url, _body) => {
-    //     url = _url
-    //     body = _body
-    //     return Promise.resolve();
-    // }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
 
 const mockArticle = {
     _id: '1',
@@ -27,7 +12,6 @@ const mockArticle = {
     description: 'description 1',
     tags: []
 }
-
 
 describe('EditArticle', () => {
     let mockMessage
@@ -74,14 +58,14 @@ describe('EditArticle', () => {
         expect(descInput).toHaveValue('description 1\ndescription 2')
     })
     test('should post on click save', async () => {
-        axios.put.mockImplementation(() => { return Promise.resolve() })
+        mockAxios.put.mockImplementation(() => { return Promise.resolve() })
         render(<EditArticle setIsEdit={mocksetIsEdit} article={mockArticle} setArticles={mocksetArticles} />)
         const descInput = screen.getByTestId('edit-article-description-textfield').querySelector('textarea')
         userEvent.type(descInput, '{enter}description 2')
         expect(await descInput).toHaveValue('description 1\ndescription 2')
         userEvent.click(screen.getByTestId('edit-article-save-button'))
-        expect(axios.put).toHaveBeenCalledTimes(1)
-        expect(axios.put).toHaveBeenCalledWith(`/article`, {
+        expect(mockAxios.put).toHaveBeenCalledTimes(1)
+        expect(mockAxios.put).toHaveBeenCalledWith(`/article`, {
             _id: '1',
             url: 'http://google.com',
             description: 'description 1\ndescription 2',
@@ -95,13 +79,13 @@ describe('EditArticle', () => {
         expect(mockErrorInit).toHaveBeenCalledTimes(1)
     })
     test('post error', async () => {
-        axios.put.mockImplementation(() => { return Promise.reject() })
+        mockAxios.put.mockImplementation(() => { return Promise.reject() })
         render(<EditArticle setIsEdit={mocksetIsEdit} article={mockArticle} setArticles={mocksetArticles} />)
         act(() => {
             userEvent.click(screen.getByTestId('edit-article-save-button'))
         })
-        expect(axios.put).toHaveBeenCalledTimes(1)
-        expect(axios.put).toHaveBeenCalledWith(`/article`, {
+        expect(mockAxios.put).toHaveBeenCalledTimes(1)
+        expect(mockAxios.put).toHaveBeenCalledWith(`/article`, {
             _id: '1',
             url: 'http://google.com',
             description: 'description 1',

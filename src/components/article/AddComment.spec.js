@@ -3,17 +3,8 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import AddComment from './AddComment'
-import axios from 'axios'
-jest.mock("axios", () => ({
-    post: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve({ data: { _id: '1', name: 'tagname' } });
-    }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
+import mockAxios from 'axios'
+
 describe('AddComment', () => {
     test('should render', () => {
         const { getByTestId } = render(
@@ -38,7 +29,7 @@ describe('AddComment', () => {
         const { getByTestId } = render(
             <AddComment article_id={'1'} setComments={setComments} />
         )
-        axios.post.mockImplementationOnce(() => {
+        mockAxios.post.mockImplementationOnce(() => {
             return Promise.resolve({ data: 'test' })
         })
         userEvent.type(getByTestId('addcomment-textfield').querySelector('textarea'), 'comment added')
@@ -48,8 +39,8 @@ describe('AddComment', () => {
         })
         // screen.debug()
         // expect(getByTestId('addcomment-textfield').querySelector('textarea')).toHaveValue('comment added')
-        expect(axios.post).toHaveBeenCalledTimes(1)
-        expect(axios.post).toHaveBeenCalledWith(
+        expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        expect(mockAxios.post).toHaveBeenCalledWith(
             `/article/comment`, {
             article_id: '1',
             parent_id: null,

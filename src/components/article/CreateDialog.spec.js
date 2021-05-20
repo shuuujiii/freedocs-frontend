@@ -3,23 +3,9 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import CreateDialog from './CreateDialog'
-import axios from 'axios'
+import mockAxios from 'axios'
 import * as Message from '../../provider/messageProvider';
 import * as Error from '../../provider/errorProvider'
-jest.mock("axios", () => ({
-    post: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve();
-    }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
-
-// afterEach(() => {
-//     jest.clearAllMocks();
-// });
 describe('CreateDialog', () => {
     const { location } = window;
 
@@ -107,7 +93,7 @@ describe('CreateDialog', () => {
                 init: jest.fn()
             }
         })
-        axios.post.mockImplementation(() => {
+        mockAxios.post.mockImplementation(() => {
             return Promise.resolve()
         })
         render(
@@ -124,8 +110,8 @@ describe('CreateDialog', () => {
             userEvent.click(screen.getByTestId('create-dialog-button'))
         })
 
-        expect(axios.post).toHaveBeenCalledTimes(1)
-        expect(axios.post).toHaveBeenCalledWith(
+        expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        expect(mockAxios.post).toHaveBeenCalledWith(
             `/article`, {
             tags: [],
             url: 'https://google.com',
@@ -150,7 +136,7 @@ describe('CreateDialog', () => {
                 successMessage: jest.fn()
             }
         })
-        axios.post.mockImplementation(() => {
+        mockAxios.post.mockImplementation(() => {
             return Promise.reject({
                 response: {
                     data: {
@@ -167,8 +153,8 @@ describe('CreateDialog', () => {
         userEvent.type(urlInput, 'https://google.com')
         userEvent.type(descriptionInput, 'description1{enter}description2{enter}description3');
         userEvent.click(getByTestId('create-dialog-button'))
-        expect(axios.post).toHaveBeenCalledTimes(1)
-        expect(axios.post).toHaveBeenCalledWith(
+        expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        expect(mockAxios.post).toHaveBeenCalledWith(
             `/article`, {
             tags: [],
             url: 'https://google.com',
@@ -188,7 +174,7 @@ describe('CreateDialog', () => {
                 successMessage: jest.fn()
             }
         })
-        axios.post.mockImplementation(() => {
+        mockAxios.post.mockImplementation(() => {
             return Promise.reject({})
         })
         const { getByTestId } = render(
@@ -201,8 +187,8 @@ describe('CreateDialog', () => {
         act(() => {
             userEvent.click(getByTestId('create-dialog-button'))
         })
-        expect(axios.post).toHaveBeenCalledTimes(1)
-        expect(axios.post).toHaveBeenCalledWith(
+        expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        expect(mockAxios.post).toHaveBeenCalledWith(
             `/article`, {
             tags: [],
             url: 'https://google.com',

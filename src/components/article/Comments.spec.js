@@ -6,20 +6,8 @@ import userEvent from '@testing-library/user-event'
 import * as Auth from '../../provider/authProvider'
 import Comments from './comments'
 // import { AuthContext } from '../../provider/authProvider'
-import axios from 'axios'
-jest.mock("axios", () => ({
-    post: jest.fn((_url, _body) => {
-        url = _url
-        body = _body
-        return Promise.resolve({ data: { _id: '1', name: 'tagname' } });
-    }),
-    get: jest.fn((_url, _body) => {
-        return Promise.resolve({ _url, _body });
-    }),
-    create: jest.fn(function () {
-        return this;
-    })
-}));
+import mockAxios from 'axios'
+
 describe('Comments', () => {
     test('should render', async () => {
         jest.spyOn(Auth, 'useAuth').mockImplementation(() => {
@@ -32,7 +20,7 @@ describe('Comments', () => {
                 }
             }
         })
-        axios.get.mockImplementation(() => {
+        mockAxios.get.mockImplementation(() => {
             return Promise.resolve({
                 data: [
                     {

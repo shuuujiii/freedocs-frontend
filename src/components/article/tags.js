@@ -33,12 +33,12 @@ export const Tags = ({ tags, setTags }) => {
     const handleKeyPress = (e) => {
         error.init()
         if (e.key === 'Enter') {
-            // e.preventDefault()
+            e.preventDefault()
             axiosbase.post('/tag', {
                 name: inputTag
             }).then(res => {
                 setTags(prev => [...prev, res.data])
-                // can't pass test when writing here
+                // can't pass test when writing here. act warning occur...
                 // setInputTag('')
             }).catch(e => {
                 console.log(e)
