@@ -56,7 +56,9 @@ export default function ReportDialog({ open, handleClose, article_id }) {
     }
 
     return (
-        <Dialog open={open} onClose={handleCloseInit} aria-labelledby="form-dialog-title">
+        <Dialog
+            data-testid='report-form-dialog'
+            open={open} onClose={handleCloseInit} aria-labelledby="form-dialog-title">
             <DialogTitle data-testid='report-title' id="report-form-dialog-title">Report</DialogTitle>
             <DialogContent>
                 <FormControl component="fieldset">

@@ -92,7 +92,9 @@ export const TagChips = ({ tags }) => {
         history.push(`/lists?tag=${tagname}`)
     }
     return (
-        <div className={classes.root}>
+        <div
+            data-testid='tagchips'
+            className={classes.root}>
             {tags.map(tag => {
                 return (
                     <Chip

@@ -28,6 +28,7 @@ export default function DeleteDialog({ open, handleClose, _id }) {
     return (
         <div>
             <Dialog
+                data-testid='delete-dialog'
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"

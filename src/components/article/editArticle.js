@@ -46,7 +46,9 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
     }
 
     return (
-        <Paper >
+        <Paper
+            data-testid='edit-article'
+        >
             <Box
                 display="flex"
                 flexDirection="column"
