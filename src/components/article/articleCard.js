@@ -1,31 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
-import ReportIcon from '@material-ui/icons/Report';
 import EditIcon from '@material-ui/icons/Edit';
 // import Badge from '@material-ui/core/Badge';
 
-import moment from 'moment'
 // provider
 import { useAuth } from '../../provider/authProvider';
-// import { useError } from '../../provider/errorProvider'
-// import { useMessage } from '../../provider/messageProvider'
 // components
 import { TagChips } from './Tags'
 import Comments from '../article/comments'
-import ReportDialog from './Report'
 import EditArticle from './editArticle'
-import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
 import ArticleVote from './ArticleVote'
+import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
 import ArticleCardDeleteButton from './ArticleCardDeleteButton'
+import ArticleCardReportButton from './ArticleCardReportButton'
+import ArticleCardAuthor from './ArticleCardAuthor'
 const useStyles = makeStyles((theme) => ({
     card_main: {
         display: 'flex',
@@ -61,26 +57,12 @@ const useStyles = makeStyles((theme) => ({
 
 const ArticleCard = ({ article, setArticles }) => {
     const classes = useStyles();
-    const history = useHistory();
     const auth = useAuth();
     const [expanded, setExpanded] = React.useState(false);
     const [edit, setEdit] = React.useState(false)
-    const [openReport, setOpenReport] = React.useState(false);
     const handleExpandComment = () => {
         setExpanded(!expanded);
     };
-
-    const handleCloseReport = () => {
-        setOpenReport(false);
-    };
-
-    const handleClickReport = () => {
-        if (auth.authState.user) {
-            setOpenReport(!openReport)
-            return
-        }
-        history.push('/signin')
-    }
     const onClickEdit = () => {
         setEdit(true)
     }
@@ -107,14 +89,9 @@ const ArticleCard = ({ article, setArticles }) => {
                                 <Link
                                     data-testid='article-card-url-link'
                                     to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
-                                <Typography style={{ marginTop: 'auto' }} variant="subtitle2" align="right" color="textSecondary">
-                                    <Link
-                                        data-testid="article-card-author-link"
-                                        to={`/profile/${article.author}`} > @{article.author} </Link>
-                                    <div
-                                        data-testid='article-card-added-moment'
-                                        style={{ display: 'inline-block' }}>added {moment(article.createdAt).fromNow()}</div>
-                                </Typography>
+                                <ArticleCardAuthor
+                                    author={article.author}
+                                    createdAt={article.createdAt} />
                             </div>
                         </CardContent>
                         {/* </div> */}
@@ -142,17 +119,8 @@ const ArticleCard = ({ article, setArticles }) => {
                                 </IconButton>
                                 <ArticleCardDeleteButton article_id={article._id} />
                             </div>
-
-                            : <IconButton
-                                data-testid='article-card-report-icon-button'
-                                style={{ marginLeft: 'auto' }}
-                                coler="default"
-                                onClick={handleClickReport}
-                                aria-label="report"
-                            >
-                                <ReportIcon />
-                            </IconButton>}
-
+                            :
+                            <ArticleCardReportButton user={auth.authState.user} article_id={article._id} />}
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
@@ -167,13 +135,29 @@ const ArticleCard = ({ article, setArticles }) => {
                         </CardContent>
                     </Collapse>
                 </Card>
-                <ReportDialog open={openReport} handleClose={handleCloseReport} article_id={article._id} />
             </div >
     )
 }
 
 ArticleCard.propTypes = {
-    article: PropTypes.object,
+    article: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        tags: PropTypes.array,
+        url: PropTypes.string,
+        description: PropTypes.string,
+        user: PropTypes.string,
+        createdAt: PropTypes.string,
+        updatedAt: PropTypes.string,
+        votes: PropTypes.shape({
+            _id: PropTypes.string,
+            article: PropTypes.string,
+            upvoteUsers: PropTypes.array,
+            downvoteUsers: PropTypes.array,
+        }),
+        author: PropTypes.string,
+        likes: PropTypes.array,
+        likeCount: PropTypes.number,
+    }),
     setArticles: PropTypes.func,
 }
 

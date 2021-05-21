@@ -56,7 +56,7 @@ describe('ArticleCardFavoriteButton', () => {
         })
         expect(await setArticles).toHaveBeenCalledTimes(1)
     })
-    test.only('not authenticated user click button', async () => {
+    test('not authenticated user click button', async () => {
         render(
             <ArticleCardFavoriteButton
                 user={null}

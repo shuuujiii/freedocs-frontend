@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import IconButton from '@material-ui/core/IconButton';
-
 // utils
 import axiosbase from '../../utils/axiosbase'
 
@@ -46,11 +45,13 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
     }
     return (
         <React.Fragment>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center'
-            }}>
+            <div
+                data-testid='article-card-vote'
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center'
+                }}>
                 <IconButton
                     data-testid='article-card-upvote-icon-button'
                     onClick={onClickUpVote}
