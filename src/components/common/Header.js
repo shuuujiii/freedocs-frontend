@@ -220,62 +220,62 @@ export default function Header() {
                         />
                     </div>
                     <div style={{ flexGrow: 1 }} />
-                    {auth.authState.isAuthenticated ? (
-                        // login user
-                        <div style={{ display: 'flex' }}>
-                            <Tooltip title="Add Post" arrow>
+                    {auth.authState.isLoading ? null :
+                        auth.authState.user ? (
+                            // login user
+                            <div style={{ display: 'flex' }}>
+                                <Tooltip title="Add Post" arrow>
+                                    <IconButton
+                                        color="inherit"
+                                        onClick={handleClickAddPost}
+                                    >
+                                        <AddBoxIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <CreateDialog open={openCreateDialog} setOpen={setOpenCreateDialog} />
                                 <IconButton
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
                                     color="inherit"
-                                    onClick={handleClickAddPost}
                                 >
-                                    <AddBoxIcon />
+                                    <AccountCircle />
                                 </IconButton>
-                            </Tooltip>
-                            <CreateDialog open={openCreateDialog} setOpen={setOpenCreateDialog} />
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={openAccountMenu}
-                                onClose={handleCloseMenu}
-                            >
-                                <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                                <MenuItem onClick={handleSetting}>Setting</MenuItem>
-                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                            </Menu>
-
-                        </div>
-                    ) : (
-                        // guest user
-                        <div>
-                            <Button
-                                className={classes.signin}
-                                href="/signin"
-                            >Sign in</Button>
-                            <Button
-                                className={classes.signup}
-                                variant="outlined"
-                                href="/signup"
-                            >Sign up</Button>
-                        </div>
-                    )}
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={openAccountMenu}
+                                    onClose={handleCloseMenu}
+                                >
+                                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                                    <MenuItem onClick={handleSetting}>Setting</MenuItem>
+                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                </Menu>
+                            </div>
+                        ) : (
+                            // guest user
+                            <div>
+                                <Button
+                                    className={classes.signin}
+                                    href="/signin"
+                                >Sign in</Button>
+                                <Button
+                                    className={classes.signup}
+                                    variant="outlined"
+                                    href="/signup"
+                                >Sign up</Button>
+                            </div>
+                        )}
                 </Toolbar>
             </AppBar>
             <SideBar open={openSidebar} setOpen={setOpenSidebar} auth={auth} />

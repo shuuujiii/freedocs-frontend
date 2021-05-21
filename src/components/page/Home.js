@@ -1,10 +1,10 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 // utils
 import axiosbase from '../../utils/axiosbase'
 
 // provider
-import { Link } from 'react-router-dom'
 import { useAuth } from '../../provider/authProvider';
 
 import Button from '@material-ui/core/Button';
@@ -18,6 +18,7 @@ import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import Loading from '../common/Loading'
 const useStyles = makeStyles((theme) => ({
     icon: {
         marginRight: theme.spacing(2),
@@ -64,18 +65,16 @@ export default function Home() {
     const [likesArticles, setLikesArticles] = React.useState([])
     const [voteArticles, setVoteArticles] = React.useState([])
     React.useEffect(() => {
-        let mounted = true
-        const getRankingData = async () => {
-            const res = await axiosbase.get('/article/ranking')
-            if (mounted) {
-                console.log('ranking data', res.data)
+        axiosbase.get('/article/ranking').then(
+            res => {
                 setLikesArticles(res.data.likesRanking)
                 setVoteArticles(res.data.voteRanking)
             }
-        }
-        getRankingData()
-        return () => mounted = false
+        )
     }, [])
+    if (auth.authState.isLoading) {
+        return <Loading />
+    }
     return (
         <React.Fragment>
             <CssBaseline />

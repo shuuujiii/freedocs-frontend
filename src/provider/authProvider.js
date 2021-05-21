@@ -4,8 +4,9 @@ import axiosbase from '../utils/axiosbase'
 export const AuthContext = React.createContext()
 
 const authInitialState = {
-    isAuthenticated: false,
+    // isAuthenticated: false,
     user: null,
+    isLoading: true,
 }
 
 export const authActions = {
@@ -22,8 +23,15 @@ export const AuthReducer = (state, action) => {
             return authInitialState
         case authActions.AUTHENTICATED:
             return {
-                isAuthenticated: true,
+                // isAuthenticated: true,
                 user: action.payload,
+                isLoading: false,
+            }
+        case authActions.NOT_AUTHENTICATED:
+            return {
+                // isAuthenticated: false,
+                user: null,
+                isLoading: false,
             }
         // case authActions.LOGIN:
         //     return { token: action.payload }
@@ -41,17 +49,17 @@ export function AuthProvider({ children }) {
     const [authState, dispatchAuthState] = React.useReducer(AuthReducer, authInitialState)
 
     React.useEffect(() => {
-        const authenticate = async () => {
-            await axiosbase.post('/users/silent')
-                .then((res) => {
-                    if (res.data.payload.user) {
-                        authenticated(res.data.payload.user)
-                    } else {
-                        notAuthenticated()
-                    }
-                })
-        }
-        authenticate();
+        axiosbase.post('/users/silent')
+            .then((res) => {
+                if (res.data.payload.user) {
+                    authenticated(res.data.payload.user)
+                } else {
+                    notAuthenticated()
+                }
+            }).catch(e => {
+                console.log(e)
+                notAuthenticated()
+            })
         // eslint-disable-next-line
     }, [])
     const authenticated = (user) => {
@@ -61,7 +69,7 @@ export function AuthProvider({ children }) {
         })
     }
     const notAuthenticated = () => {
-        dispatchAuthState({ type: authActions.INIT })
+        dispatchAuthState({ type: authActions.NOT_AUTHENTICATED })
     }
     const logout = () => {
         dispatchAuthState({ type: authActions.LOGOUT })

@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import qs from 'query-string'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -8,31 +8,20 @@ import { useLocation } from 'react-router-dom'
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
-// import useLocalStorage from '../../utils/useLocalStrage'
-
 // provider
 import { useAuth } from '../../provider/authProvider';
 
 // components
-// import { SortSelect, initialSortValue } from '../article/sortSelect'
-// import CreateArticle from '../article/createArticle'
 import ArticleCard from '../article/articleCard'
-// const useQuery = () => {
-//     return new URLSearchParams(useLocation().search);
-// }
-
+import Loading from '../common/Loading'
 const ArticlesPage = () => {
-    // const params = useParams()
     const auth = useAuth();
-    // const query = useQuery();
     const query = useLocation().search
     let qp = qs.parse(query)
-    // const [search, setSearch] = React.useState('')
-    const [articles, setArticles] = React.useState([]);
-    // const [sort, dispatchSort] = useSortReducer();
-    // const [sort, dispatchSort] = useLocalStorage('sort', initialSortValue)
+    const [articles, setArticles] = React.useState(null);
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
+    const [loading, setLoading] = React.useState(true)
     const handleChange = (e, p) => {
         e.preventDefault()
         setPage(p);
@@ -58,27 +47,43 @@ const ArticlesPage = () => {
         return p
     }
 
+    // React.useEffect(() => {
+    //     let mounted = true
+    //     const getData = async () => {
+    //         let p = createParams()
+    //         const res = await axiosbase.get('/article/lists?' + p)
+    //         if (mounted) {
+    //             setArticles(res.data.docs);
+    //             setTotalPages(res.data.totalPages)
+    //         }
+    //     }
+    //     getData()
+    //     return () => mounted = false
+    // }, [query, page, auth.authState.user])
+
     React.useEffect(() => {
-        let mounted = true
-        const getData = async () => {
-            let p = createParams()
-            const res = await axiosbase.get('/article/lists?' + p)
-            if (mounted) {
+        if (auth.authState.isLoading) {
+            return
+        }
+        let p = createParams()
+        setLoading(true)
+        axiosbase.get('/article/lists?' + p)
+            .then(res => {
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
-            }
-        }
-        getData()
-        return () => mounted = false
-        // }, [search, page, sort, auth.authState.user, isFavoriteOnly])
-        // }, [query, page, sort, auth.authState.user])
+                setLoading(false)
+            })
+            .catch(e => { console.log(e) })
     }, [query, page, auth.authState.user])
 
-    // }, [page, sort, auth.authState.user, params.tag])
-
-
-
+    if (auth.authState.loading) {
+        return <Loading />
+    }
+    if (loading) {
+        return <Loading />
+    }
     return (
+
         <div>
             {qp.tag &&
                 <div>
@@ -93,8 +98,6 @@ const ArticlesPage = () => {
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
-                        {/* {auth.authState.user && <CreateArticle setArticles={setArticles} />} */}
-                        {/* <SortSelect sort={sort} dispatchSort={dispatchSort} /> */}
                         {articles.length === 0 ?
                             <div>No articles</div> :
                             <div style={{ marginTop: '16px' }}>
@@ -133,9 +136,9 @@ const ArticlesPage = () => {
     )
 }
 
-ArticlesPage.propTypes = {
-    props: PropTypes.object,
-    // search: PropTypes.string,
-}
+// ArticlesPage.propTypes = {
+//     props: PropTypes.object,
+//     // search: PropTypes.string,
+// }
 
 export default ArticlesPage;
