@@ -35,7 +35,7 @@ export default function CreateDialog({ open, setOpen }) {
         setError('')
         const tag_ids = tags.map(tag => tag._id)
         try {
-            const res = await axiosbase.post('/article', {
+            await axiosbase.post('/article', {
                 url: url.input,
                 description: description,
                 tags: tag_ids,
