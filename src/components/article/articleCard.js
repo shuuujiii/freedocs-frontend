@@ -77,10 +77,10 @@ const ArticleCard = ({ article, setArticles }) => {
     // const error = useError()
     // const message = useMessage()
     const [expanded, setExpanded] = React.useState(false);
-    const [likes, setLikes] = React.useState(false)
+    // const [likes, setLikes] = React.useState(false)
     // const [good, setGood] = React.useState(false)
-    const [upvote, setUpvote] = React.useState(false)
-    const [downvote, setDownvote] = React.useState(false)
+    // const [upvote, setUpvote] = React.useState(false)
+    // const [downvote, setDownvote] = React.useState(false)
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
@@ -96,14 +96,13 @@ const ArticleCard = ({ article, setArticles }) => {
         setOpenDelete(false)
     }
 
-    React.useEffect(() => {
-        if (auth.authState.user) {
-            setUpvote(article.votes?.upvoteUsers.includes(auth.authState.user._id))
-            setDownvote(article.votes?.downvoteUsers.includes(auth.authState.user._id))
-            setLikes(article.likes.includes(auth.authState.user._id))
-            // setGood(article.good.includes(auth.authState.user._id))
-        }
-    }, [auth.authState.user])
+    // React.useEffect(() => {
+    //     if (auth.authState.user) {
+    //         setUpvote(article.votes?.upvoteUsers.includes(auth.authState.user._id))
+    //         setDownvote(article.votes?.downvoteUsers.includes(auth.authState.user._id))
+    //         setLikes(article.likes.includes(auth.authState.user._id))
+    //     }
+    // }, [auth.authState.user])
 
     const handleClickReport = () => {
         if (auth.authState.user) {
@@ -121,18 +120,17 @@ const ArticleCard = ({ article, setArticles }) => {
 
     }
 
-    const onClickLikes = () => {
-        auth.authState.isAuthenticated ?
+    const onClickLikes = (e) => {
+        e.preventDefault()
+        auth.authState.user ?
             axiosbase.post('/article/likes', {
                 _id: article._id,
-                likes: !likes,
             }).then(res => {
                 setArticles(prev => {
                     return prev.map(article =>
                         article._id === res.data._id ? res.data : article
                     )
                 })
-                setLikes(res.data.likes.includes(auth.authState.user._id))
             })
             :
             history.push('/signin')
@@ -141,37 +139,38 @@ const ArticleCard = ({ article, setArticles }) => {
     const getVoteCount = () => {
         return article.votes.upvoteUsers.length - article.votes.downvoteUsers.length
     }
-    const onClickUpVote = () => {
-        auth.authState.isAuthenticated ?
+    const onClickUpVote = (e) => {
+        e.preventDefault()
+        auth.authState.user ?
             axiosbase.post('/article/upvote', {
                 _id: article._id,
-                vote: !upvote
+                // vote: !upvote
             }).then(res => {
                 setArticles(prev => {
                     return prev.map(article =>
                         article._id === res.data._id ? res.data : article
                     )
                 })
-                setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
-                setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
+                // setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
+                // setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
             })
             :
             history.push('/signin')
     }
 
     const onClickDownVote = () => {
-        auth.authState.isAuthenticated ?
+        auth.authState.user ?
             axiosbase.post('/article/downvote', {
                 _id: article._id,
-                vote: !downvote
+                // vote: !downvote
             }).then(res => {
                 setArticles(prev => {
                     return prev.map(article =>
                         article._id === res.data._id ? res.data : article
                     )
                 })
-                setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
-                setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
+                // setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
+                // setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
             })
             :
             history.push('/signin')
@@ -180,40 +179,56 @@ const ArticleCard = ({ article, setArticles }) => {
     return (
         edit ?
             <EditArticle setIsEdit={setEdit} article={article} setArticles={setArticles} /> :
-            <div>
+            <div
+                data-testid='article-card'
+            >
                 <Card>
                     <div className={classes.card_main}>
                         <div className={classes.card_vote}>
                             <IconButton
+                                data-testid='article-card-upvote-icon-button'
                                 onClick={onClickUpVote}
-                                color={upvote ? "secondary" : 'default'}
+                                color={auth.authState.user && article.votes.upvoteUsers.includes(auth.authState.user._id) ? "secondary" : 'default'}
                             >
                                 <KeyboardArrowUpIcon />
                             </IconButton>
 
                             <div style={{ textAlign: 'center' }}>
-                                <Typography variant="h6" align="center" color="textSecondary" component="p">
+                                <Typography
+                                    data-testid='article-card-vote-count'
+                                    variant="h6" align="center" color="textSecondary" component="p">
                                     {getVoteCount()}
                                 </Typography>
-                                <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
+                                <Typography
+                                    data-testid='article-card-votes'
+                                    variant="subtitle2" align="center" color="textSecondary" component="p">
                                     Votes
                                 </Typography>
                             </div>
                             <IconButton
+                                data-testid='article-card-downvote-icon-button'
                                 onClick={onClickDownVote}
-                                color={downvote ? "secondary" : 'default'}
+                                color={auth.authState.user && article.votes.downvoteUsers.includes(auth.authState.user._id) ? "secondary" : 'default'}
                             >
                                 <KeyboardArrowDownIcon />
                             </IconButton>
 
                         </div>
                         <CardContent classes={{ root: classes.card_content }}>
-                            <TagChips tags={article.tags} />
+                            <TagChips
+                                data-testid='article-card-tagchips'
+                                tags={article.tags} />
                             <div className={classes.card_link}>
-                                <Link to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
-                                <Typography style={{ marginTop: 'auto' }} variant="subtitle2" align="right" color="textSecondary" component="p">
-                                    <Link to={`/profile/${article.author}`} > @{article.author} </Link>
-                                    added {moment(article.createdAt).fromNow()}
+                                <Link
+                                    data-testid='article-card-url-link'
+                                    to={{ pathname: article?.url || '#' }} target='_blank' >{article.url}</Link>
+                                <Typography style={{ marginTop: 'auto' }} variant="subtitle2" align="right" color="textSecondary">
+                                    <Link
+                                        data-testid="article-card-author-link"
+                                        to={`/profile/${article.author}`} > @{article.author} </Link>
+                                    <div
+                                        data-testid='article-card-added-moment'
+                                        style={{ display: 'inline-block' }}>added {moment(article.createdAt).fromNow()}</div>
                                 </Typography>
                             </div>
                         </CardContent>
@@ -221,10 +236,13 @@ const ArticleCard = ({ article, setArticles }) => {
                     </div>
                     <CardActions disableSpacing>
                         <IconButton
-                            color={likes ? "secondary" : "default"}
+                            data-testid="article-card-favorite-icon-button"
+                            color={auth.authState.user && article.likes.includes(auth.authState.user._id) ? "secondary" : "default"}
                             aria-label="add to favorites"
-                            onClick={() => { onClickLikes() }}>
-                            <Badge badgeContent={article.likes.length} color="secondary">
+                            onClick={onClickLikes}>
+                            <Badge
+                                data-testid='article-card-favorite-badge'
+                                badgeContent={article.likes.length} color="secondary">
                                 <FavoriteIcon />
                             </Badge>
                         </IconButton>
@@ -237,6 +255,7 @@ const ArticleCard = ({ article, setArticles }) => {
                             </Badge>
                         </IconButton> */}
                         <IconButton
+                            data-testid='article-card-comment-icon-button'
                             coler="default"
                             onClick={handleExpandClick}
                             aria-expanded={expanded}
@@ -247,6 +266,7 @@ const ArticleCard = ({ article, setArticles }) => {
                         {auth.authState.user?._id === article.user ?
                             <div style={{ marginLeft: 'auto' }}
                             ><IconButton
+                                data-testid='article-card-edit-icon-button'
                                 coler="default"
                                 onClick={onClickEdit}
                                 aria-label="edit"
@@ -254,6 +274,7 @@ const ArticleCard = ({ article, setArticles }) => {
                                     <EditIcon />
                                 </IconButton>
                                 <IconButton
+                                    data-testid="article-card-delete-icon-button"
                                     style={{ marginLeft: 'auto' }}
                                     coler="default"
                                     onClick={handleClickDelete}
@@ -265,6 +286,7 @@ const ArticleCard = ({ article, setArticles }) => {
                             </div>
 
                             : <IconButton
+                                data-testid='article-card-report-icon-button'
                                 style={{ marginLeft: 'auto' }}
                                 coler="default"
                                 onClick={handleClickReport}
@@ -276,11 +298,13 @@ const ArticleCard = ({ article, setArticles }) => {
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
-                            <div style={{ whiteSpace: 'pre-wrap' }}>
+                            <div
+                                data-testid='article-card-description'
+                                style={{ whiteSpace: 'pre-wrap' }}>
                                 {article.description}
                             </div>
                         </CardContent>
-                        <CardContent>
+                        <CardContent data-testid='article-card-comments'>
                             <Comments article_id={article._id} />
                         </CardContent>
                     </Collapse>
