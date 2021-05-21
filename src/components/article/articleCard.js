@@ -11,7 +11,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
 import ReportIcon from '@material-ui/icons/Report';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 // import Badge from '@material-ui/core/Badge';
 
 import moment from 'moment'
@@ -23,10 +22,10 @@ import { useAuth } from '../../provider/authProvider';
 import { TagChips } from './Tags'
 import Comments from '../article/comments'
 import ReportDialog from './Report'
-import DeleteDialog from './DeleteDialog'
 import EditArticle from './editArticle'
 import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
 import ArticleVote from './ArticleVote'
+import ArticleDeleteButton from './ArticleDeleteButton'
 const useStyles = makeStyles((theme) => ({
     card_main: {
         display: 'flex',
@@ -67,7 +66,6 @@ const ArticleCard = ({ article, setArticles }) => {
     const [expanded, setExpanded] = React.useState(false);
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
-    const [openDelete, setOpenDelete] = React.useState(false);
     const handleExpandComment = () => {
         setExpanded(!expanded);
     };
@@ -75,10 +73,6 @@ const ArticleCard = ({ article, setArticles }) => {
     const handleCloseReport = () => {
         setOpenReport(false);
     };
-
-    const handleCloseDelete = () => {
-        setOpenDelete(false)
-    }
 
     const handleClickReport = () => {
         if (auth.authState.user) {
@@ -89,10 +83,6 @@ const ArticleCard = ({ article, setArticles }) => {
     }
     const onClickEdit = () => {
         setEdit(true)
-    }
-
-    const handleClickDelete = () => {
-        setOpenDelete(true)
     }
 
     return (
@@ -141,25 +131,16 @@ const ArticleCard = ({ article, setArticles }) => {
                             <CommentIcon />
                         </IconButton>
                         {auth.authState.user?._id === article.user ?
-                            <div style={{ marginLeft: 'auto' }}
-                            ><IconButton
-                                data-testid='article-card-edit-icon-button'
-                                coler="default"
-                                onClick={onClickEdit}
-                                aria-label="edit"
-                            >
+                            <div style={{ marginLeft: 'auto' }}>
+                                <IconButton
+                                    data-testid='article-card-edit-icon-button'
+                                    coler="default"
+                                    onClick={onClickEdit}
+                                    aria-label="edit"
+                                >
                                     <EditIcon />
                                 </IconButton>
-                                <IconButton
-                                    data-testid="article-card-delete-icon-button"
-                                    style={{ marginLeft: 'auto' }}
-                                    coler="default"
-                                    onClick={handleClickDelete}
-                                    aria-label="delete"
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                                <DeleteDialog open={openDelete} handleClose={handleCloseDelete} _id={article._id} />
+                                <ArticleDeleteButton article_id={article._id} />
                             </div>
 
                             : <IconButton
