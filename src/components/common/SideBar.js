@@ -43,8 +43,8 @@ export default function SideBar({ open, setOpen, auth }) {
         e.preventDefault()
         let p = new URLSearchParams();
         if (auth.authState.user.username) {
-            p.append('user', auth.authState.user.username)
-            p.append('favorite', true)
+            // p.append('user', auth.authState.user.username)
+            p.append('favorite', auth.authState.user.username)
         }
         history.push(`/lists?${p}`)
     }
