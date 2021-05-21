@@ -31,7 +31,7 @@ import Comments from '../article/comments'
 import ReportDialog from './Report'
 import DeleteDialog from './DeleteDialog'
 import EditArticle from './editArticle'
-
+import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
 const useStyles = makeStyles((theme) => ({
     card_main: {
         display: 'flex',
@@ -74,35 +74,21 @@ const ArticleCard = ({ article, setArticles }) => {
     const classes = useStyles();
     const history = useHistory();
     const auth = useAuth();
-    // const error = useError()
-    // const message = useMessage()
     const [expanded, setExpanded] = React.useState(false);
-    // const [likes, setLikes] = React.useState(false)
-    // const [good, setGood] = React.useState(false)
-    // const [upvote, setUpvote] = React.useState(false)
-    // const [downvote, setDownvote] = React.useState(false)
     const [edit, setEdit] = React.useState(false)
     const [openReport, setOpenReport] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
-    const handleExpandClick = () => {
+    const handleExpandComment = () => {
         setExpanded(!expanded);
     };
 
-    const handleClose = () => {
+    const handleCloseReport = () => {
         setOpenReport(false);
     };
 
     const handleCloseDelete = () => {
         setOpenDelete(false)
     }
-
-    // React.useEffect(() => {
-    //     if (auth.authState.user) {
-    //         setUpvote(article.votes?.upvoteUsers.includes(auth.authState.user._id))
-    //         setDownvote(article.votes?.downvoteUsers.includes(auth.authState.user._id))
-    //         setLikes(article.likes.includes(auth.authState.user._id))
-    //     }
-    // }, [auth.authState.user])
 
     const handleClickReport = () => {
         if (auth.authState.user) {
@@ -117,23 +103,6 @@ const ArticleCard = ({ article, setArticles }) => {
 
     const handleClickDelete = () => {
         setOpenDelete(true)
-
-    }
-
-    const onClickLikes = (e) => {
-        e.preventDefault()
-        auth.authState.user ?
-            axiosbase.post('/article/likes', {
-                _id: article._id,
-            }).then(res => {
-                setArticles(prev => {
-                    return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
-                    )
-                })
-            })
-            :
-            history.push('/signin')
     }
 
     const getVoteCount = () => {
@@ -235,17 +204,7 @@ const ArticleCard = ({ article, setArticles }) => {
                         {/* </div> */}
                     </div>
                     <CardActions disableSpacing>
-                        <IconButton
-                            data-testid="article-card-favorite-icon-button"
-                            color={auth.authState.user && article.likes.includes(auth.authState.user._id) ? "secondary" : "default"}
-                            aria-label="add to favorites"
-                            onClick={onClickLikes}>
-                            <Badge
-                                data-testid='article-card-favorite-badge'
-                                badgeContent={article.likes.length} color="secondary">
-                                <FavoriteIcon />
-                            </Badge>
-                        </IconButton>
+                        <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} likes={article.likes} setArticles={setArticles} />
                         {/* <IconButton
                             color={good ? "primary" : "default"}
                             aria-label="good"
@@ -257,7 +216,7 @@ const ArticleCard = ({ article, setArticles }) => {
                         <IconButton
                             data-testid='article-card-comment-icon-button'
                             coler="default"
-                            onClick={handleExpandClick}
+                            onClick={handleExpandComment}
                             aria-expanded={expanded}
                             aria-label="show more"
                         >
@@ -309,7 +268,7 @@ const ArticleCard = ({ article, setArticles }) => {
                         </CardContent>
                     </Collapse>
                 </Card>
-                <ReportDialog open={openReport} handleClose={handleClose} article_id={article._id} />
+                <ReportDialog open={openReport} handleClose={handleCloseReport} article_id={article._id} />
             </div >
     )
 }
