@@ -25,7 +25,7 @@ import ReportDialog from './Report'
 import EditArticle from './editArticle'
 import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
 import ArticleVote from './ArticleVote'
-import ArticleDeleteButton from './ArticleDeleteButton'
+import ArticleCardDeleteButton from './ArticleCardDeleteButton'
 const useStyles = makeStyles((theme) => ({
     card_main: {
         display: 'flex',
@@ -140,7 +140,7 @@ const ArticleCard = ({ article, setArticles }) => {
                                 >
                                     <EditIcon />
                                 </IconButton>
-                                <ArticleDeleteButton article_id={article._id} />
+                                <ArticleCardDeleteButton article_id={article._id} />
                             </div>
 
                             : <IconButton

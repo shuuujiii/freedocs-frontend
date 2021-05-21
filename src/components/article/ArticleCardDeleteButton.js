@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteDialog from './DeleteDialog'
 
-const ArticleDeleteButton = ({ article_id }) => {
+const ArticleCardDeleteButton = ({ article_id }) => {
     const [openDelete, setOpenDelete] = React.useState(false);
     const handleCloseDelete = () => {
         setOpenDelete(false)
@@ -28,7 +28,7 @@ const ArticleDeleteButton = ({ article_id }) => {
     )
 }
 
-ArticleDeleteButton.propTypes = {
+ArticleCardDeleteButton.propTypes = {
     article_id: PropTypes.string,
 }
-export default ArticleDeleteButton
+export default ArticleCardDeleteButton
