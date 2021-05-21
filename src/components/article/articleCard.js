@@ -3,24 +3,18 @@ import PropTypes from 'prop-types'
 import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
 import ReportIcon from '@material-ui/icons/Report';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Badge from '@material-ui/core/Badge';
+// import Badge from '@material-ui/core/Badge';
 
 import moment from 'moment'
-// utils
-import axiosbase from '../../utils/axiosbase'
-
 // provider
 import { useAuth } from '../../provider/authProvider';
 // import { useError } from '../../provider/errorProvider'
@@ -32,14 +26,10 @@ import ReportDialog from './Report'
 import DeleteDialog from './DeleteDialog'
 import EditArticle from './editArticle'
 import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
+import ArticleVote from './ArticleVote'
 const useStyles = makeStyles((theme) => ({
     card_main: {
         display: 'flex',
-    },
-    card_vote: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
     },
     card_content: {
         // override root
@@ -105,46 +95,6 @@ const ArticleCard = ({ article, setArticles }) => {
         setOpenDelete(true)
     }
 
-    const getVoteCount = () => {
-        return article.votes.upvoteUsers.length - article.votes.downvoteUsers.length
-    }
-    const onClickUpVote = (e) => {
-        e.preventDefault()
-        auth.authState.user ?
-            axiosbase.post('/article/upvote', {
-                _id: article._id,
-                // vote: !upvote
-            }).then(res => {
-                setArticles(prev => {
-                    return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
-                    )
-                })
-                // setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
-                // setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
-            })
-            :
-            history.push('/signin')
-    }
-
-    const onClickDownVote = () => {
-        auth.authState.user ?
-            axiosbase.post('/article/downvote', {
-                _id: article._id,
-                // vote: !downvote
-            }).then(res => {
-                setArticles(prev => {
-                    return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
-                    )
-                })
-                // setUpvote(res.data.votes.upvoteUsers.includes(auth.authState.user._id))
-                // setDownvote(res.data.votes.downvoteUsers.includes(auth.authState.user._id))
-            })
-            :
-            history.push('/signin')
-    }
-
     return (
         edit ?
             <EditArticle setIsEdit={setEdit} article={article} setArticles={setArticles} /> :
@@ -153,36 +103,12 @@ const ArticleCard = ({ article, setArticles }) => {
             >
                 <Card>
                     <div className={classes.card_main}>
-                        <div className={classes.card_vote}>
-                            <IconButton
-                                data-testid='article-card-upvote-icon-button'
-                                onClick={onClickUpVote}
-                                color={auth.authState.user && article.votes.upvoteUsers.includes(auth.authState.user._id) ? "secondary" : 'default'}
-                            >
-                                <KeyboardArrowUpIcon />
-                            </IconButton>
-
-                            <div style={{ textAlign: 'center' }}>
-                                <Typography
-                                    data-testid='article-card-vote-count'
-                                    variant="h6" align="center" color="textSecondary" component="p">
-                                    {getVoteCount()}
-                                </Typography>
-                                <Typography
-                                    data-testid='article-card-votes'
-                                    variant="subtitle2" align="center" color="textSecondary" component="p">
-                                    Votes
-                                </Typography>
-                            </div>
-                            <IconButton
-                                data-testid='article-card-downvote-icon-button'
-                                onClick={onClickDownVote}
-                                color={auth.authState.user && article.votes.downvoteUsers.includes(auth.authState.user._id) ? "secondary" : 'default'}
-                            >
-                                <KeyboardArrowDownIcon />
-                            </IconButton>
-
-                        </div>
+                        <ArticleVote
+                            user={auth.authState.user}
+                            article_id={article._id}
+                            upvoteUsers={article.votes.upvoteUsers}
+                            downvoteUsers={article.votes.downvoteUsers}
+                            setArticles={setArticles} />
                         <CardContent classes={{ root: classes.card_content }}>
                             <TagChips
                                 data-testid='article-card-tagchips'
@@ -205,14 +131,6 @@ const ArticleCard = ({ article, setArticles }) => {
                     </div>
                     <CardActions disableSpacing>
                         <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} likes={article.likes} setArticles={setArticles} />
-                        {/* <IconButton
-                            color={good ? "primary" : "default"}
-                            aria-label="good"
-                            onClick={() => { onClickGood() }}>
-                            <Badge badgeContent={article.good.length} color="primary">
-                                <ThumbUpIcon />
-                            </Badge>
-                        </IconButton> */}
                         <IconButton
                             data-testid='article-card-comment-icon-button'
                             coler="default"
