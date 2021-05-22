@@ -1,12 +1,11 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 // utils
 import axiosbase from '../../utils/axiosbase'
 
 // provider
 import { useAuth } from '../../provider/authProvider';
-
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -61,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
     const classes = useStyles();
+    const history = useHistory()
     const auth = useAuth();
     const [likesArticles, setLikesArticles] = React.useState([])
     const [voteArticles, setVoteArticles] = React.useState([])
@@ -91,7 +91,9 @@ export default function Home() {
                             <div className={classes.heroButtons}>
                                 <Grid container spacing={2} justify="center">
                                     <Grid item>
-                                        <Button variant="contained" color="primary">
+                                        <Button
+                                            onClick={() => { history.push('/signup') }}
+                                            variant="contained" color="primary">
                                             SignUp
                                         </Button>
                                     </Grid>
