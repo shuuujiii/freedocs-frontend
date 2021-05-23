@@ -54,7 +54,7 @@ function Profile() {
     const [profile, setProfile] = React.useState({})
 
     React.useEffect(() => {
-        axiosbase.get(`/users/profile?username=${params.username}`)
+        axiosbase.get(`/user/profile?username=${params.username}`)
             .then(res => {
                 setProfile(res.data)
             })

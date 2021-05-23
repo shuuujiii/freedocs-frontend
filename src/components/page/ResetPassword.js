@@ -17,7 +17,7 @@ const ResetPassword = () => {
     const error = useError()
     const [password, setPassword] = React.useState('')
     const onClickSubmit = () => {
-        axiosbase.post('/users/resetpassword', {
+        axiosbase.post('/user/resetpassword', {
             token: params.token,
             password: password
         })

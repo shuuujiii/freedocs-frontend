@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
     const [authState, dispatchAuthState] = React.useReducer(AuthReducer, authInitialState)
 
     React.useEffect(() => {
-        axiosbase.post('/users/silent')
+        axiosbase.post('/user/silent')
             .then((res) => {
                 if (res.data.payload.user) {
                     authenticated(res.data.payload.user)

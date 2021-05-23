@@ -54,7 +54,7 @@ export default function SignIn() {
     const onClickSubmit = (e) => {
         e.preventDefault();
         setLoading(true)
-        axiosbase.post('/users/login', {
+        axiosbase.post('/user/login', {
             username: username,
             password: password
         }).then((res) => {

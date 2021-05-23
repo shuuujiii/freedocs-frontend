@@ -134,7 +134,7 @@ export default function Header() {
     };
 
     const handleLogout = () => {
-        axiosbase.post('/users/logout')
+        axiosbase.post('/user/logout')
             .then(res => {
                 if (res.status === StatusCodes.OK) {
                     auth.logout();

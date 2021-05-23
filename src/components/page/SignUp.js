@@ -76,7 +76,7 @@ export default function SignUp() {
             return
         }
 
-        axiosbase.post('/users', {
+        axiosbase.post('/user/create', {
             username: username,
             email: email,
             password: password,

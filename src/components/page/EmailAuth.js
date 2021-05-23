@@ -12,7 +12,7 @@ export default function EmailAuth(props) {
         error.init()
     }
     React.useEffect(() => {
-        axiosbase.post('/users/auth/email', {
+        axiosbase.post('/user/auth/email', {
             token: token
         })
             .then(() => {

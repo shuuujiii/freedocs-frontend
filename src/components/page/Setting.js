@@ -50,7 +50,7 @@ function DeleteAccountDialog({ open, handleClose }) {
     }
 
     const onClickDelete = () => {
-        axiosbase.delete('/users').then(
+        axiosbase.delete('/user/delete').then(
             () => {
                 message.successMessage('delete user')
                 auth.logout()
@@ -187,7 +187,7 @@ const ChangePasswordButton = () => {
             message.init()
             error.init()
             setLoading(true)
-            await axiosbase.post('/users/changepassword', {
+            await axiosbase.post('/user/changepassword', {
                 oldPassword: oldPassword,
                 newPassword: newPassword,
             })
@@ -277,7 +277,7 @@ const ChangeEmailButton = () => {
             message.init()
             error.init()
             setLoading(true)
-            const res = await axiosbase.post('/users/changeemail', {
+            const res = await axiosbase.post('/user/changeemail', {
                 email: email,
             })
             auth.authenticated(res.data.user)

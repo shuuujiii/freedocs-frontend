@@ -18,7 +18,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
     React.useEffect(() => {
         const authenticate = async () => {
-            await axiosbase.post('/users/silent')
+            await axiosbase.post('/user/silent')
                 .then((res) => {
                     error.init()
                     if (res.data.payload.user) {

@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     const error = useError()
     const [email, setEmail] = React.useState('')
     const onClickSubmit = () => {
-        axiosbase.post('/users/forgotpassword', { email: email }).then(
+        axiosbase.post('/user/forgotpassword', { email: email }).then(
             res => {
                 message.successMessage(res.data.message)
             }
