@@ -1,10 +1,7 @@
-import { getByTestId, render, screen } from '@testing-library/react'
+import { render, screen, cleanup, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { act } from '@testing-library/react-hooks'
 import mockAxios from 'axios'
-import * as Auth from '../../provider/authProvider'
-import ArticleCard from './articleCard'
-import { MemoryRouter } from 'react-router-dom';
+// import { MemoryRouter } from 'react-router-dom';
 import ArticleVote from './ArticleVote'
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => ({
@@ -13,141 +10,181 @@ jest.mock('react-router-dom', () => ({
         push: mockHistoryPush,
     }),
 }));
-const setArticles = jest.fn()
+const user = { _id: 'testuser' }
+const articleId = "testArticleId"
+const noUserVoteData = {
+    data: {
+        upvoteUsers: ['user1', 'user2', 'user3'],
+        downvoteUsers: ['userA', 'userB']
+    }
+}
+const userUpvoteData = {
+    data: {
+        upvoteUsers: ['user1', 'user2', 'user3', user._id],
+        downvoteUsers: ['userA', 'userB']
+    }
+}
+const userDownvoteData = {
+    data: {
+        upvoteUsers: ['user1',],
+        downvoteUsers: ['userA', 'userB', user._id]
+    }
+}
 describe('ArticleVote', () => {
-    test('should render', () => {
+    afterEach(cleanup)
+    test('should render', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
         render(<ArticleVote
-            user={{ _id: 'testuserid' }}
-            article_id={'testarticleid'}
-            upvoteUsers={['user1', 'user2', 'user3']}
-            downvoteUsers={['userA', 'userb']}
-            setArticles={setArticles}
+            user={user}
+            article_id={articleId}
         />)
-        expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('1')
-        expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
-        expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-vote-count')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-vote-count')).toHaveTextContent('1')
+        expect(await screen.findByTestId('article-card-votes')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-votes')).toHaveTextContent('Votes')
+        expect(await screen.findByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
     })
 })
 
-describe('not login user', () => {
-    beforeEach(() => {
+describe('guest user', () => {
+    test('should render', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
         render(<ArticleVote
             user={null}
-            article_id={'testarticleid'}
-            upvoteUsers={['user1', 'user2', 'user3']}
-            downvoteUsers={['userA', 'userb']}
-            setArticles={setArticles}
+            article_id={articleId}
         />)
+        expect(await screen.findByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-vote-count')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-vote-count')).toHaveTextContent('1')
+        expect(await screen.findByTestId('article-card-votes')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-votes')).toHaveTextContent('Votes')
+        expect(await screen.findByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
     })
-    test('should render', () => {
-        expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('1')
-        expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
-        expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
-    })
-    test('click upvoteButton', () => {
+    test('when guest user click upvote button then push signin', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
+        render(<ArticleVote
+            user={null}
+            article_id={articleId}
+        />)
         userEvent.click(screen.getByTestId('article-card-upvote-icon-button'))
+        await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledTimes(1))
         expect(mockHistoryPush).toHaveBeenCalledTimes(1)
         expect(mockHistoryPush).toHaveBeenCalledWith('/signin')
     })
-    test('click downvoteButton', () => {
+    test('when guest user click downvoteButton then push signin', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
+        render(<ArticleVote
+            user={null}
+            article_id={articleId}
+        />)
         userEvent.click(screen.getByTestId('article-card-downvote-icon-button'))
-        expect(mockHistoryPush).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledTimes(1))
         expect(mockHistoryPush).toHaveBeenCalledWith('/signin')
     })
 })
 
 describe('login user', () => {
-    beforeEach(() => {
+    test('should render', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
         render(<ArticleVote
-            user={{ _id: 'loginuser' }}
-            article_id={'testarticleid'}
-            upvoteUsers={['user1', 'user2', 'user3']}
-            downvoteUsers={['userA', 'userb']}
-            setArticles={setArticles}
+            user={user}
+            article_id={articleId}
         />)
+        expect(await screen.findByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-vote-count')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-vote-count')).toHaveTextContent('1')
+        expect(await screen.findByTestId('article-card-votes')).toBeInTheDocument()
+        expect(await screen.findByTestId('article-card-votes')).toHaveTextContent('Votes')
+        expect(await screen.findByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
     })
-    test('should render', () => {
-        expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('1')
-        expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
-        expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
-    })
-    test('click upvoteButton', async () => {
+    test('login user click upvoteButton', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
+        render(<ArticleVote
+            user={user}
+            article_id={articleId}
+        />)
         mockAxios.post.mockImplementation(() => {
-            return Promise.resolve()
+            return Promise.resolve(userUpvoteData)
         })
         userEvent.click(screen.getByTestId('article-card-upvote-icon-button'))
+        await waitFor(() => expect(mockAxios.post).toHaveBeenCalledTimes(1))
         expect(mockHistoryPush).toHaveBeenCalledTimes(0)
-        expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        // expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(mockAxios.post).toHaveBeenCalledWith('/article/upvote', {
-            _id: 'testarticleid'
+            _id: articleId
         })
-        expect(await setArticles).toHaveBeenCalledTimes(1)
+        // expect(await setArticles).toHaveBeenCalledTimes(1)
     })
-    test('click downvoteButton', async () => {
+    test('login user click downvoteButton', async () => {
+        mockAxios.get.mockImplementation(() => {
+            return Promise.resolve(noUserVoteData)
+        })
+        render(<ArticleVote
+            user={user}
+            article_id={articleId}
+        />)
         mockAxios.post.mockImplementation(() => {
-            return Promise.resolve()
+            return Promise.resolve(userDownvoteData)
         })
         userEvent.click(screen.getByTestId('article-card-downvote-icon-button'))
-        expect(mockHistoryPush).toHaveBeenCalledTimes(0)
-        expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(mockAxios.post).toHaveBeenCalledTimes(1))
         expect(mockAxios.post).toHaveBeenCalledWith('/article/downvote', {
-            _id: 'testarticleid'
+            _id: articleId
         })
-        expect(await setArticles).toHaveBeenCalledTimes(1)
+        expect(mockHistoryPush).toHaveBeenCalledTimes(0)
+
+        // expect(await setArticles).toHaveBeenCalledTimes(1)
     })
 })
 
-describe('upvote user', () => {
-    beforeEach(() => {
-        render(<ArticleVote
-            user={{ _id: 'loginuser' }}
-            article_id={'testarticleid'}
-            upvoteUsers={['user1', 'user2', 'user3', 'loginuser']}
-            downvoteUsers={['userA', 'userb']}
-            setArticles={setArticles}
-        />)
+test('if user already upvote then upvote button style has changed', async () => {
+    mockAxios.get.mockImplementation(() => {
+        return Promise.resolve(userUpvoteData)
     })
-    test('should render', () => {
-        expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-upvote-icon-button')).toHaveClass('MuiIconButton-colorSecondary')
-
-        expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('2')
-        expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
-        expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
-    })
-
+    render(<ArticleVote
+        user={user}
+        article_id={articleId}
+    />)
+    await waitFor(() => expect(mockAxios.get).toHaveBeenCalledTimes(1))
+    expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-upvote-icon-button')).toHaveClass('MuiIconButton-colorSecondary')
+    expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('2')
+    expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
+    expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
 })
 
 
-describe('downvote user', () => {
-    beforeEach(() => {
-        render(<ArticleVote
-            user={{ _id: 'loginuser' }}
-            article_id={'testarticleid'}
-            upvoteUsers={['user1']}
-            downvoteUsers={['userA', 'userb', 'loginuser']}
-            setArticles={setArticles}
-        />)
-    })
-    test('should render', () => {
-        expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('-2')
-        expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
-        expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-downvote-icon-button')).toHaveClass('MuiIconButton-colorSecondary')
-    })
 
+test('if user already upvote then upvote button style has changed', async () => {
+    mockAxios.get.mockImplementation(() => {
+        return Promise.resolve(userDownvoteData)
+    })
+    render(<ArticleVote
+        user={user}
+        article_id={articleId}
+    />)
+    await waitFor(() => expect(mockAxios.get).toHaveBeenCalledTimes(1))
+
+    expect(screen.getByTestId('article-card-upvote-icon-button')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-vote-count')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-vote-count')).toHaveTextContent('-2')
+    expect(screen.getByTestId('article-card-votes')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-votes')).toHaveTextContent('Votes')
+    expect(screen.getByTestId('article-card-downvote-icon-button')).toBeInTheDocument()
+    expect(screen.getByTestId('article-card-downvote-icon-button')).toHaveClass('MuiIconButton-colorSecondary')
 })

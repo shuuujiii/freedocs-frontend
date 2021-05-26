@@ -8,10 +8,23 @@ import IconButton from '@material-ui/core/IconButton';
 // utils
 import axiosbase from '../../utils/axiosbase'
 
-const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles }) => {
+const ArticleVote = ({ user, article_id }) => {
     const history = useHistory();
+    const [vote, setVote] = React.useState({
+        upvoteUsers: [],
+        downvoteUsers: [],
+    })
+    React.useEffect(() => {
+        axiosbase.get(`/article/vote?article_id=${article_id}`)
+            .then(res => {
+                setVote({
+                    upvoteUsers: res.data.upvoteUsers,
+                    downvoteUsers: res.data.downvoteUsers,
+                })
+            })
+    }, [])
     const getVoteCount = () => {
-        return upvoteUsers.length - downvoteUsers.length
+        return vote.upvoteUsers.length - vote.downvoteUsers.length
     }
     const onClickUpVote = (e) => {
         e.preventDefault()
@@ -19,11 +32,11 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
             axiosbase.post('/article/upvote', {
                 _id: article_id,
             }).then(res => {
-                setArticles(prev => {
-                    return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
-                    )
+                setVote({
+                    upvoteUsers: res.data.upvoteUsers,
+                    downvoteUsers: res.data.downvoteUsers,
                 })
+
             })
             :
             history.push('/signin')
@@ -34,10 +47,9 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
             axiosbase.post('/article/downvote', {
                 _id: article_id,
             }).then(res => {
-                setArticles(prev => {
-                    return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
-                    )
+                setVote({
+                    upvoteUsers: res.data.upvoteUsers,
+                    downvoteUsers: res.data.downvoteUsers,
                 })
             })
             :
@@ -55,7 +67,7 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
                 <IconButton
                     data-testid='article-card-upvote-icon-button'
                     onClick={onClickUpVote}
-                    color={user && upvoteUsers.includes(user._id) ? "secondary" : 'default'}
+                    color={user && vote.upvoteUsers.includes(user._id) ? "secondary" : 'default'}
                 >
                     <KeyboardArrowUpIcon />
                 </IconButton>
@@ -75,7 +87,7 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
                 <IconButton
                     data-testid='article-card-downvote-icon-button'
                     onClick={onClickDownVote}
-                    color={user && downvoteUsers.includes(user._id) ? "secondary" : 'default'}
+                    color={user && vote.downvoteUsers.includes(user._id) ? "secondary" : 'default'}
                 >
                     <KeyboardArrowDownIcon />
                 </IconButton>
@@ -88,9 +100,5 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
 ArticleVote.propTypes = {
     user: PropTypes.object,
     article_id: PropTypes.string,
-    upvoteUsers: PropTypes.array,
-    downvoteUsers: PropTypes.array,
-    // votes: PropTypes.object,
-    setArticles: PropTypes.func,
 }
 export default ArticleVote

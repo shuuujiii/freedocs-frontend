@@ -56,12 +56,8 @@ const mockAuthorArticle = {
     // likeCount: 0
 }
 const setArticles = jest.fn()
-// describe('testfor test', () => {
-//     it('shoudl test', () => {
-//         expect(true).toBe(true)
-//     })
-// })
 jest.mock('./ArticleCardFavoriteButton', () => () => { return <div data-testid='mock-favorite-button'></div> })
+jest.mock('./ArticleVote', () => () => { return <div data-testid='mock-vote'></div> })
 
 describe('ArticleCard', () => {
     beforeEach(() => {
@@ -87,7 +83,7 @@ describe('ArticleCard', () => {
             </MemoryRouter>
         )
         expect(screen.getByTestId('article-card')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
+        // expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
         expect(screen.getByTestId('tagchips')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toHaveTextContent('http://google.com')
@@ -123,7 +119,7 @@ describe('ArticleCard', () => {
             </MemoryRouter>
         )
         expect(screen.getByTestId('article-card')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
+        // expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
         expect(screen.getByTestId('tagchips')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-author-link')).toBeInTheDocument()
