@@ -14,7 +14,7 @@ export default function DeleteDialog({ open, handleClose, _id }) {
     const message = useMessage()
     const error = useError()
     const onClickDelete = () => {
-        axiosbase.delete('/article', { data: { _id: _id } }).then(
+        axiosbase.delete('/article/delete', { data: { _id: _id } }).then(
             () => {
                 message.successMessage('contents deleted')
                 window.location.reload()

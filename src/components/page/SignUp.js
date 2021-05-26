@@ -70,7 +70,12 @@ export default function SignUp() {
         e.preventDefault()
         error.init()
         try {
-            await UserValidator.validateAsync({ username: username, password: password, confirmPassword: confirmPassword })
+            await UserValidator.validateAsync({
+                username: username,
+                password: password,
+                confirmPassword: confirmPassword,
+                email: email,
+            })
         } catch (err) {
             error.setErrorMessage(err.message)
             return

@@ -24,7 +24,7 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
         e.preventDefault()
         error.init()
         const tag_ids = tags.map(tag => tag._id)
-        axiosbase.put('/article', {
+        axiosbase.put('/article/update', {
             _id: article._id,
             url: article.url,
             description: description,
