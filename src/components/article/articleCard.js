@@ -94,10 +94,10 @@ const ArticleCard = ({ article, setArticles }) => {
                                     createdAt={article.createdAt} />
                             </div>
                         </CardContent>
-                        {/* </div> */}
                     </div>
                     <CardActions disableSpacing>
-                        <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} likes={article.likes} setArticles={setArticles} />
+                        <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} />
+
                         <IconButton
                             data-testid='article-card-comment-icon-button'
                             coler="default"
@@ -123,6 +123,7 @@ const ArticleCard = ({ article, setArticles }) => {
                             <ArticleCardReportButton user={auth.authState.user} article_id={article._id} />}
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
+
                         <CardContent>
                             <div
                                 data-testid='article-card-description'

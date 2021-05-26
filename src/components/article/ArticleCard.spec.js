@@ -33,8 +33,8 @@ const mockArticle = {
         "__v": 0
     },
     author: "authorUser",
-    likes: ['likea', 'likeb'],
-    likeCount: 2
+    // likes: ['likea', 'likeb'],
+    // likeCount: 2
 }
 const mockAuthorArticle = {
     _id: "60a22a92f8e43114eaf04270",
@@ -52,10 +52,17 @@ const mockAuthorArticle = {
         "__v": 0
     },
     author: "AuthorUser",
-    likes: [],
-    likeCount: 0
+    // likes: [],
+    // likeCount: 0
 }
 const setArticles = jest.fn()
+// describe('testfor test', () => {
+//     it('shoudl test', () => {
+//         expect(true).toBe(true)
+//     })
+// })
+jest.mock('./ArticleCardFavoriteButton', () => () => { return <div data-testid='mock-favorite-button'></div> })
+
 describe('ArticleCard', () => {
     beforeEach(() => {
         jest.spyOn(Auth, 'useAuth').mockImplementation(() => {
@@ -73,6 +80,7 @@ describe('ArticleCard', () => {
         jest.clearAllMocks()
     })
     test('should render for normal user', async () => {
+        // mockAxios.get.mockImplementation(() => { return Promise.resolve({ data: [] }) })
         render(
             <MemoryRouter>
                 <ArticleCard article={mockArticle} setArticles={setArticles} />
@@ -84,7 +92,8 @@ describe('ArticleCard', () => {
         expect(screen.getByTestId('article-card-url-link')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toHaveTextContent('http://google.com')
         expect(screen.getByTestId('article-card-author')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
+        expect(screen.getByTestId('mock-favorite-button')).toBeInTheDocument()
+        // expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-comment-icon-button')).toBeInTheDocument()
         expect(screen.queryByTestId('article-card-edit-icon-button')).toBe(null)
         expect(screen.queryByTestId('article-card-delete-icon-button')).toBe(null)
@@ -118,7 +127,8 @@ describe('ArticleCard', () => {
         expect(screen.getByTestId('tagchips')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-author-link')).toBeInTheDocument()
-        expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
+        // expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
+        expect(screen.getByTestId('mock-favorite-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-comment-icon-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-edit-icon-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-delete-icon-button')).toBeInTheDocument()
