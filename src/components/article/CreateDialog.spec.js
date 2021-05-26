@@ -112,7 +112,7 @@ describe('CreateDialog', () => {
 
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(mockAxios.post).toHaveBeenCalledWith(
-            `/article`, {
+            `/article/create`, {
             tags: [],
             url: 'https://google.com',
             description: 'description1\ndescription2\ndescription3',
@@ -155,7 +155,7 @@ describe('CreateDialog', () => {
         userEvent.click(getByTestId('create-dialog-button'))
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(mockAxios.post).toHaveBeenCalledWith(
-            `/article`, {
+            `/article/create`, {
             tags: [],
             url: 'https://google.com',
             description: 'description1\ndescription2\ndescription3',
@@ -189,7 +189,7 @@ describe('CreateDialog', () => {
         })
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(mockAxios.post).toHaveBeenCalledWith(
-            `/article`, {
+            `/article/create`, {
             tags: [],
             url: 'https://google.com',
             description: 'description1\ndescription2\ndescription3',

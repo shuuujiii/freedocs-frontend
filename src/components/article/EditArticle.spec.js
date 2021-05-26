@@ -65,7 +65,7 @@ describe('EditArticle', () => {
         expect(await descInput).toHaveValue('description 1\ndescription 2')
         userEvent.click(screen.getByTestId('edit-article-save-button'))
         expect(mockAxios.put).toHaveBeenCalledTimes(1)
-        expect(mockAxios.put).toHaveBeenCalledWith(`/article`, {
+        expect(mockAxios.put).toHaveBeenCalledWith(`/article/update`, {
             _id: '1',
             url: 'http://google.com',
             description: 'description 1\ndescription 2',
@@ -85,7 +85,7 @@ describe('EditArticle', () => {
             userEvent.click(screen.getByTestId('edit-article-save-button'))
         })
         expect(mockAxios.put).toHaveBeenCalledTimes(1)
-        expect(mockAxios.put).toHaveBeenCalledWith(`/article`, {
+        expect(mockAxios.put).toHaveBeenCalledWith(`/article/update`, {
             _id: '1',
             url: 'http://google.com',
             description: 'description 1',
