@@ -69,6 +69,7 @@ const ArticlesPage = () => {
         setLoading(true)
         axiosbase.get('/article/lists?' + p)
             .then(res => {
+                console.log('articles', res.data)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
                 setLoading(false)
@@ -83,7 +84,6 @@ const ArticlesPage = () => {
         return <Loading />
     }
     return (
-
         <div>
             {qp.tag &&
                 <div>

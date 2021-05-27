@@ -2,7 +2,7 @@ import { render, screen, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ArticleCardFavoriteButton from './ArticleCardFavoriteButton'
 import mockAxios from 'axios'
-
+const mockSetArticles = jest.fn()
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -12,29 +12,18 @@ jest.mock('react-router-dom', () => ({
 }));
 const user = { _id: 'test-user-id' }
 const articleId = 'testarticleid'
-const userFavData = {
-    data: {
-        users: ['user1', 'user2', 'user3', user._id],
-        article: articleId
-    }
-}
-const userNotFavData = {
-    data: {
-        users: ['user1', 'user2', 'user3',],
-        article: articleId
-    }
-}
-describe.only('ArticleCardFavoriteButton', () => {
+const userFavData = ['user1', 'user2', 'user3', user._id]
+const userNotFavData = ['user1', 'user2', 'user3',]
+describe('ArticleCardFavoriteButton', () => {
     afterEach(cleanup)
 
     test('should render user favorite', async () => {
-        mockAxios.get.mockImplementation(() => {
-            return Promise.resolve(userFavData)
-        })
         render(
             <ArticleCardFavoriteButton
                 user={user}
                 article_id={articleId}
+                favoriteUsers={userFavData}
+                setArticles={mockSetArticles}
             />
         )
         expect(await screen.findByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
@@ -42,23 +31,19 @@ describe.only('ArticleCardFavoriteButton', () => {
         expect(await screen.findByTestId('article-card-favorite-badge')).toHaveTextContent('4')
     })
     test("should render user doesn't favorite", async () => {
-        mockAxios.get.mockImplementation(() => {
-            return Promise.resolve(userNotFavData)
-        })
         render(
             <ArticleCardFavoriteButton
                 user={user}
                 article_id={articleId}
+                favoriteUsers={userNotFavData}
+                setArticles={mockSetArticles}
             />
         )
         expect(await screen.findByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
         expect(await screen.findByTestId('article-card-favorite-icon-button')).not.toHaveClass('MuiIconButton-colorSecondary')
         expect(await screen.findByTestId('article-card-favorite-badge')).toHaveTextContent('3')
     })
-    test('authenticated user click button', async () => {
-        mockAxios.get.mockImplementation(() => {
-            return Promise.resolve(userNotFavData)
-        })
+    test('when authenticated user click button then post to api', async () => {
         mockAxios.post.mockImplementation(() => {
             return Promise.resolve(userFavData)
         })
@@ -66,6 +51,8 @@ describe.only('ArticleCardFavoriteButton', () => {
             <ArticleCardFavoriteButton
                 user={user}
                 article_id={articleId}
+                favoriteUsers={userNotFavData}
+                setArticles={mockSetArticles}
             />
         )
         userEvent.click(screen.getByTestId('article-card-favorite-icon-button'))
@@ -75,14 +62,13 @@ describe.only('ArticleCardFavoriteButton', () => {
             _id: articleId
         })
     })
-    test('not authenticated user click button', async () => {
-        mockAxios.get.mockImplementation(() => {
-            return Promise.resolve(userNotFavData)
-        })
+    test('if not authenticated user click button then push signin', async () => {
         render(
             <ArticleCardFavoriteButton
                 user={null}
                 article_id={articleId}
+                favoriteUsers={userNotFavData}
+                setArticles={mockSetArticles}
             />
         )
         expect(await screen.findByTestId('article-card-favorite-icon-button')).toBeInTheDocument()

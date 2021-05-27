@@ -78,8 +78,8 @@ const ArticleCard = ({ article, setArticles }) => {
                         <ArticleVote
                             user={auth.authState.user}
                             article_id={article._id}
-                            upvoteUsers={article.votes.upvoteUsers}
-                            downvoteUsers={article.votes.downvoteUsers}
+                            upvoteUsers={article.upvoteUsers}
+                            downvoteUsers={article.downvoteUsers}
                             setArticles={setArticles} />
                         <CardContent classes={{ root: classes.card_content }}>
                             <TagChips
@@ -96,8 +96,7 @@ const ArticleCard = ({ article, setArticles }) => {
                         </CardContent>
                     </div>
                     <CardActions disableSpacing>
-                        <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} />
-
+                        <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} favoriteUsers={article.favoriteUsers} setArticles={setArticles} />
                         <IconButton
                             data-testid='article-card-comment-icon-button'
                             coler="default"
@@ -149,15 +148,10 @@ ArticleCard.propTypes = {
         user: PropTypes.string,
         createdAt: PropTypes.string,
         updatedAt: PropTypes.string,
-        votes: PropTypes.shape({
-            _id: PropTypes.string,
-            article: PropTypes.string,
-            upvoteUsers: PropTypes.array,
-            downvoteUsers: PropTypes.array,
-        }),
+        upvoteUsers: PropTypes.array,
+        downvoteUsers: PropTypes.array,
         author: PropTypes.string,
-        likes: PropTypes.array,
-        likeCount: PropTypes.number,
+        favoriteUsers: PropTypes.array,
     }),
     setArticles: PropTypes.func,
 }

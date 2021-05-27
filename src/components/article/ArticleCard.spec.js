@@ -25,16 +25,10 @@ const mockArticle = {
     "user": "609e4f2efca1e2737975bbdf",
     "createdAt": "2021-05-17T08:34:26.827Z",
     "updatedAt": "2021-05-17T08:34:26.827Z",
-    "votes": {
-        "_id": "60a22a92f8e43114eaf04272",
-        "upvoteUsers": ['a', 'b', 'c', 'd'],
-        "downvoteUsers": ['e'],
-        "article": "60a22a92f8e43114eaf04270",
-        "__v": 0
-    },
+    upvoteUsers: [],
+    downvoteUsers: [],
+    favoriteUsers: [],
     author: "authorUser",
-    // likes: ['likea', 'likeb'],
-    // likeCount: 2
 }
 const mockAuthorArticle = {
     _id: "60a22a92f8e43114eaf04270",
@@ -44,20 +38,16 @@ const mockAuthorArticle = {
     user: "authorUserId",
     createdAt: "2021-05-17T08:34:26.827Z",
     updatedAt: "2021-05-17T08:34:26.827Z",
-    votes: {
-        _id: "60a22a92f8e43114eaf04272",
-        upvoteUsers: [],
-        downvoteUsers: [],
-        article: "60a22a92f8e43114eaf04270",
-        "__v": 0
-    },
+    upvoteUsers: [],
+    downvoteUsers: [],
+    favoriteUsers: [],
     author: "AuthorUser",
     // likes: [],
     // likeCount: 0
 }
 const setArticles = jest.fn()
-jest.mock('./ArticleCardFavoriteButton', () => () => { return <div data-testid='mock-favorite-button'></div> })
-jest.mock('./ArticleVote', () => () => { return <div data-testid='mock-vote'></div> })
+// jest.mock('./ArticleCardFavoriteButton', () => () => { return <div data-testid='mock-favorite-button'></div> })
+// jest.mock('./ArticleVote', () => () => { return <div data-testid='mock-vote'></div> })
 
 describe('ArticleCard', () => {
     beforeEach(() => {
@@ -76,20 +66,19 @@ describe('ArticleCard', () => {
         jest.clearAllMocks()
     })
     test('should render for normal user', async () => {
-        // mockAxios.get.mockImplementation(() => { return Promise.resolve({ data: [] }) })
         render(
             <MemoryRouter>
                 <ArticleCard article={mockArticle} setArticles={setArticles} />
             </MemoryRouter>
         )
         expect(screen.getByTestId('article-card')).toBeInTheDocument()
-        // expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
+        expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
         expect(screen.getByTestId('tagchips')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toHaveTextContent('http://google.com')
         expect(screen.getByTestId('article-card-author')).toBeInTheDocument()
-        expect(screen.getByTestId('mock-favorite-button')).toBeInTheDocument()
-        // expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
+        // expect(screen.getByTestId('mock-favorite-button')).toBeInTheDocument()
+        expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-comment-icon-button')).toBeInTheDocument()
         expect(screen.queryByTestId('article-card-edit-icon-button')).toBe(null)
         expect(screen.queryByTestId('article-card-delete-icon-button')).toBe(null)
@@ -119,12 +108,12 @@ describe('ArticleCard', () => {
             </MemoryRouter>
         )
         expect(screen.getByTestId('article-card')).toBeInTheDocument()
-        // expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
+        expect(screen.getByTestId('article-card-vote')).toBeInTheDocument()
         expect(screen.getByTestId('tagchips')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-url-link')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-author-link')).toBeInTheDocument()
-        // expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
-        expect(screen.getByTestId('mock-favorite-button')).toBeInTheDocument()
+        expect(screen.getByTestId('article-card-favorite-icon-button')).toBeInTheDocument()
+        // expect(screen.getByTestId('mock-favorite-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-comment-icon-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-edit-icon-button')).toBeInTheDocument()
         expect(screen.getByTestId('article-card-delete-icon-button')).toBeInTheDocument()
