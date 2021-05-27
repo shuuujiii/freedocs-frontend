@@ -13,7 +13,6 @@ import { useMessage } from '../../provider/messageProvider'
 // components
 import { Tags } from './Tags'
 
-
 const EditArticle = ({ setIsEdit, article, setArticles }) => {
     const error = useError();
     const message = useMessage();
@@ -34,7 +33,11 @@ const EditArticle = ({ setIsEdit, article, setArticles }) => {
                 message.successMessage('edited')
                 setArticles(prev => {
                     return prev.map(article =>
-                        article._id === res.data._id ? res.data : article
+                        article._id === res.data._id ? {
+                            ...article,
+                            description: res.data.description,
+                            tags: res.data.tags,
+                        } : article
                     )
                 })
                 setIsEdit(false)

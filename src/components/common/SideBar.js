@@ -45,6 +45,7 @@ export default function SideBar({ open, setOpen, auth }) {
         if (auth.authState.user.username) {
             // p.append('user', auth.authState.user.username)
             p.append('favorite', auth.authState.user.username)
+            p.append('page', 1)
         }
         history.push(`/lists?${p}`)
     }
@@ -53,7 +54,7 @@ export default function SideBar({ open, setOpen, auth }) {
         e.preventDefault()
         let p = new URLSearchParams();
         if (auth.authState.user.username) {
-            p.append('user', auth.authState.user.username)
+            p.append('author', auth.authState.user.username)
         }
         history.push(`/lists?${p}`)
         // history.push(`/lists/user/${auth.authState.user.username}`)

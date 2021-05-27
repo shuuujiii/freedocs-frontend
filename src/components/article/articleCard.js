@@ -96,7 +96,11 @@ const ArticleCard = ({ article, setArticles }) => {
                         </CardContent>
                     </div>
                     <CardActions disableSpacing>
-                        <ArticleCardFavoriteButton user={auth.authState.user} article_id={article._id} favoriteUsers={article.favoriteUsers} setArticles={setArticles} />
+                        <ArticleCardFavoriteButton
+                            user={auth.authState.user}
+                            article_id={article._id}
+                            favoriteUsers={article.favoriteUsers}
+                            setArticles={setArticles} />
                         <IconButton
                             data-testid='article-card-comment-icon-button'
                             coler="default"

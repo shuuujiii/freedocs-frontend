@@ -19,7 +19,11 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
             axiosbase.post('/article/upvote', {
                 _id: article_id,
             }).then(res => {
-                setArticles(prev => prev.map(article => article._id === res.data._id ? res.data : article))
+                setArticles(prev => prev.map(article => article._id === res.data._id ? {
+                    ...article,
+                    upvoteUsers: res.data.upvoteUsers,
+                    downvoteUsers: res.data.downvoteUsers,
+                } : article))
             })
             :
             history.push('/signin')
@@ -30,7 +34,13 @@ const ArticleVote = ({ user, article_id, upvoteUsers, downvoteUsers, setArticles
             axiosbase.post('/article/downvote', {
                 _id: article_id,
             }).then(res => {
-                setArticles(prev => prev.map(article => article._id === res.data._id ? res.data : article))
+                setArticles(prev => prev.map(article => article._id === res.data._id
+                    ? {
+                        ...article,
+                        upvoteUsers: res.data.upvoteUsers,
+                        downvoteUsers: res.data.downvoteUsers,
+                    }
+                    : article))
             })
             :
             history.push('/signin')

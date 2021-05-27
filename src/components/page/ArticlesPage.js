@@ -4,7 +4,7 @@ import qs from 'query-string'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import Pagination from '@material-ui/lab/Pagination';
 // utils
 import axiosbase from '../../utils/axiosbase'
@@ -16,24 +16,21 @@ import ArticleCard from '../article/articleCard'
 import Loading from '../common/Loading'
 const ArticlesPage = () => {
     const auth = useAuth();
+    const history = useHistory()
     const query = useLocation().search
     let qp = qs.parse(query)
     const [articles, setArticles] = React.useState(null);
-    const [page, setPage] = React.useState(1);
+    // const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
     const [loading, setLoading] = React.useState(true)
-    const handleChange = (e, p) => {
+    const handleChange = (e, page) => {
         e.preventDefault()
-        setPage(p);
-    };
-
-    const createParams = () => {
         let p = new URLSearchParams();
         if (qp.tag) {
             p.append('tag', qp.tag)
         }
-        if (qp.user) {
-            p.append('username', qp.user)
+        if (qp.author) {
+            p.append('author', qp.author)
         }
         if (qp.favorite) {
             p.append('favorite', qp.favorite)
@@ -41,7 +38,33 @@ const ArticlesPage = () => {
         if (qp.search) {
             p.append('search', qp.search)
         }
+        // if (qp.page) {
         p.append('page', page)
+        // }
+        p.append('sortkey', qp.sortkey || 'createdAt')
+        p.append('order', qp.sortorder || 'desc')
+        // return p
+        history.push(`/lists?${p}`)
+        // history.push('/list?p);
+    };
+
+    const createParams = () => {
+        let p = new URLSearchParams();
+        if (qp.tag) {
+            p.append('tag', qp.tag)
+        }
+        if (qp.author) {
+            p.append('author', qp.author)
+        }
+        if (qp.favorite) {
+            p.append('favorite', qp.favorite)
+        }
+        if (qp.search) {
+            p.append('search', qp.search)
+        }
+        if (qp.page) {
+            p.append('page', qp.page)
+        }
         p.append('sortkey', qp.sortkey || 'createdAt')
         p.append('order', qp.sortorder || 'desc')
         return p
@@ -69,13 +92,16 @@ const ArticlesPage = () => {
         setLoading(true)
         axiosbase.get('/article/lists?' + p)
             .then(res => {
-                console.log('articles', res.data)
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
                 setLoading(false)
+
             })
-            .catch(e => { console.log(e) })
-    }, [query, page, auth.authState.user])
+            .catch(e => {
+                console.log(e)
+                setLoading(false)
+            })
+    }, [query, auth.authState.user])
 
     if (auth.authState.loading) {
         return <Loading />
@@ -104,7 +130,7 @@ const ArticlesPage = () => {
                                 <Pagination
                                     count={totalPages}
                                     size="large"
-                                    page={page}
+                                    page={Number(qp.page) || 1}
                                     variant="outlined"
                                     shape="rounded"
                                     onChange={handleChange}
@@ -122,7 +148,7 @@ const ArticlesPage = () => {
                                 <Pagination
                                     count={totalPages}
                                     size="large"
-                                    page={page}
+                                    page={Number(qp.page) || 1}
                                     variant="outlined"
                                     shape="rounded"
                                     onChange={handleChange}

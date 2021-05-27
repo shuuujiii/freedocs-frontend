@@ -13,9 +13,14 @@ const ArticleCardFavoriteButton = ({ user, article_id, favoriteUsers, setArticle
             axiosbase.post('/article/likes', {
                 _id: article_id,
             }).then(res => {
-                console.log('clicked res.data', res.data)
                 setArticles(prev =>
-                    prev.map(article => article._id === res.data._id ? res.data : article)
+                    prev.map(article => article._id === res.data._id
+                        ? {
+                            ...article,
+                            favoriteUsers: res.data.favoriteUsers
+                        }
+                        : article
+                    )
                 )
             })
             :
