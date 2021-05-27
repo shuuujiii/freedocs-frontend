@@ -64,9 +64,11 @@ export default function Home() {
     const auth = useAuth();
     const [likesArticles, setLikesArticles] = React.useState([])
     const [voteArticles, setVoteArticles] = React.useState([])
+    const [recentlyPosted, setRecentlyPosted] = React.useState([])
     React.useEffect(() => {
         axiosbase.get('/article/ranking').then(
             res => {
+                setRecentlyPosted(res.data.recentlyPosted)
                 setLikesArticles(res.data.likesRanking)
                 setVoteArticles(res.data.voteRanking)
             }
@@ -104,6 +106,23 @@ export default function Home() {
                 }
                 <Container className={classes.cardGrid} maxWidth="md">
                     <div className={classes.rankTitle}>
+                        <Typography variant="h4" color="textSecondary">Recently Posted</Typography>
+                    </div>
+                    <Grid container spacing={4}>
+                        {recentlyPosted.map((article) => (
+                            <Grid item key={article._id} xs={12} sm={6} md={4}>
+                                <Card className={classes.card}>
+                                    <CardContent className={classes.cardContent}>
+                                        <Typography>
+                                            <Link to={{ pathname: article.url || '#' }} target='_blank' >{article.url}</Link>
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                    <Link to='/lists?page=1&sortKey=createdAt&order=desc'>see more</Link>
+                    <div className={classes.rankTitle}>
                         <Typography variant="h4" color="textSecondary">LikesRanking</Typography>
                     </div>
                     <Grid container spacing={4}>
@@ -122,8 +141,9 @@ export default function Home() {
                                 </Card>
                             </Grid>
                         ))}
-
                     </Grid>
+                    <Link to='/lists?page=1&sortKey=favorite&order=desc'>see more</Link>
+
                     <div className={classes.rankTitle}>
                         <Typography variant="h4" color="textSecondary">VoteRanking</Typography>
                     </div>
@@ -144,6 +164,7 @@ export default function Home() {
                             </Grid>
                         ))}
                     </Grid>
+                    <Link to='/lists?page=1&sortKey=vote&order=desc'>see more</Link>
                 </Container>
             </main>
         </React.Fragment>

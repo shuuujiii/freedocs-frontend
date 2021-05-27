@@ -38,59 +38,18 @@ const ArticlesPage = () => {
         if (qp.search) {
             p.append('search', qp.search)
         }
-        // if (qp.page) {
         p.append('page', page)
-        // }
         p.append('sortkey', qp.sortkey || 'createdAt')
         p.append('order', qp.sortorder || 'desc')
-        // return p
         history.push(`/lists?${p}`)
-        // history.push('/list?p);
     };
-
-    const createParams = () => {
-        let p = new URLSearchParams();
-        if (qp.tag) {
-            p.append('tag', qp.tag)
-        }
-        if (qp.author) {
-            p.append('author', qp.author)
-        }
-        if (qp.favorite) {
-            p.append('favorite', qp.favorite)
-        }
-        if (qp.search) {
-            p.append('search', qp.search)
-        }
-        if (qp.page) {
-            p.append('page', qp.page)
-        }
-        p.append('sortkey', qp.sortkey || 'createdAt')
-        p.append('order', qp.sortorder || 'desc')
-        return p
-    }
-
-    // React.useEffect(() => {
-    //     let mounted = true
-    //     const getData = async () => {
-    //         let p = createParams()
-    //         const res = await axiosbase.get('/article/lists?' + p)
-    //         if (mounted) {
-    //             setArticles(res.data.docs);
-    //             setTotalPages(res.data.totalPages)
-    //         }
-    //     }
-    //     getData()
-    //     return () => mounted = false
-    // }, [query, page, auth.authState.user])
 
     React.useEffect(() => {
         if (auth.authState.isLoading) {
             return
         }
-        let p = createParams()
         setLoading(true)
-        axiosbase.get('/article/lists?' + p)
+        axiosbase.get('/article/lists' + query)
             .then(res => {
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
