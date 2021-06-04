@@ -20,29 +20,19 @@ const ArticlesPage = () => {
     const history = useHistory()
     const error = useError()
     const query = useLocation().search
-    let qp = qs.parse(query)
+    const parsedQuery = qs.parse(query)
     const [articles, setArticles] = React.useState([]);
-    // const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
     const [loading, setLoading] = React.useState(true)
+    const updateQuery = (params) => {
+        let p = new URLSearchParams();
+        const updated = Object.assign(parsedQuery, params)
+        Object.keys(updated).forEach(key => { p.append(key, updated[key]) })
+        return p
+    }
     const handleChange = (e, page) => {
         e.preventDefault()
-        let p = new URLSearchParams();
-        if (qp.tag) {
-            p.append('tag', qp.tag)
-        }
-        if (qp.author) {
-            p.append('author', qp.author)
-        }
-        if (qp.favorite) {
-            p.append('favorite', qp.favorite)
-        }
-        if (qp.search) {
-            p.append('search', qp.search)
-        }
-        p.append('page', page)
-        p.append('sortkey', qp.sortkey || 'createdAt')
-        p.append('order', qp.sortorder || 'desc')
+        const p = updateQuery({ page })
         history.push(`/lists?${p}`)
     };
 
@@ -56,13 +46,12 @@ const ArticlesPage = () => {
                 setArticles(res.data.docs);
                 setTotalPages(res.data.totalPages)
                 setLoading(false)
-
             })
             .catch(e => {
                 error.setError(e)
                 setLoading(false)
             })
-    }, [query, auth.authState.user])
+    }, [query, auth.authState])
 
     if (auth.authState.loading) {
         return <Loading />
@@ -72,16 +61,17 @@ const ArticlesPage = () => {
     }
     return (
         <div>
-            {qp.tag &&
+            {parsedQuery.tag &&
                 <div>
-                    <Typography variant="h4" align="center" color="textSecondary">Tagged #{qp.tag}</Typography>
+                    <Typography variant="h4" align="center" color="textSecondary">Tagged #{parsedQuery.tag}</Typography>
                 </div>
             }
-            {qp.user &&
+            {parsedQuery.user &&
                 <div>
-                    <Typography variant="h4" align="center" color="textSecondary">Posted @{qp.user}</Typography>
+                    <Typography variant="h4" align="center" color="textSecondary">Posted @{parsedQuery.user}</Typography>
                 </div>
             }
+
             <Container maxWidth="lg">
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={8}>
@@ -91,7 +81,7 @@ const ArticlesPage = () => {
                                 <Pagination
                                     count={totalPages}
                                     size="large"
-                                    page={Number(qp.page) || 1}
+                                    page={Number(parsedQuery.page) || 1}
                                     variant="outlined"
                                     shape="rounded"
                                     onChange={handleChange}
@@ -109,7 +99,7 @@ const ArticlesPage = () => {
                                 <Pagination
                                     count={totalPages}
                                     size="large"
-                                    page={Number(qp.page) || 1}
+                                    page={Number(parsedQuery.page) || 1}
                                     variant="outlined"
                                     shape="rounded"
                                     onChange={handleChange}
