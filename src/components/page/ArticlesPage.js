@@ -10,6 +10,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import axiosbase from '../../utils/axiosbase'
 // provider
 import { useAuth } from '../../provider/authProvider';
+import { useError } from '../../provider/errorProvider';
 
 // components
 import ArticleCard from '../article/articleCard'
@@ -17,9 +18,10 @@ import Loading from '../common/Loading'
 const ArticlesPage = () => {
     const auth = useAuth();
     const history = useHistory()
+    const error = useError()
     const query = useLocation().search
     let qp = qs.parse(query)
-    const [articles, setArticles] = React.useState(null);
+    const [articles, setArticles] = React.useState([]);
     // const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(0)
     const [loading, setLoading] = React.useState(true)
@@ -57,7 +59,7 @@ const ArticlesPage = () => {
 
             })
             .catch(e => {
-                console.log(e)
+                error.setError(e)
                 setLoading(false)
             })
     }, [query, auth.authState.user])
