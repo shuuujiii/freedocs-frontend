@@ -146,7 +146,7 @@ export default function Header() {
 
     const onClickTitle = (e) => {
         e.preventDefault()
-        history.push('/')
+        history.push('/lists')
     }
 
     const handleKeyPress = (e) => {
